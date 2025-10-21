@@ -19,7 +19,7 @@ START → Analyzer → Searcher → Classifier → Prioritizer
 
 import os
 import json
-from typing import List, Optional, Dict, Any
+from typing import List, Optional, Dict, Any, Iterable, Union
 from typing_extensions import TypedDict
 from datetime import datetime
 from dotenv import load_dotenv
@@ -27,6 +27,7 @@ from enum import Enum
 from markdown import markdown
 from pathlib import Path
 from weasyprint import HTML, CSS
+import re
 
 from langchain_openai import ChatOpenAI
 from langchain_tavily import TavilySearch
@@ -68,6 +69,14 @@ class BusinessInfo(TypedDict, total=False):
     export_countries: List[str]
 
 
+class EvidenceItem(TypedDict, total=False):
+    """LLM 답변에 포함되는 근거/출처 정보"""
+    source_id: str                   # 검색 결과 식별자 (예: SRC-001)
+    title: str                       # 문서 제목
+    url: str                         # 문서 URL
+    snippet: str                     # 발췌 내용
+
+
 class Regulation(TypedDict):
     """규제 정보 데이터 구조"""
     id: str
@@ -78,6 +87,7 @@ class Regulation(TypedDict):
     priority: str
     key_requirements: List[str]
     reference_url: Optional[str]
+    sources: List[EvidenceItem]
 
 
 class ChecklistItem(TypedDict):
@@ -92,6 +102,7 @@ class ChecklistItem(TypedDict):
     estimated_time: str         # 소요 시간
     priority: str               # 우선순위 (상위 규제와 동일)
     status: str                 # 상태 (pending/in_progress/completed)
+    evidence: List[EvidenceItem]
 
 
 class Milestone(TypedDict):
@@ -114,6 +125,7 @@ class ExecutionPlan(TypedDict):
     dependencies: Dict[str, List[str]]  # 선행 작업 의존성 (작업ID: [선행작업ID들])
     parallel_tasks: List[List[str]]     # 병렬 처리 가능한 작업 그룹
     critical_path: List[str]            # 크리티컬 패스 (가장 긴 경로)
+    evidence: List[EvidenceItem]
 
 
 class FinalReport(TypedDict):
@@ -127,6 +139,7 @@ class FinalReport(TypedDict):
     next_steps: List[str]               # 다음 단계 권장사항
     full_markdown: str                  # 통합 마크다운 보고서 (전체)
     report_pdf_path: str                # PDF 저장 경로
+    citations: List[EvidenceItem]       # 전체 보고서에 포함된 주요 출처
 
 
 class RiskItem(TypedDict):
@@ -139,6 +152,7 @@ class RiskItem(TypedDict):
     risk_score: float           # 리스크 점수 (0-10)
     past_cases: List[str]       # 과거 처벌 사례
     mitigation: str             # 리스크 완화 방안
+    evidence: List[EvidenceItem]
 
 
 class RiskAssessment(TypedDict):
@@ -202,6 +216,65 @@ def _truncate(text: str, limit: int = 300) -> str:
     return text[: limit - 3] + "..."
 
 
+def _merge_evidence(evidence_lists: List[List[EvidenceItem]]) -> List[EvidenceItem]:
+    """여러 Evidence 목록을 병합하고 중복을 제거합니다."""
+    merged: List[EvidenceItem] = []
+    seen: set = set()
+    for items in evidence_lists:
+        for item in items or []:
+            key = (item.get("source_id"), item.get("url"))
+            if key in seen:
+                continue
+            seen.add(key)
+            merged.append({
+                "source_id": item.get("source_id", ""),
+                "title": item.get("title", ""),
+                "url": item.get("url", ""),
+                "snippet": item.get("snippet", "")
+            })
+    return merged
+
+
+def _normalize_evidence_payload(
+    raw_evidence: Union[str, Dict[str, Any], Iterable[Any], None],
+    source_lookup: Dict[str, Dict[str, Any]]
+) -> List[EvidenceItem]:
+    """LLM이 반환한 evidence 필드를 표준 EvidenceItem 리스트로 변환합니다."""
+    normalized: List[EvidenceItem] = []
+    if not raw_evidence:
+        return normalized
+
+    if isinstance(raw_evidence, dict):
+        raw_iterable = [raw_evidence]
+    elif isinstance(raw_evidence, str):
+        raw_iterable = [raw_evidence]
+    elif isinstance(raw_evidence, Iterable):
+        raw_iterable = list(raw_evidence)
+    else:
+        raw_iterable = [raw_evidence]
+
+    for entry in raw_iterable:
+        if isinstance(entry, dict):
+            src_id = entry.get("source_id") or ""
+            justification = entry.get("justification") or entry.get("excerpt") or ""
+        else:
+            text = str(entry)
+            match = re.match(r"(SRC-\d+)", text.strip())
+            src_id = match.group(1) if match else ""
+            justification = text
+
+        source_meta = source_lookup.get(src_id, {}) if src_id else {}
+        snippet_text = str(justification or source_meta.get("snippet", "") or "")
+        normalized.append({
+            "source_id": src_id,
+            "title": source_meta.get("title", ""),
+            "url": source_meta.get("url", ""),
+            "snippet": snippet_text[:300]
+        })
+
+    return normalized
+
+
 def save_report_pdf(markdown_text: str, output_dir: Path) -> Path:
     """Markdown 보고서를 HTML+CSS로 변환하여 PDF로 저장하고,
     원본 markdown도 .md 파일로 함께 저장합니다.
@@ -221,8 +294,8 @@ def save_report_pdf(markdown_text: str, output_dir: Path) -> Path:
     output_dir.mkdir(parents=True, exist_ok=True)
 
     # 저장 파일 경로 정의 (동일 베이스 이름으로 md & pdf 생성)
-    md_path = output_dir / "regulation_report.md"
-    pdf_path = output_dir / "regulation_report.pdf"
+    md_path = output_dir / "regulation_report_reason.md"
+    pdf_path = output_dir / "regulation_report_reason.pdf"
 
     # 1) 원본 마크다운 저장 (존재 시 덮어쓰기)
     md_path.write_text(markdown_text, encoding="utf-8")
@@ -353,8 +426,9 @@ def search_regulations(keywords: List[str]) -> Dict[str, Any]:
 
     # 검색 결과 구조화
     structured_results = []
-    for item in search_results:
+    for idx, item in enumerate(search_results, 1):
         structured_results.append({
+            "source_id": f"SRC-{idx:03d}",
             "title": item.get("title", ""),
             "url": item.get("url", ""),
             "content": _truncate(item.get("content", ""), 300),
@@ -384,12 +458,13 @@ def classify_regulations(
 
     # 검색 결과를 텍스트로 정리
     search_summary = "\n\n".join([
-        f"문서 {i+1}: {r.get('title', '')}\n{r.get('content', '')[:300]}..."
+        f"{r.get('source_id', f'DOC-{i+1}')} | {r.get('title', '제목 없음')}\nURL: {r.get('url', '미기재')}\n요약: {r.get('content', '')[:300]}..."
         for i, r in enumerate(search_results[:5])
     ])
 
     prompt = f"""
-다음 사업 정보에 적용될 수 있는 규제를 분석하여 분류하세요.
+다음 정보를 바탕으로 '검색 근거 기반' 규제 분류를 수행하세요.
+검색 요약은 [문서ID]로 표기되며, 반드시 해당 ID를 사용해 출처를 지정해야 합니다.
 
 [사업 정보]
 업종: {business_info['industry']}
@@ -398,28 +473,40 @@ def classify_regulations(
 공정: {', '.join(business_info.get('processes', []))}
 직원 수: {business_info.get('employee_count', 0)}명
 
-[검색된 규제 정보]
+[검색 요약]
 {search_summary}
 
-위 정보를 바탕으로 적용 가능한 주요 규제 5-8개를 식별하고, 다음 3가지 카테고리로 분류하세요:
-1. 안전/환경
-2. 제품 인증
-3. 공장 운영
+[생성 지침]
+1) 검색 요약에 명시된 문서만 근거로 사용하고, 각 규제마다 1개 이상 출처를 연결합니다.
+2) 5~7개의 규제를 제안하되, 신뢰할 수 있는 근거가 없으면 제외하세요.
+3) category는 '안전/환경' | '제품 인증' | '공장 운영' 중 하나입니다.
+4) key_requirements는 실행형 문장 2~4개.
+5) reference_url은 선택한 출처 중 가장 공식적인 URL을 사용합니다.
+6) 출력은 JSON 배열이며, 각 항목은 아래 스키마를 따릅니다.
 
-각 규제는 다음 JSON 형식으로 출력하세요:
-{{
-    "name": "규제명 (예: 화학물질관리법)",
-    "category": "카테고리 (안전/환경, 제품 인증, 공장 운영 중 하나)",
-    "why_applicable": "이 사업에 적용되는 이유를 1-2문장으로 설명",
-    "authority": "관할 기관 (예: 환경부)",
-    "key_requirements": ["필수 요구사항 1", "필수 요구사항 2"],
-    "reference_url": "관련 URL (검색 결과에서 가져오거나 없으면 빈 문자열)"
-}}
+[
+  {{
+    "name": "규제명",
+    "category": "안전/환경|제품 인증|공장 운영",
+    "why_applicable": "이 사업에 적용되는 이유",
+    "authority": "관할 기관",
+    "key_requirements": ["요구사항1", "요구사항2"],
+    "reference_url": "https://...",
+    "sources": [
+      {{
+        "source_id": "SRC-001",
+        "excerpt": "출처에서 인용한 근거 문장"
+      }}
+    ]
+  }}
+]
 
-출력은 JSON 배열 형식으로만 작성하세요. 설명은 포함하지 마세요.
+JSON 이외 텍스트를 출력하지 말고, sources 배열은 최대 3개까지 포함하세요.
 """
 
     response = llm.invoke(prompt)
+
+    source_lookup = {item.get("source_id"): item for item in search_results if item.get("source_id")}
 
     try:
         # JSON 파싱
@@ -435,6 +522,31 @@ def classify_regulations(
         # Regulation 형식으로 변환
         regulations = []
         for idx, reg in enumerate(regulations_data, 1):
+            source_entries = []
+            for src in reg.get("sources", []) or []:
+                src_id = src.get("source_id")
+                matched = source_lookup.get(src_id, {})
+                source_entries.append({
+                    "source_id": src_id or f"SRC-{idx:03d}",
+                    "title": matched.get("title", ""),
+                    "url": matched.get("url", ""),
+                    "snippet": src.get("excerpt", matched.get("content", ""))[:300]
+                })
+
+            primary_url = reg.get("reference_url") or (source_entries[0]["url"] if source_entries else "")
+
+            if not source_entries and primary_url:
+                matched = next(
+                    (src for src in source_lookup.values() if src.get("url") == primary_url),
+                    {}
+                )
+                source_entries.append({
+                    "source_id": matched.get("source_id", f"SRC-{idx:03d}"),
+                    "title": matched.get("title", ""),
+                    "url": primary_url,
+                    "snippet": matched.get("content", "")[:300]
+                })
+
             regulations.append({
                 "id": f"REG-{idx:03d}",
                 "name": reg.get("name", "미지정"),
@@ -443,7 +555,8 @@ def classify_regulations(
                 "authority": reg.get("authority", "미지정"),
                 "priority": "MEDIUM",  # 기본값, Prioritizer에서 결정
                 "key_requirements": reg.get("key_requirements", []),
-                "reference_url": reg.get("reference_url", "")
+                "reference_url": primary_url,
+                "sources": source_entries
             })
 
         # 카테고리별 개수 계산
@@ -569,8 +682,14 @@ def generate_checklists(regulations: List[Regulation]) -> Dict[str, Any]:
     for reg in regulations:
         print(f"   {reg['name']} - 체크리스트 생성 중...")
 
+        source_summary = "\n".join([
+            f"{src.get('source_id','-')} | {src.get('title','제목 없음')}\nURL: {src.get('url','')}\n발췌: {src.get('snippet','')}"
+            for src in reg.get('sources', [])
+        ]) or "등록된 출처 없음"
+
         prompt = f"""
 다음 규제를 준수하기 위한 실행 가능한 체크리스트를 생성하세요.
+각 작업마다 실제 인터넷 출처(source_id)를 evidence 배열에 포함해야 합니다.
 
 [규제 정보]
 규제명: {reg['name']}
@@ -581,23 +700,38 @@ def generate_checklists(regulations: List[Regulation]) -> Dict[str, Any]:
 주요 요구사항:
 {chr(10).join(f'- {req}' for req in reg['key_requirements'])}
 
-중소 제조기업이 실행할 수 있는 구체적인 체크리스트 3-5개 항목을 생성하세요.
+[사용 가능한 출처]
+{source_summary}
 
-각 항목은 다음 JSON 형식으로 작성하세요:
+[생성 지침]
+1) 작업 수: 3~5개.
+2) method[0]에는 "(매핑: 요구사항 N)" 형식으로 매핑 정보를 기재합니다.
+3) evidence에는 [사용 가능한 출처]에서 선택한 source_id와 해당 출처의 핵심 문장을 1~2개 포함합니다.
+4) method 단계는 3~5개, 마지막 단계에는 증빙/기록 확보를 포함합니다.
+5) deadline, estimated_cost, estimated_time은 우선순위에 맞게 구체적으로 작성합니다.
+6) JSON 배열 외 텍스트는 금지합니다.
+
+[출력 스키마]
 {{
-    "task_name": "구체적인 작업명",
-    "responsible_dept": "담당 부서 (예: 안전관리팀, 법무팀, 시설관리팀, 인사팀)",
-    "deadline": "마감 기한 (예: 사업 개시 전 필수, 연 1회, 분기 1회, 3개월 내)",
-    "method": [
-        "1. 첫 번째 단계",
-        "2. 두 번째 단계",
-        "3. 세 번째 단계"
-    ],
-    "estimated_cost": "예상 비용 (예: 30만원, 100만원, 무료)",
-    "estimated_time": "소요 시간 (예: 20일, 1개월, 3일)"
+  "task_name": "구체적인 작업명(명령형)",
+  "responsible_dept": "담당 부서",
+  "deadline": "마감 기한",
+  "method": [
+    "1. (매핑: 요구사항 N) ...",
+    "2. ...",
+    "3. ...",
+    "4. ...",
+    "5. ..."
+  ],
+  "estimated_cost": "예상 비용",
+  "estimated_time": "소요 시간",
+  "evidence": [
+    {{
+      "source_id": "SRC-001",
+      "justification": "출처에서 확인한 핵심 문장"
+    }}
+  ]
 }}
-
-출력은 JSON 배열 형식으로만 작성하세요. 설명은 포함하지 마세요.
 """
 
         response = llm.invoke(prompt)
@@ -612,8 +746,18 @@ def generate_checklists(regulations: List[Regulation]) -> Dict[str, Any]:
 
             checklist_items = json.loads(content.strip())
 
+            source_lookup = {
+                src.get("source_id"): src for src in reg.get("sources", [])
+                if src.get("source_id")
+            }
+
             # ChecklistItem 형식으로 변환
             for item in checklist_items:
+                evidence_entries = _normalize_evidence_payload(
+                    item.get("evidence"),
+                    source_lookup
+                )
+
                 all_checklists.append({
                     "regulation_id": reg['id'],
                     "regulation_name": reg['name'],
@@ -624,7 +768,8 @@ def generate_checklists(regulations: List[Regulation]) -> Dict[str, Any]:
                     "estimated_cost": item.get("estimated_cost", "미정"),
                     "estimated_time": item.get("estimated_time", "미정"),
                     "priority": reg['priority'],
-                    "status": "pending"
+                    "status": "pending",
+                    "evidence": evidence_entries
                 })
 
         except json.JSONDecodeError as e:
@@ -746,6 +891,8 @@ def plan_execution(
 
             plan_data = json.loads(content.strip())
 
+            plan_evidence = _merge_evidence([item.get("evidence", []) for item in reg_checklists])
+
             # ExecutionPlan 형식으로 변환
             execution_plan: ExecutionPlan = {
                 "plan_id": f"PLAN-{len(all_execution_plans) + 1:03d}",
@@ -757,7 +904,8 @@ def plan_execution(
                 "milestones": plan_data.get("milestones", []),
                 "dependencies": plan_data.get("dependencies", {}),
                 "parallel_tasks": plan_data.get("parallel_tasks", []),
-                "critical_path": plan_data.get("critical_path", [])
+                "critical_path": plan_data.get("critical_path", []),
+                "evidence": plan_evidence
             }
 
             all_execution_plans.append(execution_plan)
@@ -765,6 +913,8 @@ def plan_execution(
         except json.JSONDecodeError as e:
             print(f"      ⚠️  JSON 파싱 오류: {e}")
             # 기본 실행 계획 생성
+            plan_evidence = _merge_evidence([item.get("evidence", []) for item in reg_checklists])
+
             default_plan: ExecutionPlan = {
                 "plan_id": f"PLAN-{len(all_execution_plans) + 1:03d}",
                 "regulation_id": reg_id,
@@ -775,7 +925,8 @@ def plan_execution(
                 "milestones": [],
                 "dependencies": {},
                 "parallel_tasks": [],
-                "critical_path": []
+                "critical_path": [],
+                "evidence": plan_evidence
             }
             all_execution_plans.append(default_plan)
 
@@ -807,8 +958,14 @@ def assess_risks(
     for reg in regulations:
         print(f"   {reg['name']} - 리스크 분석 중...")
 
+        source_summary = "\n".join([
+            f"{src.get('source_id','-')} | {src.get('title','제목 없음')}\nURL: {src.get('url','')}\n발췌: {src.get('snippet','')}"
+            for src in reg.get('sources', [])
+        ]) or "등록된 출처 없음"
+
         prompt = f"""
 다음 규제를 준수하지 않았을 때의 리스크를 평가하세요.
+근거는 [사용 가능한 출처]에서 선택한 항목만 활용하고 evidence 배열에 포함하세요.
 
 [규제 정보]
 규제명: {reg['name']}
@@ -821,20 +978,28 @@ def assess_risks(
 제품: {business_info['product_name']}
 직원 수: {business_info.get('employee_count', 0)}명
 
-다음 정보를 JSON 형식으로 제공하세요:
+[사용 가능한 출처]
+{source_summary}
+
+[출력 스키마]
 {{
-    "penalty_amount": "벌금액 (예: 최대 1억원, 300만원 이하)",
-    "penalty_type": "벌칙 유형 (예: 형사처벌, 과태료, 행정처분)",
-    "business_impact": "사업 영향 (예: 영업정지 6개월, 인허가 취소, 입찰 제한)",
-    "risk_score": 리스크 점수 (0-10, 숫자만),
-    "past_cases": [
-        "과거 처벌 사례 1 (연도, 기업, 처벌 내용)",
-        "과거 처벌 사례 2"
-    ],
-    "mitigation": "리스크 완화 방안 (1-2문장)"
+  "penalty_amount": "벌금액 (예: 최대 1억원, 300만원 이하, 없으면 \"\")",
+  "penalty_type": "벌칙 유형 (형사처벌|과태료|행정처분|\"\" )",
+  "business_impact": "사업 영향 (예: 영업정지 6개월, 인허가 취소, 없으면 \"\")",
+  "risk_score": 0-10 사이 숫자,
+  "past_cases": [
+    "과거 처벌 사례 1 (연도, 기업, 처벌 내용)"
+  ],
+  "mitigation": "리스크 완화 방안 (1-2문장)",
+  "evidence": [
+    {{
+      "source_id": "SRC-001",
+      "justification": "출처에서 인용한 핵심 문장"
+    }}
+  ]
 }}
 
-출력은 JSON 형식으로만 작성하세요.
+JSON 이외 텍스트는 금지합니다.
 """
 
         response = llm.invoke(prompt)
@@ -848,15 +1013,32 @@ def assess_risks(
 
             risk_data = json.loads(content.strip())
 
+            source_lookup = {
+                src.get("source_id"): src for src in reg.get("sources", [])
+                if src.get("source_id")
+            }
+
+            raw_score = risk_data.get("risk_score", 5.0)
+            try:
+                risk_score = float(raw_score)
+            except (TypeError, ValueError):
+                risk_score = 5.0
+
+            evidence_entries = _normalize_evidence_payload(
+                risk_data.get("evidence"),
+                source_lookup
+            )
+
             risk_item: RiskItem = {
                 "regulation_id": reg['id'],
                 "regulation_name": reg['name'],
-                "penalty_amount": risk_data.get("penalty_amount", "미상"),
-                "penalty_type": risk_data.get("penalty_type", "미상"),
-                "business_impact": risk_data.get("business_impact", "미상"),
-                "risk_score": float(risk_data.get("risk_score", 5.0)),
+                "penalty_amount": risk_data.get("penalty_amount", "") or "",
+                "penalty_type": risk_data.get("penalty_type", "") or "",
+                "business_impact": risk_data.get("business_impact", "") or "",
+                "risk_score": risk_score,
                 "past_cases": risk_data.get("past_cases", []),
-                "mitigation": risk_data.get("mitigation", "")
+                "mitigation": risk_data.get("mitigation", ""),
+                "evidence": evidence_entries
             }
 
             risk_items.append(risk_item)
@@ -867,12 +1049,13 @@ def assess_risks(
             risk_items.append({
                 "regulation_id": reg['id'],
                 "regulation_name": reg['name'],
-                "penalty_amount": "미상",
-                "penalty_type": "미상",
-                "business_impact": "미상",
+                "penalty_amount": "",
+                "penalty_type": "",
+                "business_impact": "",
                 "risk_score": 5.0,
                 "past_cases": [],
-                "mitigation": "전문가 상담 권장"
+                "mitigation": "전문가 상담 권장",
+                "evidence": []
             })
 
     # 전체 리스크 점수 계산 (가중 평균)
@@ -954,6 +1137,20 @@ def generate_final_report(
     total_risk_score = risk_assessment.get('total_risk_score', 0)
     immediate_actions = [reg for reg in regulations if reg['priority'] == 'HIGH']
 
+    regulation_evidence = _merge_evidence([reg.get('sources', []) for reg in regulations])
+    checklist_evidence = _merge_evidence([item.get('evidence', []) for item in checklists])
+    execution_plan_evidence = _merge_evidence([plan.get('evidence', []) for plan in execution_plans])
+    risk_evidence = _merge_evidence([
+        item.get('evidence', []) for bucket in risk_assessment.get('risk_matrix', {}).values()
+        for item in bucket
+    ] if isinstance(risk_assessment.get('risk_matrix'), dict) else [])
+    all_citations = _merge_evidence([
+        regulation_evidence,
+        checklist_evidence,
+        execution_plan_evidence,
+        risk_evidence
+    ])
+
     # === 2. 통합 마크다운 보고서 생성 ===
     print("   통합 마크다운 보고서 작성 중...")
 
@@ -1019,6 +1216,18 @@ def generate_final_report(
             if reg.get('penalty'):
                 full_markdown += f"**벌칙:** {reg['penalty']}\n\n"
 
+            if reg.get('sources'):
+                full_markdown += "**근거 출처:**\n"
+                for src in reg['sources']:
+                    link_title = src.get('title') or src.get('url', '')
+                    url = src.get('url', '')
+                    snippet = (src.get('snippet') or "").replace('\n', ' ')
+                    if url:
+                        full_markdown += f"- [{link_title}]({url}) — {snippet}\n"
+                    else:
+                        full_markdown += f"- {link_title} — {snippet}\n"
+                full_markdown += "\n"
+
     # 2-3. 실행 체크리스트
     full_markdown += "\n---\n\n## 4. 실행 체크리스트\n\n"
 
@@ -1035,6 +1244,17 @@ def generate_final_report(
                 if item.get('estimated_cost'):
                     full_markdown += f"  - 예상 비용: {item['estimated_cost']}\n"
                 full_markdown += "\n"
+                if item.get('evidence'):
+                    for ev in item['evidence']:
+                        link_title = ev.get('title') or ev.get('url', '')
+                        url = ev.get('url', '')
+                        snippet = (ev.get('snippet') or "").replace('\n', ' ')
+                        full_markdown += f"    • 근거: "
+                        if url:
+                            full_markdown += f"[{link_title}]({url}) — {snippet}\n"
+                        else:
+                            full_markdown += f"{link_title} — {snippet}\n"
+                    full_markdown += "\n"
 
     # 2-4. 실행 계획 및 타임라인
     full_markdown += "\n---\n\n## 5. 실행 계획 및 타임라인\n\n"
@@ -1074,6 +1294,18 @@ def generate_final_report(
         if plan.get('critical_path'):
             full_markdown += f"**크리티컬 패스:** {' → '.join(f'`{t}`' for t in plan['critical_path'])}\n\n"
 
+        if plan.get('evidence'):
+            full_markdown += "**근거 출처:**\n"
+            for ev in plan['evidence']:
+                link_title = ev.get('title') or ev.get('url', '')
+                url = ev.get('url', '')
+                snippet = (ev.get('snippet') or "").replace('\n', ' ')
+                if url:
+                    full_markdown += f"- [{link_title}]({url}) — {snippet}\n"
+                else:
+                    full_markdown += f"- {link_title} — {snippet}\n"
+            full_markdown += "\n"
+
     # 2-5. 리스크 평가
     full_markdown += "\n---\n\n## 6. 리스크 평가\n\n"
     full_markdown += f"### 6.1 전체 리스크 평가\n\n"
@@ -1092,6 +1324,18 @@ def generate_final_report(
 
             if item.get('mitigation_priority'):
                 full_markdown += f"**완화 우선순위:** {item['mitigation_priority']}\n\n"
+
+            if item.get('evidence'):
+                full_markdown += "**근거 출처:**\n"
+                for ev in item['evidence']:
+                    link_title = ev.get('title') or ev.get('url', '')
+                    url = ev.get('url', '')
+                    snippet = (ev.get('snippet') or "").replace('\n', ' ')
+                    if url:
+                        full_markdown += f"- [{link_title}]({url}) — {snippet}\n"
+                    else:
+                        full_markdown += f"- {link_title} — {snippet}\n"
+                full_markdown += "\n"
 
     # 2-6. 경영진 요약 (LLM으로 생성)
     print("   경영진 요약 생성 중...")
@@ -1144,6 +1388,17 @@ def generate_final_report(
     for step in next_steps:
         full_markdown += f"- {step}\n"
 
+    if all_citations:
+        full_markdown += "\n---\n\n## 9. 근거 출처 모음\n\n"
+        for idx, citation in enumerate(all_citations, 1):
+            link_title = citation.get('title') or citation.get('url', '')
+            url = citation.get('url', '')
+            snippet = (citation.get('snippet') or "").replace('\n', ' ')
+            if url:
+                full_markdown += f"{idx}. [{link_title}]({url}) — {snippet}\n"
+            else:
+                full_markdown += f"{idx}. {link_title} — {snippet}\n"
+
     # 2-8. 면책 조항
     full_markdown += "\n---\n\n## 면책 조항\n\n"
     full_markdown += "> 본 보고서는 AI 기반 분석 도구로 생성된 참고 자료입니다. "
@@ -1169,8 +1424,10 @@ def generate_final_report(
 
     risk_highlights = []
     for item in high_risk_items[:3]:
+        penalty = item.get('penalty_type') or "제재 정보 없음"
+        impact = item.get('business_impact') or "영향 정보 미기재"
         risk_highlights.append(
-            f"{item['regulation_name']} 미준수 시 {item['penalty_type']} - {item['business_impact']}"
+            f"{item['regulation_name']} 미준수 시 {penalty} - {impact}"
         )
 
     # === 4. PDF 저장 ===
@@ -1194,7 +1451,8 @@ def generate_final_report(
         "risk_highlights": risk_highlights,
         "next_steps": next_steps,
         "full_markdown": full_markdown,
-        "report_pdf_path": report_pdf_path
+        "report_pdf_path": report_pdf_path,
+        "citations": all_citations
     }
 
     print(f"   ✓ 통합 보고서 생성 완료\n")
@@ -1356,7 +1614,10 @@ def run_regulation_agent(business_info: BusinessInfo) -> AgentState:
             "key_insights": [],
             "action_items": [],
             "risk_highlights": [],
-            "next_steps": []
+            "next_steps": [],
+            "full_markdown": "",
+            "report_pdf_path": "",
+            "citations": []
         }
     }
 
@@ -1404,6 +1665,12 @@ def print_checklists(checklists: List[ChecklistItem]):
                 print(f"      실행 방법:")
                 for method in item['method'][:3]:  # 최대 3단계만 표시
                     print(f"         {method}")
+            if item.get('evidence'):
+                print("      근거:")
+                for ev in item['evidence'][:2]:
+                    title = ev.get("title") or ev.get("url", "")
+                    url = ev.get("url", "")
+                    print(f"         - {title} ({url})")
 
         print()
 
@@ -1445,6 +1712,15 @@ def print_execution_plans(execution_plans: List[ExecutionPlan]):
             for group in parallel_tasks[:2]:
                 print(f"      작업 {', '.join(group)}는 동시 진행 가능")
         print()
+
+        evidence = plan.get('evidence', [])
+        if evidence:
+            print("   📎 근거:")
+            for ev in evidence[:3]:
+                title = ev.get("title") or ev.get("url", "")
+                url = ev.get("url", "")
+                print(f"      - {title} ({url})")
+            print()
 
         # 크리티컬 패스
         critical_path = plan.get('critical_path', [])
@@ -1492,6 +1768,17 @@ def print_final_report(final_report: FinalReport):
             print(f"   {step}")
         print()
 
+    citations = final_report.get('citations', [])
+    if citations:
+        print("🔗 주요 출처:")
+        for ev in citations[:5]:
+            title = ev.get("title") or ev.get("url", "")
+            url = ev.get("url", "")
+            print(f"   - {title} ({url})")
+        if len(citations) > 5:
+            print("   ...")
+        print()
+
     # 경영진용 요약 (일부만 표시)
     exec_summary = final_report.get('executive_summary', '')
     if exec_summary:
@@ -1530,6 +1817,12 @@ def print_risk_assessment(risk_assessment: RiskAssessment):
                     print(f"         - {case}")
             if item['mitigation']:
                 print(f"      완화 방안: {item['mitigation']}")
+            if item.get('evidence'):
+                print("      근거:")
+                for ev in item['evidence'][:2]:
+                    title = ev.get("title") or ev.get("url", "")
+                    url = ev.get("url", "")
+                    print(f"         - {title} ({url})")
         print()
 
     # 권장 사항
@@ -1622,6 +1915,12 @@ def main():
             print(f"      - {req}")
         if reg['reference_url']:
             print(f"   참고: {reg['reference_url']}")
+        if reg.get('sources'):
+            print("   근거:")
+            for src in reg['sources'][:3]:
+                title = src.get("title") or src.get("url", "")
+                url = src.get("url", "")
+                print(f"      - {title} ({url})")
         print()
 
     print()

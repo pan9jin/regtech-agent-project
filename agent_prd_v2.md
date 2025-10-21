@@ -1,9 +1,9 @@
 # 규제 AI Agent 서비스 - 제품 요구사항 명세서 (PRD)
 
-**문서 버전**: 2.0 (3일 MVP)  
-**작성일**: 2025년 10월 20일  
-**개발 기간**: 3일  
-**서비스명**: RegTech Assistant (가칭)  
+**문서 버전**: 2.0 (8-Agent System)
+**작성일**: 2025년 10월 21일
+**시스템**: LangGraph 기반 8-Agent Multi-Agent Workflow
+**서비스명**: RegTech Assistant
 **슬로건**: "규제를 이해하고, 준수를 자동화하다"
 **PRD**: @agent_prd_v2.md
 
@@ -12,29 +12,33 @@
 ## 1. 개요 (Executive Summary)
 
 ### 1.1 서비스 설명
-RegTech Assistant는 중소 제조기업이 복잡한 규제 환경에서 안전하게 사업을 운영할 수 있도록 돕는 AI 기반 규제 준수 보조 서비스입니다. 기업의 사업 정보를 입력하면 AI가 적용 가능한 규제를 자동으로 식별하고, 준수해야 할 항목을 체크리스트로 제공합니다.
+RegTech Assistant는 중소 제조기업이 복잡한 규제 환경에서 안전하게 사업을 운영할 수 있도록 돕는 AI 기반 규제 준수 자동화 서비스입니다. 기업의 사업 정보를 입력하면 **8개의 전문 AI Agent**가 협업하여 적용 가능한 규제를 자동으로 식별하고, 실행 가능한 체크리스트, 상세 실행 계획, 리스크 평가, 통합 보고서(PDF)까지 생성합니다.
 
-### 1.2 핵심 가치 제안 (MVP)
-- **빠른 규제 파악**: 사업 정보 입력 후 5분 내 적용 규제 확인
-- **자동화된 체크리스트**: AI가 생성한 실행 가능한 준수 체크리스트
-- **근거 기반 정보**: 웹 검색을 통한 최신 규제 정보 제공
+### 1.2 핵심 가치 제안
+- **빠른 규제 파악**: 사업 정보 입력 후 5-10분 내 적용 규제 자동 식별
+- **실행 가능한 체크리스트**: AI가 생성한 구체적인 준수 항목 (규제당 3-5개)
+- **체계적 실행 계획**: 의존성, 타임라인, 마일스톤 포함 프로젝트 계획
+- **리스크 평가**: 미준수 시 벌칙, 영향도 분석 및 완화 방안 제시
+- **통합 보고서**: 경영진/실무진/법무팀용 맞춤 보고서 자동 생성 (Markdown + PDF)
+- **근거 기반 정보**: Tavily 웹 검색을 통한 최신 규제 정보 제공
 
-### 1.3 MVP 범위
-이 문서는 **3일 내 구현 가능한 최소 기능 제품(MVP)**을 정의합니다. 확장성, 보안, 대규모 사용자 지원은 향후 버전에서 고려합니다.
+### 1.3 시스템 범위
+**8-Agent LangGraph Multi-Agent System**으로 구현된 완전 자동화 규제 분석 파이프라인입니다. 단일 Python 스크립트로 실행되며, 모든 분석 과정이 순차적으로 자동 진행됩니다.
 
 ---
 
 ## 2. 목표 및 배경 (Goals & Background)
 
-### 2.1 MVP 목표 (3일)
-1. **Day 1**: 기본 UI 및 사업 정보 입력 폼 완성
-2. **Day 2**: AI Agent 규제 매핑 로직 구현
-3. **Day 3**: 체크리스트 생성 및 결과 화면 완성
+### 2.1 시스템 목표
+**8-Agent Multi-Agent Workflow**를 통한 완전 자동화 규제 분석 시스템 구축
 
 **성공 기준**:
-- 사업 정보 입력 → 규제 목록 출력까지 동작
-- 최소 10개 주요 규제 커버
-- 기본적인 체크리스트 생성 가능
+- 사업 정보 입력 → 규제 분석 → PDF 보고서 생성까지 5-10분 내 완료
+- 최소 5-8개 적용 규제 자동 식별
+- 규제당 3-5개 실행 가능한 체크리스트 생성
+- 실행 계획에 의존성, 타임라인, 마일스톤 포함
+- 리스크 평가 (점수 0-10) 및 완화 방안 제시
+- 통합 보고서 PDF 자동 생성 (한글 폰트 지원)
 
 ### 2.2 문제 정의 (간소화)
 - 중소 제조기업은 어떤 규제가 적용되는지 파악하기 어려움
@@ -94,19 +98,28 @@ AI Agent가 사업 정보를 분석하여 자동으로 적용 규제를 식별�
 
 ---
 
-### 4.2 Feature 2: AI Agent 규제 매핑 (Day 2)
-**설명**: LangGraph 기반 Multi-Agent가 규제를 식별하고 분석
+### 4.2 Feature 2: 8-Agent Multi-Agent Workflow
+**설명**: LangGraph 기반 8개 전문 Agent가 순차 협업하여 규제 분석 전체 프로세스 자동화
 
-**Agent 구조**:
-```python
-# LangGraph Workflow
-1. Analyzer Agent: 입력 데이터 분석 및 키워드 추출
-2. Search Agent: Tavily API로 관련 규제 웹 검색
-3. Classifier Agent: 규제를 3개 영역으로 분류
+**Agent 구조** (실행 순서):
+```
+START → Analyzer → Searcher → Classifier → Prioritizer
+     → Checklist Generator → Planning Agent → Risk Assessor
+     → Report Generator → END
+```
+
+**각 Agent 역할**:
+1. **Analyzer Agent**: 입력 데이터 분석 및 키워드 추출 (5-10개)
+2. **Search Agent**: Tavily API로 관련 규제 웹 검색 (최대 8개 문서)
+3. **Classifier Agent**: 규제를 3개 카테고리로 분류 및 적용성 판단
    - 안전/환경
-   - 제품 인증  
+   - 제품 인증
    - 공장 운영
-4. Prioritizer Agent: 위험도 기반 우선순위 결정
+4. **Prioritizer Agent**: 위험도 기반 우선순위 결정 (HIGH/MEDIUM/LOW)
+5. **Checklist Generator Agent**: 규제별 실행 체크리스트 생성 (3-5개 항목)
+6. **Planning Agent**: 실행 계획 수립 (타임라인, 의존성, 마일스톤, 크리티컬 패스)
+7. **Risk Assessor Agent**: 리스크 평가 (벌칙, 영향도, 완화 방안)
+8. **Report Generator Agent**: 통합 보고서 생성 (Markdown + PDF)
 ```
 
 **처리 로직**:
@@ -260,34 +273,32 @@ prompt = f"""
 
 ---
 
-## 5. 기술 스택 및 아키텍처 (Tech Stack - MVP)
+## 5. 기술 스택 및 아키텍처
 
 ### 5.1 기술 스택
-**Frontend**:
-- **Framework**: Vue.js 3 (Composition API)
-- **UI Library**: Tailwind CSS
-- **빌드 도구**: Vite
-- **HTTP Client**: Axios
-- **마크다운 렌더러**: marked.js 또는 vue-markdown
 
-**Backend**:
-- **Framework**: FastAPI (Python 3.10+)
-- **AI/ML**:
-  - LangChain: LLM 체이닝 및 프롬프트 관리
-  - LangGraph: Multi-Agent Workflow 구성
-  - OpenAI API: GPT-4 (분석, 분류, 체크리스트 생성)
-- **웹 검색**: Tavily API
-- **기타**: Pydantic (데이터 검증), python-dotenv
+**Python 단일 시스템** (Backend Only):
+- **언어**: Python 3.11+
+- **AI/ML 프레임워크**:
+  - **LangChain**: LLM 체이닝 및 프롬프트 관리
+  - **LangGraph**: Multi-Agent Workflow 구성 (8-Agent 순차 실행)
+  - **OpenAI API**: GPT-4o-mini (분석, 분류, 체크리스트, 계획, 리스크, 보고서 생성)
+- **웹 검색**: Tavily API (최대 8개 문서 검색)
+- **보고서 생성**:
+  - **Markdown**: markdown 라이브러리 (Markdown → HTML 변환)
+  - **PDF**: WeasyPrint (HTML → PDF 저장, 한글 폰트 지원)
+- **데이터 검증**: Pydantic (TypedDict)
+- **환경변수**: python-dotenv
 
-**Database** (간소화):
-- **개발용**: SQLite (로컬)
-- **배포용**: PostgreSQL (Railway/Supabase 무료 티어)
-- 대안: JSON 파일로 임시 저장 (DB 없이도 가능)
+**데이터 저장**:
+- **출력 파일**: JSON 파일 (전체 분석 결과)
+- **보고서**: Markdown + PDF 파일 (`report/` 폴더)
+- **Database**: 없음 (파일 기반 저장)
 
-**배포**:
-- Frontend: Vercel 또는 Netlify
-- Backend: Railway, Render, 또는 fly.io
-- 환경변수: .env 파일 관리
+**배포** (향후):
+- Backend API: FastAPI로 확장 가능
+- Frontend: Vue.js로 확장 가능
+- 현재 버전: 단일 Python 스크립트 실행
 
 ### 5.2 시스템 아키텍처 (간소화)
 

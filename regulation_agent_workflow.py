@@ -1,15 +1,20 @@
 """
 규제 AI Agent 서비스 - LangGraph Multi-Agent Workflow
-7개의 Agent로 구성된 규제 분석 시스템
-- Analyzer Agent: 사업 정보 분석 및 키워드 추출
-- Search Agent: Tavily API를 통한 규제 정보 검색
-- Classifier Agent: 검색된 규제 분류 및 적용성 판단
-- Prioritizer Agent: 규제 우선순위 결정 (HIGH/MEDIUM/LOW)
-- Checklist Generator Agent: 규제별 실행 가능한 체크리스트 생성
-- [제거] Cost Estimator Agent: 총 준수 비용 산출 및 지출 계획 수립
-- [추가] Planning Agent: 체크리스트에서 실행 방법 도출 및 담당자가 수행해야 할 세부적인 계획 수립
-- Risk Assessment Agent: 미준수 시 리스크 평가 및 완화 방안 제시
-- [추가] Report Generation Agent: 최종 보고서 작성 및 요약
+8개의 Agent로 구성된 규제 분석 시스템
+
+1. Analyzer Agent: 사업 정보 분석 및 키워드 추출
+2. Search Agent: Tavily API를 통한 규제 정보 검색
+3. Classifier Agent: 검색된 규제 분류 및 적용성 판단
+4. Prioritizer Agent: 규제 우선순위 결정 (HIGH/MEDIUM/LOW)
+5. Checklist Generator Agent: 규제별 실행 가능한 체크리스트 생성
+6. Planning Agent: 체크리스트 → 실행 계획 변환 (의존성, 타임라인, 마일스톤)
+7. Risk Assessment Agent: 미준수 시 리스크 평가 및 완화 방안 제시
+8. Report Generation Agent: 최종 통합 보고서 생성 (경영진/실무진/법무팀용)
+
+워크플로우:
+START → Analyzer → Searcher → Classifier → Prioritizer
+→ Checklist Generator → Planning Agent → Risk Assessor
+→ Report Generator → END
 """
 
 import os
@@ -17,7 +22,11 @@ import json
 from typing import List, Optional, Dict, Any
 from typing_extensions import TypedDict
 from enum import Enum
+from datetime import datetime
 from dotenv import load_dotenv
+from markdown import markdown
+from pathlib import Path
+from weasyprint import HTML, CSS
 
 from langchain_openai import ChatOpenAI
 from langchain_tavily import TavilySearch
@@ -85,20 +94,39 @@ class ChecklistItem(TypedDict):
     status: str                 # 상태 (pending/in_progress/completed)
 
 
-class CostBreakdown(TypedDict):
-    """비용 분류 데이터 구조"""
-    by_priority: Dict[str, int]     # HIGH/MEDIUM/LOW별 비용
-    by_category: Dict[str, int]     # 카테고리별 비용
-    by_timeline: Dict[str, int]     # 시기별 비용 (즉시/단기/중기)
+class Milestone(TypedDict):
+    """마일스톤 데이터 구조"""
+    name: str                           # 마일스톤명
+    deadline: str                       # 마감일 (예: "1개월 내")
+    tasks: List[str]                    # 포함된 작업 ID들
+    completion_criteria: str            # 완료 기준
 
 
-class CostAnalysis(TypedDict):
-    """비용 분석 결과 데이터 구조"""
-    total_cost: int                         # 총 비용 (원)
-    total_cost_formatted: str               # 포맷된 문자열
-    breakdown: CostBreakdown                # 세부 분류
-    subsidies: List[Dict[str, str]]         # 정부 지원금 정보
-    payment_plan: List[Dict[str, Any]]      # 단계별 지출 계획
+class ExecutionPlan(TypedDict):
+    """실행 계획 데이터 구조"""
+    plan_id: str                        # 계획 ID
+    regulation_id: str                  # 연결된 규제 ID
+    regulation_name: str                # 규제명
+    checklist_items: List[str]          # 연결된 체크리스트 항목 ID들
+    timeline: str                       # 예상 소요 기간 (예: "3개월")
+    start_date: str                     # 시작 시점 (예: "즉시", "공장등록 후")
+    milestones: List[Milestone]         # 마일스톤 목록
+    dependencies: Dict[str, List[str]]  # 선행 작업 의존성 (작업ID: [선행작업ID들])
+    parallel_tasks: List[List[str]]     # 병렬 처리 가능한 작업 그룹
+    critical_path: List[str]            # 크리티컬 패스 (가장 긴 경로)
+
+
+class FinalReport(TypedDict):
+    """최종 보고서 데이터 구조"""
+    executive_summary: str              # 경영진용 요약 (마크다운)
+    detailed_report: str                # 실무진용 상세 보고서 (마크다운)
+    legal_report: str                   # 법무팀용 규제 상세 (마크다운)
+    key_insights: List[str]             # 핵심 인사이트 (3-5개)
+    action_items: List[Dict[str, Any]]  # 즉시 조치 항목
+    risk_highlights: List[str]          # 주요 리스크 하이라이트
+    next_steps: List[str]               # 다음 단계 권장사항
+    full_markdown: str                  # 통합 마크다운 보고서 (전체)
+    report_pdf_path: str                # PDF 저장 경로
 
 
 class RiskItem(TypedDict):
@@ -130,10 +158,11 @@ class AgentState(TypedDict, total=False):
     regulations: List[Regulation]
     final_output: Dict[str, Any]
 
-    # 추가 필드 (3개 새로운 Agent)
+    # Agent 결과 필드
     checklists: List[ChecklistItem]     # 체크리스트 목록
-    cost_analysis: CostAnalysis         # 비용 분석 결과
+    execution_plans: List[ExecutionPlan]  # 실행 계획 (Planning Agent)
     risk_assessment: RiskAssessment     # 리스크 평가 결과
+    final_report: FinalReport           # 최종 보고서 (Report Generation Agent)
 
 
 # ============================================
@@ -212,6 +241,74 @@ def _parse_cost_from_text(text: str) -> int:
         return int(match_num.group(1).replace(',', ''))
 
     return 0
+
+
+def save_report_pdf(markdown_text: str, output_dir: Path) -> Path:
+    """Markdown 보고서를 HTML+CSS로 변환하여 PDF로 저장하고,
+    원본 markdown도 .md 파일로 함께 저장합니다.
+
+    Args:
+        markdown_text: 마크다운 형식의 보고서 텍스트
+        output_dir: PDF 저장 디렉토리 경로
+
+    Returns:
+        생성된 PDF 파일의 경로
+    """
+    if not markdown_text.strip():
+        raise RuntimeError("생성된 보고서 내용이 비어 있어 PDF를 생성할 수 없습니다.")
+
+    # 출력 디렉토리 생성
+    output_dir = Path(output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    # 저장 파일 경로 정의 (동일 베이스 이름으로 md & pdf 생성)
+    md_path = output_dir / "regulation_report.md"
+    pdf_path = output_dir / "regulation_report.pdf"
+
+    # 1) 원본 마크다운 저장 (존재 시 덮어쓰기)
+    md_path.write_text(markdown_text, encoding="utf-8")
+
+    # 2) Markdown → HTML 변환
+    html_body = markdown(
+        markdown_text,
+        extensions=["extra", "toc", "tables", "fenced_code"],
+    )
+
+    # 3) PDF 스타일 정의
+    css = CSS(
+        string="""
+        @page { size: A4; margin: 20mm; }
+        body { font-family: 'Apple SD Gothic Neo', 'Nanum Gothic', 'Noto Sans CJK KR', sans-serif; font-size: 11pt; line-height: 1.6; }
+        h1, h2, h3 { color: #1a237e; }
+        h1 { border-bottom: 3px solid #1a237e; padding-bottom: 10px; }
+        h2 { border-bottom: 1px solid #9fa8da; padding-bottom: 5px; margin-top: 20px; }
+        ul { margin-left: 0; padding-left: 15px; }
+        li { margin-bottom: 6px; }
+        table { border-collapse: collapse; width: 100%; margin: 12px 0; }
+        th, td { border: 1px solid #bdbdbd; padding: 8px; text-align: left; }
+        th { background-color: #e8eaf6; font-weight: bold; }
+        code, pre { background: #f5f5f5; padding: 2px 4px; border-radius: 3px; }
+        blockquote { border-left: 4px solid #1a237e; padding-left: 10px; color: #555; }
+        """
+    )
+
+    # 4) HTML 문서 완성 및 PDF 저장 (동일 이름 존재 시 자동 덮어쓰기)
+    html_doc = f"""
+    <html>
+      <head>
+        <meta charset='utf-8'>
+        <title>규제 준수 분석 보고서</title>
+      </head>
+      <body>{html_body}</body>
+    </html>
+    """
+
+    HTML(string=html_doc).write_pdf(target=str(pdf_path), stylesheets=[css])
+
+    print(f"✓ PDF 보고서 저장: {pdf_path}")
+    print(f"✓ Markdown 보고서 저장: {md_path}")
+
+    return pdf_path
 
 
 # ============================================
@@ -581,147 +678,151 @@ def generate_checklists(regulations: List[Regulation]) -> Dict[str, Any]:
 
 
 @tool
-def estimate_costs(
+def plan_execution(
     regulations: List[Regulation],
-    checklists: List[ChecklistItem],
-    business_info: BusinessInfo
+    checklists: List[ChecklistItem]
 ) -> Dict[str, Any]:
-    """규제 준수에 필요한 총 비용을 산출합니다.
+    """체크리스트를 실행 가능한 계획으로 변환합니다.
 
     Args:
         regulations: 규제 목록
         checklists: 체크리스트 목록
-        business_info: 사업 정보
 
     Returns:
-        비용 분석 결과
+        실행 계획 목록
     """
-    print("💰 [Cost Estimator Agent] 비용 분석 중...")
+    print("📅 [Planning Agent] 실행 계획 수립 중...")
 
-    llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.3)
+    llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
 
-    # 체크리스트별 비용 추출
-    total_cost = 0
-    cost_by_priority = {"HIGH": 0, "MEDIUM": 0, "LOW": 0}
-    cost_by_category = {}
-
+    # 규제별로 체크리스트 그룹핑
+    checklists_by_regulation = {}
     for item in checklists:
-        cost = _parse_cost_from_text(item['estimated_cost'])
-        total_cost += cost
+        reg_id = item['regulation_id']
+        if reg_id not in checklists_by_regulation:
+            checklists_by_regulation[reg_id] = []
+        checklists_by_regulation[reg_id].append(item)
 
-        # 우선순위별 집계
-        priority = item.get('priority', 'MEDIUM')
-        cost_by_priority[priority] = cost_by_priority.get(priority, 0) + cost
+    all_execution_plans = []
 
-        # 카테고리별 집계 (regulations에서 찾기)
-        for reg in regulations:
-            if reg['id'] == item['regulation_id']:
-                category = reg['category']
-                cost_by_category[category] = cost_by_category.get(category, 0) + cost
-                break
+    for reg in regulations:
+        reg_id = reg['id']
+        reg_name = reg['name']
+        reg_priority = reg['priority']
 
-    # GPT로 추가 분석 및 정부 지원금 정보 생성
-    regulations_summary = "\n".join([
-        f"- {r['name']} ({r['category']}, {r['priority']})"
-        for r in regulations
-    ])
+        # 해당 규제의 체크리스트 항목들
+        reg_checklists = checklists_by_regulation.get(reg_id, [])
 
-    prompt = f"""
-다음 사업의 규제 준수를 위한 비용 분석을 수행하세요.
+        if not reg_checklists:
+            continue
 
-[사업 정보]
-업종: {business_info['industry']}
-제품: {business_info['product_name']}
-직원 수: {business_info.get('employee_count', 0)}명
+        print(f"   {reg_name} - 실행 계획 생성 중...")
 
-[적용 규제]
-{regulations_summary}
+        # 체크리스트 요약
+        checklist_summary = "\n".join([
+            f"{i+1}. {item['task_name']}\n   담당: {item['responsible_dept']}\n   마감: {item['deadline']}\n   기간: {item['estimated_time']}"
+            for i, item in enumerate(reg_checklists)
+        ])
 
-[현재 예상 비용]
-총 비용: {_format_currency(total_cost)}
+        prompt = f"""
+다음 규제의 체크리스트를 바탕으로 실행 계획을 수립하세요.
 
-다음 정보를 JSON 형식으로 제공하세요:
+[규제 정보]
+규제명: {reg_name}
+우선순위: {reg_priority}
+
+[체크리스트 항목들]
+{checklist_summary}
+
+다음 정보를 분석하여 JSON 형식으로 제공하세요:
+1. 전체 예상 소요 기간 (timeline)
+2. 시작 시점 (start_date: "즉시", "1개월 내", "공장등록 후" 등)
+3. 마일스톤 (3-5개, 각 마일스톤마다 name, deadline, completion_criteria 포함)
+4. 작업 간 의존성 (dependencies: 어떤 작업이 먼저 완료되어야 하는지)
+5. 병렬 처리 가능한 작업 그룹 (parallel_tasks)
+6. 크리티컬 패스 (critical_path: 가장 오래 걸리는 경로의 작업 번호들)
+
+출력 형식:
 {{
-    "subsidies": [
+    "timeline": "3개월",
+    "start_date": "즉시",
+    "milestones": [
         {{
-            "name": "정부 지원금 프로그램명",
-            "amount": "지원 금액 (예: 최대 500만원)",
-            "agency": "주관 기관"
+            "name": "1개월 차: 서류 준비 완료",
+            "deadline": "30일 내",
+            "tasks": ["1", "2"],
+            "completion_criteria": "필요 서류 모두 준비"
         }}
     ],
-    "payment_plan": [
-        {{
-            "period": "즉시 (0-3개월)",
-            "amount": 예상 금액 (숫자만),
-            "items": ["항목1", "항목2"]
-        }},
-        {{
-            "period": "단기 (3-6개월)",
-            "amount": 예상 금액 (숫자만),
-            "items": ["항목1", "항목2"]
-        }},
-        {{
-            "period": "중기 (6-12개월)",
-            "amount": 예상 금액 (숫자만),
-            "items": ["항목1", "항목2"]
-        }}
-    ]
+    "dependencies": {{
+        "2": ["1"],
+        "3": ["1", "2"]
+    }},
+    "parallel_tasks": [
+        ["1", "2"],
+        ["3", "4"]
+    ],
+    "critical_path": ["1", "2", "5"]
 }}
+
+참고:
+- 우선순위 HIGH는 즉시 시작
+- 우선순위 MEDIUM은 1-3개월 내
+- 우선순위 LOW는 6개월 내
+- dependencies의 키는 작업 번호(문자열), 값은 선행 작업 번호 리스트
+- parallel_tasks는 동시에 진행 가능한 작업 그룹들의 리스트
 
 출력은 JSON 형식으로만 작성하세요.
 """
 
-    response = llm.invoke(prompt)
+        response = llm.invoke(prompt)
 
-    try:
-        content = response.content.strip()
-        if content.startswith("```"):
-            content = content.split("```")[1]
-            if content.startswith("json"):
-                content = content[4:]
+        try:
+            # JSON 파싱
+            content = response.content.strip()
+            if content.startswith("```"):
+                content = content.split("```")[1]
+                if content.startswith("json"):
+                    content = content[4:]
 
-        analysis_data = json.loads(content.strip())
+            plan_data = json.loads(content.strip())
 
-        # 시기별 비용 계산
-        cost_by_timeline = {}
-        for plan in analysis_data.get('payment_plan', []):
-            cost_by_timeline[plan['period']] = plan.get('amount', 0)
-
-        cost_analysis: CostAnalysis = {
-            "total_cost": total_cost,
-            "total_cost_formatted": _format_currency(total_cost),
-            "breakdown": {
-                "by_priority": cost_by_priority,
-                "by_category": cost_by_category,
-                "by_timeline": cost_by_timeline
-            },
-            "subsidies": analysis_data.get('subsidies', []),
-            "payment_plan": analysis_data.get('payment_plan', [])
-        }
-
-        print(f"   ✓ 비용 분석 완료: 총 {_format_currency(total_cost)}")
-        print(f"      - HIGH: {_format_currency(cost_by_priority['HIGH'])}")
-        print(f"      - MEDIUM: {_format_currency(cost_by_priority['MEDIUM'])}")
-        print(f"      - LOW: {_format_currency(cost_by_priority['LOW'])}\n")
-
-        return {"cost_analysis": cost_analysis}
-
-    except json.JSONDecodeError as e:
-        print(f"   ⚠️  JSON 파싱 오류: {e}")
-        # 기본 분석 결과 반환
-        return {
-            "cost_analysis": {
-                "total_cost": total_cost,
-                "total_cost_formatted": _format_currency(total_cost),
-                "breakdown": {
-                    "by_priority": cost_by_priority,
-                    "by_category": cost_by_category,
-                    "by_timeline": {}
-                },
-                "subsidies": [],
-                "payment_plan": []
+            # ExecutionPlan 형식으로 변환
+            execution_plan: ExecutionPlan = {
+                "plan_id": f"PLAN-{len(all_execution_plans) + 1:03d}",
+                "regulation_id": reg_id,
+                "regulation_name": reg_name,
+                "checklist_items": [str(i+1) for i in range(len(reg_checklists))],
+                "timeline": plan_data.get("timeline", "3개월"),
+                "start_date": plan_data.get("start_date", "즉시"),
+                "milestones": plan_data.get("milestones", []),
+                "dependencies": plan_data.get("dependencies", {}),
+                "parallel_tasks": plan_data.get("parallel_tasks", []),
+                "critical_path": plan_data.get("critical_path", [])
             }
-        }
+
+            all_execution_plans.append(execution_plan)
+
+        except json.JSONDecodeError as e:
+            print(f"      ⚠️  JSON 파싱 오류: {e}")
+            # 기본 실행 계획 생성
+            default_plan: ExecutionPlan = {
+                "plan_id": f"PLAN-{len(all_execution_plans) + 1:03d}",
+                "regulation_id": reg_id,
+                "regulation_name": reg_name,
+                "checklist_items": [str(i+1) for i in range(len(reg_checklists))],
+                "timeline": "3개월",
+                "start_date": "즉시" if reg_priority == "HIGH" else "1개월 내",
+                "milestones": [],
+                "dependencies": {},
+                "parallel_tasks": [],
+                "critical_path": []
+            }
+            all_execution_plans.append(default_plan)
+
+    print(f"   ✓ 실행 계획 수립 완료: 총 {len(all_execution_plans)}개 계획\n")
+
+    return {"execution_plans": all_execution_plans}
 
 
 @tool
@@ -858,6 +959,290 @@ def assess_risks(
     return {"risk_assessment": risk_assessment}
 
 
+@tool
+def generate_final_report(
+    business_info: BusinessInfo,
+    regulations: List[Regulation],
+    checklists: List[ChecklistItem],
+    execution_plans: List[ExecutionPlan],
+    risk_assessment: RiskAssessment
+) -> Dict[str, Any]:
+    """전체 분석 결과를 통합 마크다운 보고서로 작성하고 PDF로 저장합니다.
+
+    Args:
+        business_info: 사업 정보
+        regulations: 규제 목록
+        checklists: 체크리스트
+        execution_plans: 실행 계획
+        risk_assessment: 리스크 평가
+
+    Returns:
+        최종 보고서 (통합 마크다운 + PDF 경로)
+    """
+    print("📄 [Report Generation Agent] 통합 보고서 생성 중...")
+
+    llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.3)
+
+    # === 1. 기본 통계 계산 ===
+    priority_count = {"HIGH": 0, "MEDIUM": 0, "LOW": 0}
+    category_count = {}
+    for reg in regulations:
+        priority_count[reg['priority']] += 1
+        cat = reg['category']
+        category_count[cat] = category_count.get(cat, 0) + 1
+
+    high_risk_items = risk_assessment.get('high_risk_items', [])
+    total_risk_score = risk_assessment.get('total_risk_score', 0)
+    immediate_actions = [reg for reg in regulations if reg['priority'] == 'HIGH']
+
+    # === 2. 통합 마크다운 보고서 생성 ===
+    print("   통합 마크다운 보고서 작성 중...")
+
+    # 2-1. 헤더 및 사업 정보
+    full_markdown = f"""# 규제 준수 분석 통합 보고서
+
+> 생성일: {datetime.now().strftime('%Y년 %m월 %d일')}
+
+---
+
+## 1. 사업 정보
+
+| 항목 | 내용 |
+|------|------|
+| **업종** | {business_info.get('industry', 'N/A')} |
+| **제품명** | {business_info.get('product_name', 'N/A')} |
+| **원자재** | {business_info.get('raw_materials', 'N/A')} |
+| **제조 공정** | {', '.join(business_info.get('processes', []))} |
+| **직원 수** | {business_info.get('employee_count', 0)}명 |
+| **판매 방식** | {', '.join(business_info.get('sales_channels', []))} |
+
+---
+
+## 2. 분석 요약
+
+### 2.1 규제 현황
+- **총 규제 개수**: {len(regulations)}개
+- **우선순위 분포**:
+  - 🔴 HIGH: {priority_count['HIGH']}개 (즉시 조치 필요)
+  - 🟡 MEDIUM: {priority_count['MEDIUM']}개 (1-3개월 내 조치)
+  - 🟢 LOW: {priority_count['LOW']}개 (6개월 내 조치)
+- **카테고리 분포**:
+{chr(10).join(f'  - {cat}: {count}개' for cat, count in category_count.items())}
+
+### 2.2 리스크 평가
+- **전체 리스크 점수**: {total_risk_score:.1f}/10
+- **고위험 규제**: {len(high_risk_items)}개
+- **즉시 조치 필요**: {len(immediate_actions)}개
+
+---
+
+## 3. 규제 목록 및 분류
+"""
+
+    # 2-2. 카테고리별 규제 목록
+    categories = list(set(reg['category'] for reg in regulations))
+    for i, category in enumerate(categories, 1):
+        full_markdown += f"\n### 3.{i} {category}\n\n"
+
+        category_regs = [reg for reg in regulations if reg['category'] == category]
+        for j, reg in enumerate(category_regs, 1):
+            priority_icon = {"HIGH": "🔴", "MEDIUM": "🟡", "LOW": "🟢"}[reg['priority']]
+            full_markdown += f"""#### 3.{i}.{j} {priority_icon} {reg['name']}
+
+**우선순위:** {reg['priority']}
+**관할 기관:** {reg['authority']}
+**적용 이유:** {reg['why_applicable']}
+
+**주요 요구사항:**
+{chr(10).join(f'- {req}' for req in reg.get('key_requirements', []))}
+
+"""
+            if reg.get('penalty'):
+                full_markdown += f"**벌칙:** {reg['penalty']}\n\n"
+
+    # 2-3. 실행 체크리스트
+    full_markdown += "\n---\n\n## 4. 실행 체크리스트\n\n"
+
+    for reg in regulations:
+        reg_checklists = [c for c in checklists if c['regulation_id'] == reg['id']]
+        if reg_checklists:
+            priority_icon = {"HIGH": "🔴", "MEDIUM": "🟡", "LOW": "🟢"}[reg['priority']]
+            full_markdown += f"### 4.{regulations.index(reg)+1} {priority_icon} {reg['name']}\n\n"
+
+            for item in reg_checklists:
+                full_markdown += f"- [ ] **{item['task_name']}**\n"
+                full_markdown += f"  - 담당: {item['responsible_dept']}\n"
+                full_markdown += f"  - 마감: {item['deadline']}\n"
+                if item.get('estimated_cost'):
+                    full_markdown += f"  - 예상 비용: {item['estimated_cost']}\n"
+                full_markdown += "\n"
+
+    # 2-4. 실행 계획 및 타임라인
+    full_markdown += "\n---\n\n## 5. 실행 계획 및 타임라인\n\n"
+
+    for plan in execution_plans:
+        reg_name = plan['regulation_name']
+        priority = next((r['priority'] for r in regulations if r['id'] == plan['regulation_id']), 'MEDIUM')
+        priority_icon = {"HIGH": "🔴", "MEDIUM": "🟡", "LOW": "🟢"}[priority]
+
+        full_markdown += f"### 5.{execution_plans.index(plan)+1} {priority_icon} {reg_name}\n\n"
+        full_markdown += f"**타임라인:** {plan['timeline']}  \n"
+        full_markdown += f"**시작 예정:** {plan['start_date']}  \n\n"
+
+        # 마일스톤
+        if plan.get('milestones'):
+            full_markdown += "**주요 마일스톤:**\n"
+            for milestone in plan['milestones']:
+                full_markdown += f"- {milestone['name']} (완료 목표: {milestone['deadline']})\n"
+            full_markdown += "\n"
+
+        # 의존성
+        if plan.get('dependencies') and any(plan['dependencies'].values()):
+            full_markdown += "**의존성:**\n"
+            for task, deps in plan['dependencies'].items():
+                if deps:
+                    full_markdown += f"- `{task}` ← {', '.join(f'`{d}`' for d in deps)}\n"
+            full_markdown += "\n"
+
+        # 병렬 작업
+        if plan.get('parallel_tasks'):
+            full_markdown += "**병렬 수행 가능:**\n"
+            for group in plan['parallel_tasks']:
+                full_markdown += f"- {', '.join(f'`{t}`' for t in group)}\n"
+            full_markdown += "\n"
+
+        # 크리티컬 패스
+        if plan.get('critical_path'):
+            full_markdown += f"**크리티컬 패스:** {' → '.join(f'`{t}`' for t in plan['critical_path'])}\n\n"
+
+    # 2-5. 리스크 평가
+    full_markdown += "\n---\n\n## 6. 리스크 평가\n\n"
+    full_markdown += f"### 6.1 전체 리스크 평가\n\n"
+    full_markdown += f"**전체 리스크 점수:** {total_risk_score:.1f}/10\n\n"
+
+    risk_level = "매우 높음" if total_risk_score >= 8 else "높음" if total_risk_score >= 6 else "중간"
+    full_markdown += f"**리스크 수준:** {risk_level}\n\n"
+
+    if high_risk_items:
+        full_markdown += "### 6.2 고위험 규제 (상위 5개)\n\n"
+        for item in high_risk_items[:5]:
+            full_markdown += f"#### {item['regulation_name']}\n\n"
+            full_markdown += f"**리스크 점수:** {item['risk_score']}/10\n\n"
+            full_markdown += f"**처벌 유형:** {item['penalty_type']}\n\n"
+            full_markdown += f"**사업 영향:** {item['business_impact']}\n\n"
+
+            if item.get('mitigation_priority'):
+                full_markdown += f"**완화 우선순위:** {item['mitigation_priority']}\n\n"
+
+    # 2-6. 경영진 요약 (LLM으로 생성)
+    print("   경영진 요약 생성 중...")
+
+    exec_summary_prompt = f"""
+다음 규제 분석 결과를 바탕으로 경영진을 위한 핵심 요약을 작성하세요.
+
+[분석 결과]
+- 총 규제: {len(regulations)}개
+- HIGH: {priority_count['HIGH']}개, MEDIUM: {priority_count['MEDIUM']}개, LOW: {priority_count['LOW']}개
+- 리스크 점수: {total_risk_score:.1f}/10
+- 고위험 규제: {len(high_risk_items)}개
+
+다음 형식으로 작성하세요 (마크다운):
+
+### 핵심 인사이트
+- 인사이트 1 (구체적 숫자 포함)
+- 인사이트 2
+- 인사이트 3
+
+### 의사결정 포인트
+- [ ] 결정 사항 1
+- [ ] 결정 사항 2
+- [ ] 결정 사항 3
+
+### 권장 조치 (우선순위 순)
+1. **즉시:** [조치 내용]
+2. **1개월 내:** [조치 내용]
+3. **3개월 내:** [조치 내용]
+
+간결하고 명확하게 작성하세요.
+"""
+
+    exec_response = llm.invoke(exec_summary_prompt)
+    executive_summary = exec_response.content.strip()
+
+    full_markdown += f"\n---\n\n## 7. 경영진 요약\n\n{executive_summary}\n"
+
+    # 2-7. Next Steps
+    full_markdown += "\n---\n\n## 8. 다음 단계\n\n"
+
+    next_steps = [
+        f"**1단계 (즉시):** HIGH 우선순위 {priority_count['HIGH']}개 규제 착수",
+        "**2단계 (1주일 내):** 담당 부서 및 책임자 지정",
+        "**3단계 (2주일 내):** 상세 실행 일정 확정 및 예산 승인",
+        "**4단계 (1개월):** 월 단위 진행 상황 모니터링 체계 구축",
+        "**5단계 (분기별):** 전문가 검토 및 보완"
+    ]
+
+    for step in next_steps:
+        full_markdown += f"- {step}\n"
+
+    # 2-8. 면책 조항
+    full_markdown += "\n---\n\n## 면책 조항\n\n"
+    full_markdown += "> 본 보고서는 AI 기반 분석 도구로 생성된 참고 자료입니다. "
+    full_markdown += "실제 규제 준수 여부는 반드시 전문가의 검토를 받으시기 바랍니다. "
+    full_markdown += "본 보고서 내용으로 인한 법적 책임은 사용자에게 있습니다.\n"
+
+    # === 3. 인사이트 및 액션 아이템 추출 (구조화된 데이터) ===
+    print("   핵심 데이터 추출 중...")
+
+    key_insights = [
+        f"총 {len(regulations)}개 규제 적용 대상 - 체계적 준수 관리 필요",
+        f"HIGH 우선순위 {priority_count['HIGH']}개 규제는 사업 개시 전 필수 완료",
+        f"전체 리스크 점수 {total_risk_score:.1f}/10 - {'즉각 대응 필요' if total_risk_score >= 7 else '전문가 컨설팅 권장'}"
+    ]
+
+    action_items = []
+    for reg in immediate_actions[:3]:
+        action_items.append({
+            "name": f"{reg['name']} 준수 조치 시작",
+            "deadline": "즉시",
+            "priority": "HIGH"
+        })
+
+    risk_highlights = []
+    for item in high_risk_items[:3]:
+        risk_highlights.append(
+            f"{item['regulation_name']} 미준수 시 {item['penalty_type']} - {item['business_impact']}"
+        )
+
+    # === 4. PDF 저장 ===
+    print("   PDF 파일 생성 중...")
+
+    try:
+        pdf_path = save_report_pdf(full_markdown, Path("report"))
+        report_pdf_path = str(pdf_path)
+        print(f"   ✓ PDF 저장 완료: {report_pdf_path}")
+    except Exception as e:
+        print(f"   ⚠ PDF 생성 실패: {e}")
+        report_pdf_path = "PDF 생성 실패"
+
+    # === 5. 최종 보고서 반환 ===
+    final_report: FinalReport = {
+        "executive_summary": executive_summary,
+        "detailed_report": "",  # 통합 보고서로 대체
+        "legal_report": "",     # 통합 보고서로 대체
+        "key_insights": key_insights,
+        "action_items": action_items,
+        "risk_highlights": risk_highlights,
+        "next_steps": next_steps,
+        "full_markdown": full_markdown,
+        "report_pdf_path": report_pdf_path
+    }
+
+    print(f"   ✓ 통합 보고서 생성 완료\n")
+
+    return {"final_report": final_report}
+
+
 # ============================================
 # LangGraph 노드 - 각 Tool을 호출하고 상태를 업데이트
 # ============================================
@@ -901,14 +1286,13 @@ def checklist_generator_node(state: AgentState) -> Dict[str, Any]:
     return {"checklists": result["checklists"]}
 
 
-def cost_estimator_node(state: AgentState) -> Dict[str, Any]:
-    """비용 추정 노드: 총 준수 비용을 산출합니다."""
-    result = estimate_costs.invoke({
+def planning_agent_node(state: AgentState) -> Dict[str, Any]:
+    """실행 계획 노드: 체크리스트를 실행 계획으로 변환합니다."""
+    result = plan_execution.invoke({
         "regulations": state["regulations"],
-        "checklists": state["checklists"],
-        "business_info": state["business_info"]
+        "checklists": state["checklists"]
     })
-    return {"cost_analysis": result["cost_analysis"]}
+    return {"execution_plans": result["execution_plans"]}
 
 
 def risk_assessor_node(state: AgentState) -> Dict[str, Any]:
@@ -918,6 +1302,18 @@ def risk_assessor_node(state: AgentState) -> Dict[str, Any]:
         "business_info": state["business_info"]
     })
     return {"risk_assessment": result["risk_assessment"]}
+
+
+def report_generator_node(state: AgentState) -> Dict[str, Any]:
+    """보고서 생성 노드: 전체 분석 결과를 통합 보고서로 작성합니다."""
+    result = generate_final_report.invoke({
+        "business_info": state["business_info"],
+        "regulations": state["regulations"],
+        "checklists": state["checklists"],
+        "execution_plans": state["execution_plans"],
+        "risk_assessment": state["risk_assessment"]
+    })
+    return {"final_report": result["final_report"]}
 
 
 # ============================================
@@ -933,33 +1329,34 @@ def build_workflow() -> StateGraph:
     3. classifier: 규제 분류
     4. prioritizer: 우선순위 결정
     5. checklist_generator: 규제별 체크리스트 생성
-    6. cost_estimator: 총 비용 산출
+    6. planning_agent: 실행 계획 수립
     7. risk_assessor: 리스크 평가
+    8. report_generator: 최종 보고서 생성
     """
     graph = StateGraph(AgentState)
 
-    # 기존 4개 노드
+    # 기존 Agent 노드
     graph.add_node("analyzer", analyzer_node)
     graph.add_node("searcher", search_node)
     graph.add_node("classifier", classifier_node)
     graph.add_node("prioritizer", prioritizer_node)
-
-    # 새로운 3개 노드
     graph.add_node("checklist_generator", checklist_generator_node)
-    graph.add_node("cost_estimator", cost_estimator_node)
     graph.add_node("risk_assessor", risk_assessor_node)
+
+    # 신규 Agent 노드
+    graph.add_node("planning_agent", planning_agent_node)
+    graph.add_node("report_generator", report_generator_node)
 
     # 엣지 추가: 순차 실행
     graph.add_edge(START, "analyzer")
     graph.add_edge("analyzer", "searcher")
     graph.add_edge("searcher", "classifier")
     graph.add_edge("classifier", "prioritizer")
-
-    # 새로운 엣지 추가
     graph.add_edge("prioritizer", "checklist_generator")
-    graph.add_edge("checklist_generator", "cost_estimator")
-    graph.add_edge("cost_estimator", "risk_assessor")
-    graph.add_edge("risk_assessor", END)
+    graph.add_edge("checklist_generator", "planning_agent")
+    graph.add_edge("planning_agent", "risk_assessor")
+    graph.add_edge("risk_assessor", "report_generator")
+    graph.add_edge("report_generator", END)
 
     return graph
 
@@ -984,20 +1381,23 @@ def run_regulation_agent(business_info: BusinessInfo) -> AgentState:
         "search_results": [],
         "regulations": [],
         "final_output": {},
-        # 새로운 필드 초기화
+        # Agent 결과 필드 초기화
         "checklists": [],
-        "cost_analysis": {
-            "total_cost": 0,
-            "total_cost_formatted": "0원",
-            "breakdown": {"by_priority": {}, "by_category": {}, "by_timeline": {}},
-            "subsidies": [],
-            "payment_plan": []
-        },
+        "execution_plans": [],
         "risk_assessment": {
             "total_risk_score": 0.0,
             "high_risk_items": [],
             "risk_matrix": {},
             "recommendations": []
+        },
+        "final_report": {
+            "executive_summary": "",
+            "detailed_report": "",
+            "legal_report": "",
+            "key_insights": [],
+            "action_items": [],
+            "risk_highlights": [],
+            "next_steps": []
         }
     }
 
@@ -1049,58 +1449,98 @@ def print_checklists(checklists: List[ChecklistItem]):
         print()
 
 
-def print_cost_analysis(cost_analysis: CostAnalysis):
-    """비용 분석 결과를 보기 좋게 출력합니다."""
-    print("💰 총 비용 분석")
+def print_execution_plans(execution_plans: List[ExecutionPlan]):
+    """실행 계획을 보기 좋게 출력합니다."""
+    print("📅 실행 계획")
+    print("=" * 60)
+    print(f"총 {len(execution_plans)}개 계획\n")
+
+    for plan in execution_plans:
+        print(f"🎯 {plan['regulation_name']}")
+        print(f"   계획 ID: {plan['plan_id']}")
+        print(f"   예상 기간: {plan['timeline']}")
+        print(f"   시작 시점: {plan['start_date']}")
+        print()
+
+        # 마일스톤
+        milestones = plan.get('milestones', [])
+        if milestones:
+            print(f"   📌 마일스톤:")
+            for milestone in milestones:
+                print(f"      • {milestone.get('name', '')} ({milestone.get('deadline', '')})")
+                print(f"        완료 기준: {milestone.get('completion_criteria', '')}")
+        print()
+
+        # 의존성
+        dependencies = plan.get('dependencies', {})
+        if dependencies:
+            print(f"   🔗 작업 의존성:")
+            for task, prereqs in list(dependencies.items())[:3]:
+                print(f"      작업 {task}는 작업 {', '.join(prereqs)} 완료 후")
+        print()
+
+        # 병렬 작업
+        parallel_tasks = plan.get('parallel_tasks', [])
+        if parallel_tasks:
+            print(f"   ⚡ 병렬 처리 가능:")
+            for group in parallel_tasks[:2]:
+                print(f"      작업 {', '.join(group)}는 동시 진행 가능")
+        print()
+
+        # 크리티컬 패스
+        critical_path = plan.get('critical_path', [])
+        if critical_path:
+            print(f"   🛤️  크리티컬 패스: {' → '.join(critical_path)}")
+        print("-" * 60)
+        print()
+
+
+def print_final_report(final_report: FinalReport):
+    """최종 보고서를 출력합니다."""
+    print("📄 최종 보고서")
     print("=" * 60)
     print()
 
-    print(f"💵 총 소요 비용: {cost_analysis['total_cost_formatted']}\n")
-
-    # 우선순위별 비용
-    breakdown = cost_analysis['breakdown']
-    by_priority = breakdown.get('by_priority', {})
-
-    if by_priority:
-        print("📊 우선순위별 비용:")
-        total = cost_analysis['total_cost']
-        if total > 0:
-            for priority in ['HIGH', 'MEDIUM', 'LOW']:
-                amount = by_priority.get(priority, 0)
-                percentage = (amount / total * 100) if total > 0 else 0
-                print(f"   {priority:7s}: {_format_currency(amount):>15s} ({percentage:5.1f}%)")
+    # 핵심 인사이트
+    key_insights = final_report.get('key_insights', [])
+    if key_insights:
+        print("📌 핵심 인사이트:")
+        for idx, insight in enumerate(key_insights, 1):
+            print(f"   {idx}. {insight}")
         print()
 
-    # 카테고리별 비용
-    by_category = breakdown.get('by_category', {})
-    if by_category:
-        print("📂 카테고리별 비용:")
-        for category, amount in by_category.items():
-            print(f"   {category:12s}: {_format_currency(amount)}")
+    # 즉시 조치 항목
+    action_items = final_report.get('action_items', [])
+    if action_items:
+        print("🎯 즉시 조치 필요:")
+        for item in action_items:
+            print(f"   • {item.get('name', '')} (마감: {item.get('deadline', '')})")
         print()
 
-    # 시기별 지출 계획
-    payment_plan = cost_analysis.get('payment_plan', [])
-    if payment_plan:
-        print("📅 시기별 지출 계획:")
-        for plan in payment_plan:
-            period = plan.get('period', '')
-            amount = plan.get('amount', 0)
-            items = plan.get('items', [])
-            print(f"   {period:20s}: {_format_currency(amount)}")
-            if items:
-                for item in items[:2]:  # 최대 2개만 표시
-                    print(f"      - {item}")
+    # 주요 리스크
+    risk_highlights = final_report.get('risk_highlights', [])
+    if risk_highlights:
+        print("⚠️  주요 리스크:")
+        for risk in risk_highlights:
+            print(f"   • {risk}")
         print()
 
-    # 정부 지원금
-    subsidies = cost_analysis.get('subsidies', [])
-    if subsidies:
-        print("🎁 정부 지원금 정보:")
-        for subsidy in subsidies:
-            print(f"   • {subsidy.get('name', '')}")
-            print(f"     금액: {subsidy.get('amount', '')}")
-            print(f"     기관: {subsidy.get('agency', '')}")
+    # 다음 단계
+    next_steps = final_report.get('next_steps', [])
+    if next_steps:
+        print("📋 다음 단계 권장사항:")
+        for step in next_steps:
+            print(f"   {step}")
+        print()
+
+    # 경영진용 요약 (일부만 표시)
+    exec_summary = final_report.get('executive_summary', '')
+    if exec_summary:
+        print("📊 경영진 요약 보고서 (미리보기):")
+        lines = exec_summary.split('\n')[:10]
+        print('\n'.join(f"   {line}" for line in lines))
+        if len(exec_summary.split('\n')) > 10:
+            print("   ... (전체 내용은 JSON 파일 참조)")
         print()
 
 
@@ -1227,14 +1667,17 @@ def main():
 
     print()
 
-    # 새로운 3개 섹션 출력
+    # 새로운 Agent 결과 출력
     print_checklists(result.get('checklists', []))
     print()
 
-    print_cost_analysis(result.get('cost_analysis', {}))
+    print_execution_plans(result.get('execution_plans', []))
     print()
 
     print_risk_assessment(result.get('risk_assessment', {}))
+    print()
+
+    print_final_report(result.get('final_report', {}))
 
     # JSON 파일로 저장 (모든 데이터 포함)
     complete_output = {
@@ -1243,13 +1686,14 @@ def main():
             "total_regulations": final_output.get('total_count', 0),
             "priority_distribution": priority_dist,
             "total_checklist_items": len(result.get('checklists', [])),
-            "total_cost": result.get('cost_analysis', {}).get('total_cost_formatted', '0원'),
+            "total_execution_plans": len(result.get('execution_plans', [])),
             "risk_score": result.get('risk_assessment', {}).get('total_risk_score', 0.0)
         },
         "regulations": regulations,
         "checklists": result.get('checklists', []),
-        "cost_analysis": result.get('cost_analysis', {}),
-        "risk_assessment": result.get('risk_assessment', {})
+        "execution_plans": result.get('execution_plans', []),
+        "risk_assessment": result.get('risk_assessment', {}),
+        "final_report": result.get('final_report', {})
     }
 
     output_file = "regulation_analysis_result.json"

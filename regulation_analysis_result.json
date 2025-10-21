@@ -19,79 +19,106 @@
     ]
   },
   "summary": {
-    "total_regulations": 5,
+    "total_regulations": 7,
     "priority_distribution": {
-      "HIGH": 3,
+      "HIGH": 5,
       "MEDIUM": 2,
       "LOW": 0
     },
-    "total_checklist_items": 16,
-    "total_cost": "8,800,000원",
-    "risk_score": 8.0
+    "total_checklist_items": 28,
+    "total_execution_plans": 7,
+    "risk_score": 8.29
   },
   "regulations": [
     {
       "id": "REG-001",
-      "name": "리튬 배터리 운송 규정",
-      "category": "안전/환경",
-      "why_applicable": "리튬이온 배터리 제조 및 운송 과정에서 안전을 보장하기 위해 적용됩니다.",
-      "authority": "유엔",
+      "name": "PSE 법",
+      "category": "제품 인증",
+      "why_applicable": "리튬이온 배터리는 과충전, 단락 방지, 열 관리에 대한 엄격한 테스트를 통과해야 하므로 이 법이 적용됩니다.",
+      "authority": "일본 정부",
       "priority": "HIGH",
       "key_requirements": [
-        "안전 시험 통과",
-        "운송 중 위험 요소 관리"
+        "과충전 방지 테스트",
+        "단락 방지 테스트",
+        "열 관리 테스트"
       ],
-      "reference_url": "문서 1"
+      "reference_url": ""
     },
     {
       "id": "REG-002",
-      "name": "사용후 배터리 정책",
+      "name": "METI 안전 지침",
       "category": "제품 인증",
-      "why_applicable": "리튬이온 배터리의 재활용 및 안전성을 보장하기 위한 인증 절차가 필요합니다.",
-      "authority": "한국 정부",
+      "why_applicable": "리튬 배터리의 안전성을 보장하기 위해 국내 및 국제 안전 표준을 준수해야 합니다.",
+      "authority": "일본 경제산업성",
       "priority": "HIGH",
       "key_requirements": [
-        "재생원료 인증제",
-        "전기차 배터리 성능 평가"
+        "국내 안전 기준 준수",
+        "국제 안전 기준 준수"
       ],
-      "reference_url": "문서 2"
+      "reference_url": ""
     },
     {
       "id": "REG-003",
-      "name": "산업 안전 규정",
-      "category": "안전/환경",
-      "why_applicable": "화학 물질을 다루는 공정에서 작업자의 안전을 보장하기 위해 필요합니다.",
-      "authority": "고용노동부",
+      "name": "CB 인증",
+      "category": "제품 인증",
+      "why_applicable": "리튬 배터리 제품이 국제 안전, 성능 및 기계 표준 준수를 입증하기 위해 필요합니다.",
+      "authority": "IECEE",
       "priority": "HIGH",
       "key_requirements": [
-        "안전 샤워기 및 세안기 설치",
-        "부식성 화학물질 관리"
+        "IEC 표준 준수",
+        "전기 안전 시험"
       ],
-      "reference_url": "문서 4"
+      "reference_url": ""
     },
     {
       "id": "REG-004",
-      "name": "미국 IRA 시행지침",
-      "category": "제품 인증",
-      "why_applicable": "북미 시장에서 배터리 공급망의 인증 요건을 충족하기 위해 필요합니다.",
-      "authority": "미국 정부",
+      "name": "IEC 61508",
+      "category": "공장 운영",
+      "why_applicable": "고온과 압력으로부터 작업자를 보호하기 위해 안전 시스템이 필요하므로 이 표준이 적용됩니다.",
+      "authority": "국제 전기기술 위원회",
       "priority": "MEDIUM",
       "key_requirements": [
-        "핵심광물 비율 충족",
-        "부품 생산 비율 충족"
+        "안전 인증 장비 사용",
+        "위험 평가 및 관리"
       ],
-      "reference_url": "문서 5"
+      "reference_url": ""
     },
     {
       "id": "REG-005",
+      "name": "KC 인증",
+      "category": "제품 인증",
+      "why_applicable": "한국에서 유통되는 리튬이온 배터리는 안전 인증이 필요하므로 KC 인증이 요구됩니다.",
+      "authority": "한국기술표준원",
+      "priority": "HIGH",
+      "key_requirements": [
+        "안전성 평가",
+        "품질 기준 준수"
+      ],
+      "reference_url": ""
+    },
+    {
+      "id": "REG-006",
       "name": "화학물질관리법",
-      "category": "공장 운영",
-      "why_applicable": "화학 물질을 사용하여 배터리를 제조하는 과정에서 규제를 준수해야 합니다.",
+      "category": "안전/환경",
+      "why_applicable": "리튬, 코발트, 니켈 등 원자재의 안전한 관리와 사용을 위해 이 법이 적용됩니다.",
       "authority": "환경부",
-      "priority": "MEDIUM",
+      "priority": "HIGH",
       "key_requirements": [
         "화학물질 등록",
         "안전성 평가"
+      ],
+      "reference_url": ""
+    },
+    {
+      "id": "REG-007",
+      "name": "ESS 안전 인증",
+      "category": "제품 인증",
+      "why_applicable": "전력 저장 장치와 관련된 안전 인증이 필요하므로 이 규제가 적용됩니다.",
+      "authority": "한국전기안전공사",
+      "priority": "MEDIUM",
+      "key_requirements": [
+        "안전성 평가",
+        "기준 준수"
       ],
       "reference_url": ""
     }
@@ -99,14 +126,14 @@
   "checklists": [
     {
       "regulation_id": "REG-001",
-      "regulation_name": "리튬 배터리 운송 규정",
-      "task_name": "리튬 배터리 안전 시험 실시",
+      "regulation_name": "PSE 법",
+      "task_name": "과충전 방지 테스트 수행",
       "responsible_dept": "안전관리팀",
       "deadline": "사업 개시 전 필수",
       "method": [
-        "1. 안전 시험 기준 확인",
-        "2. 시험 기관 선정",
-        "3. 시험 결과 보고서 수령 및 검토"
+        "1. 테스트 장비 준비",
+        "2. 테스트 프로토콜 수립",
+        "3. 결과 분석 및 보고서 작성"
       ],
       "estimated_cost": "100만원",
       "estimated_time": "1개월",
@@ -115,62 +142,110 @@
     },
     {
       "regulation_id": "REG-001",
-      "regulation_name": "리튬 배터리 운송 규정",
-      "task_name": "운송 중 위험 요소 관리 계획 수립",
-      "responsible_dept": "법무팀",
-      "deadline": "3개월 내",
+      "regulation_name": "PSE 법",
+      "task_name": "단락 방지 테스트 수행",
+      "responsible_dept": "안전관리팀",
+      "deadline": "사업 개시 전 필수",
       "method": [
-        "1. 운송 경로 및 방법 분석",
-        "2. 위험 요소 식별 및 평가",
-        "3. 관리 계획서 작성 및 승인"
+        "1. 단락 방지 테스트 장비 설치",
+        "2. 테스트 진행",
+        "3. 결과 검토 및 개선 사항 도출"
       ],
-      "estimated_cost": "30만원",
+      "estimated_cost": "80만원",
+      "estimated_time": "3주",
+      "priority": "HIGH",
+      "status": "pending"
+    },
+    {
+      "regulation_id": "REG-001",
+      "regulation_name": "PSE 법",
+      "task_name": "열 관리 테스트 수행",
+      "responsible_dept": "안전관리팀",
+      "deadline": "사업 개시 전 필수",
+      "method": [
+        "1. 열 관리 시스템 점검",
+        "2. 테스트 환경 설정",
+        "3. 데이터 수집 및 분석"
+      ],
+      "estimated_cost": "120만원",
+      "estimated_time": "1개월",
+      "priority": "HIGH",
+      "status": "pending"
+    },
+    {
+      "regulation_id": "REG-001",
+      "regulation_name": "PSE 법",
+      "task_name": "테스트 결과 문서화",
+      "responsible_dept": "법무팀",
+      "deadline": "사업 개시 전 필수",
+      "method": [
+        "1. 각 테스트 결과 정리",
+        "2. 법적 요구사항 검토",
+        "3. 최종 보고서 작성"
+      ],
+      "estimated_cost": "무료",
       "estimated_time": "2주",
       "priority": "HIGH",
       "status": "pending"
     },
     {
       "regulation_id": "REG-001",
-      "regulation_name": "리튬 배터리 운송 규정",
-      "task_name": "운송 직원 안전 교육 실시",
-      "responsible_dept": "인사팀",
-      "deadline": "분기 1회",
+      "regulation_name": "PSE 법",
+      "task_name": "정기적인 테스트 일정 수립",
+      "responsible_dept": "시설관리팀",
+      "deadline": "연 1회",
       "method": [
-        "1. 교육 자료 준비",
-        "2. 교육 일정 공지",
-        "3. 교육 실시 후 피드백 수집"
+        "1. 연간 테스트 계획 수립",
+        "2. 필요한 자원 배분",
+        "3. 관련 부서와 일정 조율"
       ],
       "estimated_cost": "무료",
-      "estimated_time": "3일",
-      "priority": "HIGH",
-      "status": "pending"
-    },
-    {
-      "regulation_id": "REG-002",
-      "regulation_name": "사용후 배터리 정책",
-      "task_name": "재생원료 인증 신청",
-      "responsible_dept": "법무팀",
-      "deadline": "사업 개시 전 필수",
-      "method": [
-        "1. 재생원료 관련 법규 조사",
-        "2. 인증에 필요한 서류 준비",
-        "3. 관할 기관에 신청서 제출"
-      ],
-      "estimated_cost": "50만원",
       "estimated_time": "1개월",
       "priority": "HIGH",
       "status": "pending"
     },
     {
       "regulation_id": "REG-002",
-      "regulation_name": "사용후 배터리 정책",
-      "task_name": "전기차 배터리 성능 평가 실시",
-      "responsible_dept": "R&D팀",
-      "deadline": "연 1회",
+      "regulation_name": "METI 안전 지침",
+      "task_name": "국내 안전 기준 조사 및 분석",
+      "responsible_dept": "안전관리팀",
+      "deadline": "사업 개시 전 필수",
       "method": [
-        "1. 평가 기준 및 방법 결정",
-        "2. 배터리 샘플 수집 및 테스트 수행",
-        "3. 평가 결과 보고서 작성"
+        "1. 국내 안전 기준 관련 문서 수집",
+        "2. 기준별 요구사항 목록화",
+        "3. 요구사항 충족 여부 분석"
+      ],
+      "estimated_cost": "무료",
+      "estimated_time": "1개월",
+      "priority": "HIGH",
+      "status": "pending"
+    },
+    {
+      "regulation_id": "REG-002",
+      "regulation_name": "METI 안전 지침",
+      "task_name": "국제 안전 기준 조사 및 분석",
+      "responsible_dept": "안전관리팀",
+      "deadline": "사업 개시 전 필수",
+      "method": [
+        "1. 국제 안전 기준 관련 문서 수집",
+        "2. 기준별 요구사항 목록화",
+        "3. 요구사항 충족 여부 분석"
+      ],
+      "estimated_cost": "무료",
+      "estimated_time": "1개월",
+      "priority": "HIGH",
+      "status": "pending"
+    },
+    {
+      "regulation_id": "REG-002",
+      "regulation_name": "METI 안전 지침",
+      "task_name": "안전 기준 준수 계획 수립",
+      "responsible_dept": "법무팀",
+      "deadline": "사업 개시 전 필수",
+      "method": [
+        "1. 국내 및 국제 안전 기준 통합 검토",
+        "2. 준수 계획 초안 작성",
+        "3. 관련 부서와 협의하여 최종 계획 수립"
       ],
       "estimated_cost": "100만원",
       "estimated_time": "20일",
@@ -179,14 +254,14 @@
     },
     {
       "regulation_id": "REG-002",
-      "regulation_name": "사용후 배터리 정책",
-      "task_name": "재활용 프로세스 교육 실시",
+      "regulation_name": "METI 안전 지침",
+      "task_name": "안전 기준 준수 교육 실시",
       "responsible_dept": "인사팀",
-      "deadline": "3개월 내",
+      "deadline": "연 1회",
       "method": [
         "1. 교육 자료 준비",
-        "2. 직원 대상 교육 일정 조율",
-        "3. 교육 실시 및 피드백 수집"
+        "2. 교육 일정 수립",
+        "3. 직원 대상 교육 실시"
       ],
       "estimated_cost": "30만원",
       "estimated_time": "3일",
@@ -194,365 +269,1014 @@
       "status": "pending"
     },
     {
-      "regulation_id": "REG-003",
-      "regulation_name": "산업 안전 규정",
-      "task_name": "안전 샤워기 및 세안기 설치",
+      "regulation_id": "REG-002",
+      "regulation_name": "METI 안전 지침",
+      "task_name": "안전 기준 준수 상태 점검",
       "responsible_dept": "시설관리팀",
+      "deadline": "분기 1회",
+      "method": [
+        "1. 안전 기준 준수 여부 점검 리스트 작성",
+        "2. 현장 점검 실시",
+        "3. 결과 보고서 작성 및 개선 사항 반영"
+      ],
+      "estimated_cost": "무료",
+      "estimated_time": "5일",
+      "priority": "HIGH",
+      "status": "pending"
+    },
+    {
+      "regulation_id": "REG-003",
+      "regulation_name": "CB 인증",
+      "task_name": "IEC 표준 조사 및 확인",
+      "responsible_dept": "법무팀",
       "deadline": "사업 개시 전 필수",
       "method": [
-        "1. 안전 샤워기 및 세안기 설치 위치 선정",
-        "2. 필요한 장비 및 자재 구매",
-        "3. 설치 후 기능 점검 및 교육 실시"
+        "1. IEC 표준 목록 확인",
+        "2. 해당 표준에 맞는 제품 요구 사항 정리",
+        "3. 기준 충족 여부 평가"
+      ],
+      "estimated_cost": "무료",
+      "estimated_time": "10일",
+      "priority": "HIGH",
+      "status": "pending"
+    },
+    {
+      "regulation_id": "REG-003",
+      "regulation_name": "CB 인증",
+      "task_name": "전기 안전 시험 실시",
+      "responsible_dept": "안전관리팀",
+      "deadline": "사업 개시 전 필수",
+      "method": [
+        "1. 시험 기관 선정",
+        "2. 제품 샘플 준비 및 제출",
+        "3. 시험 결과 분석 및 보고서 작성"
       ],
       "estimated_cost": "100만원",
+      "estimated_time": "20일",
+      "priority": "HIGH",
+      "status": "pending"
+    },
+    {
+      "regulation_id": "REG-003",
+      "regulation_name": "CB 인증",
+      "task_name": "CB 인증 신청 준비",
+      "responsible_dept": "법무팀",
+      "deadline": "사업 개시 전 필수",
+      "method": [
+        "1. 필요한 서류 목록 작성",
+        "2. 서류 준비 및 검토",
+        "3. 인증 신청서 제출"
+      ],
+      "estimated_cost": "30만원",
       "estimated_time": "15일",
       "priority": "HIGH",
       "status": "pending"
     },
     {
-      "regulation_id": "REG-003",
-      "regulation_name": "산업 안전 규정",
-      "task_name": "부식성 화학물질 관리 매뉴얼 작성",
-      "responsible_dept": "안전관리팀",
-      "deadline": "3개월 내",
+      "regulation_id": "REG-004",
+      "regulation_name": "IEC 61508",
+      "task_name": "안전 인증 장비 목록 작성",
+      "responsible_dept": "시설관리팀",
+      "deadline": "사업 개시 전 필수",
       "method": [
-        "1. 부식성 화학물질 목록 작성",
-        "2. 관리 및 취급 절차 수립",
-        "3. 직원 교육 및 매뉴얼 배포"
-      ],
-      "estimated_cost": "30만원",
-      "estimated_time": "1개월",
-      "priority": "HIGH",
-      "status": "pending"
-    },
-    {
-      "regulation_id": "REG-003",
-      "regulation_name": "산업 안전 규정",
-      "task_name": "정기적인 안전 점검 실시",
-      "responsible_dept": "안전관리팀",
-      "deadline": "분기 1회",
-      "method": [
-        "1. 점검 항목 목록 작성",
-        "2. 점검 일정 수립",
-        "3. 점검 결과 기록 및 개선사항 반영"
+        "1. 현재 사용 중인 장비 목록 확인",
+        "2. 안전 인증 기준에 따른 장비 리스트업",
+        "3. 인증이 필요한 장비에 대한 공급업체 조사"
       ],
       "estimated_cost": "무료",
-      "estimated_time": "3일",
-      "priority": "HIGH",
-      "status": "pending"
-    },
-    {
-      "regulation_id": "REG-004",
-      "regulation_name": "미국 IRA 시행지침",
-      "task_name": "핵심광물 비율 분석",
-      "responsible_dept": "제품 개발팀",
-      "deadline": "3개월 내",
-      "method": [
-        "1. 사용 중인 원자재의 핵심광물 목록 작성",
-        "2. 각 원자재의 비율 계산",
-        "3. 비율이 규정에 부합하는지 검토"
-      ],
-      "estimated_cost": "50만원",
-      "estimated_time": "2주",
+      "estimated_time": "10일",
       "priority": "MEDIUM",
       "status": "pending"
     },
     {
       "regulation_id": "REG-004",
-      "regulation_name": "미국 IRA 시행지침",
-      "task_name": "부품 생산 비율 점검",
-      "responsible_dept": "생산팀",
-      "deadline": "사업 개시 전 필수",
-      "method": [
-        "1. 각 부품의 생산 과정을 문서화",
-        "2. 부품 생산 비율을 측정",
-        "3. 필요한 경우 생산 공정 조정"
-      ],
-      "estimated_cost": "80만원",
-      "estimated_time": "1개월",
-      "priority": "MEDIUM",
-      "status": "pending"
-    },
-    {
-      "regulation_id": "REG-004",
-      "regulation_name": "미국 IRA 시행지침",
-      "task_name": "규제 준수 교육 실시",
-      "responsible_dept": "인사팀",
-      "deadline": "연 1회",
-      "method": [
-        "1. 규제 내용에 대한 교육 자료 준비",
-        "2. 전 직원 대상 교육 일정 공지",
-        "3. 교육 실시 후 참석자 명단 기록"
-      ],
-      "estimated_cost": "30만원",
-      "estimated_time": "3일",
-      "priority": "MEDIUM",
-      "status": "pending"
-    },
-    {
-      "regulation_id": "REG-004",
-      "regulation_name": "미국 IRA 시행지침",
-      "task_name": "인증 문서 준비",
-      "responsible_dept": "법무팀",
-      "deadline": "3개월 내",
-      "method": [
-        "1. 필요한 인증서 목록 작성",
-        "2. 각 인증서에 필요한 서류 수집",
-        "3. 인증서 발급 신청"
-      ],
-      "estimated_cost": "100만원",
-      "estimated_time": "1개월",
-      "priority": "MEDIUM",
-      "status": "pending"
-    },
-    {
-      "regulation_id": "REG-005",
-      "regulation_name": "화학물질관리법",
-      "task_name": "화학물질 등록",
-      "responsible_dept": "법무팀",
-      "deadline": "사업 개시 전 필수",
-      "method": [
-        "1. 사용하려는 화학물질 목록 작성",
-        "2. 해당 화학물질의 등록 요건 확인",
-        "3. 등록 신청서 작성 및 제출"
-      ],
-      "estimated_cost": "100만원",
-      "estimated_time": "1개월",
-      "priority": "MEDIUM",
-      "status": "pending"
-    },
-    {
-      "regulation_id": "REG-005",
-      "regulation_name": "화학물질관리법",
-      "task_name": "안전성 평가 수행",
+      "regulation_name": "IEC 61508",
+      "task_name": "위험 평가 진행",
       "responsible_dept": "안전관리팀",
       "deadline": "연 1회",
       "method": [
-        "1. 평가할 화학물질 선정",
-        "2. 안전성 평가 기준 및 방법 정의",
-        "3. 평가 결과 보고서 작성"
+        "1. 작업 환경 및 절차 분석",
+        "2. 잠재적 위험 요소 식별",
+        "3. 위험 관리 방안 수립"
       ],
-      "estimated_cost": "50만원",
+      "estimated_cost": "100만원",
       "estimated_time": "20일",
       "priority": "MEDIUM",
       "status": "pending"
     },
     {
-      "regulation_id": "REG-005",
-      "regulation_name": "화학물질관리법",
-      "task_name": "직원 교육 실시",
+      "regulation_id": "REG-004",
+      "regulation_name": "IEC 61508",
+      "task_name": "안전 교육 프로그램 개발",
       "responsible_dept": "인사팀",
-      "deadline": "분기 1회",
+      "deadline": "3개월 내",
       "method": [
-        "1. 교육 필요 주제 및 내용 선정",
-        "2. 교육 일정 및 강사 섭외",
-        "3. 교육 실시 및 참석자 확인"
+        "1. 교육 필요 주제 식별",
+        "2. 교육 자료 및 강사 선정",
+        "3. 교육 일정 계획 및 실시"
+      ],
+      "estimated_cost": "300만원",
+      "estimated_time": "1개월",
+      "priority": "MEDIUM",
+      "status": "pending"
+    },
+    {
+      "regulation_id": "REG-005",
+      "regulation_name": "KC 인증",
+      "task_name": "안전성 평가 수행",
+      "responsible_dept": "안전관리팀",
+      "deadline": "사업 개시 전 필수",
+      "method": [
+        "1. 리튬이온 배터리의 안전성 관련 규정 확인",
+        "2. 안전성 평가 테스트 수행",
+        "3. 평가 결과 문서화 및 보고서 작성"
+      ],
+      "estimated_cost": "100만원",
+      "estimated_time": "1개월",
+      "priority": "HIGH",
+      "status": "pending"
+    },
+    {
+      "regulation_id": "REG-005",
+      "regulation_name": "KC 인증",
+      "task_name": "품질 기준 준수 확인",
+      "responsible_dept": "품질관리팀",
+      "deadline": "사업 개시 전 필수",
+      "method": [
+        "1. 관련 품질 기준 문서 검토",
+        "2. 생산 공정 및 제품 샘플 검사",
+        "3. 품질 기준 충족 여부 확인 및 기록"
+      ],
+      "estimated_cost": "50만원",
+      "estimated_time": "20일",
+      "priority": "HIGH",
+      "status": "pending"
+    },
+    {
+      "regulation_id": "REG-005",
+      "regulation_name": "KC 인증",
+      "task_name": "KC 인증 신청 준비",
+      "responsible_dept": "법무팀",
+      "deadline": "사업 개시 1개월 전",
+      "method": [
+        "1. 필요한 서류 및 자료 목록 작성",
+        "2. 인증 신청서 및 관련 문서 준비",
+        "3. 신청서 제출 및 진행 상황 모니터링"
       ],
       "estimated_cost": "30만원",
       "estimated_time": "3일",
+      "priority": "HIGH",
+      "status": "pending"
+    },
+    {
+      "regulation_id": "REG-005",
+      "regulation_name": "KC 인증",
+      "task_name": "인증 유지 관리",
+      "responsible_dept": "품질관리팀",
+      "deadline": "연 1회",
+      "method": [
+        "1. 인증 유지 관련 지침 확인",
+        "2. 정기적인 품질 점검 및 기록 유지",
+        "3. 인증 갱신을 위한 자료 준비"
+      ],
+      "estimated_cost": "20만원",
+      "estimated_time": "1개월",
+      "priority": "HIGH",
+      "status": "pending"
+    },
+    {
+      "regulation_id": "REG-006",
+      "regulation_name": "화학물질관리법",
+      "task_name": "화학물질 등록",
+      "responsible_dept": "법무팀",
+      "deadline": "사업 개시 전 필수",
+      "method": [
+        "1. 사용 예정 화학물질 목록 작성",
+        "2. 각 화학물질의 등록 요건 확인",
+        "3. 환경부에 등록 신청서 제출"
+      ],
+      "estimated_cost": "100만원",
+      "estimated_time": "1개월",
+      "priority": "HIGH",
+      "status": "pending"
+    },
+    {
+      "regulation_id": "REG-006",
+      "regulation_name": "화학물질관리법",
+      "task_name": "안전성 평가 수행",
+      "responsible_dept": "안전관리팀",
+      "deadline": "연 1회",
+      "method": [
+        "1. 안전성 평가 기준 및 절차 수립",
+        "2. 사용 화학물질에 대한 안전성 데이터 수집",
+        "3. 평가 결과를 바탕으로 안전성 보고서 작성"
+      ],
+      "estimated_cost": "50만원",
+      "estimated_time": "20일",
+      "priority": "HIGH",
+      "status": "pending"
+    },
+    {
+      "regulation_id": "REG-006",
+      "regulation_name": "화학물질관리법",
+      "task_name": "교육 프로그램 개발 및 시행",
+      "responsible_dept": "인사팀",
+      "deadline": "사업 개시 전 필수",
+      "method": [
+        "1. 화학물질 관리 관련 교육 자료 준비",
+        "2. 전 직원 대상 교육 일정 수립",
+        "3. 교육 실시 및 참석 기록 관리"
+      ],
+      "estimated_cost": "30만원",
+      "estimated_time": "3일",
+      "priority": "HIGH",
+      "status": "pending"
+    },
+    {
+      "regulation_id": "REG-007",
+      "regulation_name": "ESS 안전 인증",
+      "task_name": "안전성 평가 계획 수립",
+      "responsible_dept": "안전관리팀",
+      "deadline": "사업 개시 전 필수",
+      "method": [
+        "1. 안전성 평가 기준 검토",
+        "2. 평가 방법론 결정",
+        "3. 평가 일정 수립"
+      ],
+      "estimated_cost": "무료",
+      "estimated_time": "1주일",
+      "priority": "MEDIUM",
+      "status": "pending"
+    },
+    {
+      "regulation_id": "REG-007",
+      "regulation_name": "ESS 안전 인증",
+      "task_name": "안전성 평가 수행",
+      "responsible_dept": "안전관리팀",
+      "deadline": "사업 개시 전 필수",
+      "method": [
+        "1. 평가팀 구성",
+        "2. 제품 테스트 및 데이터 수집",
+        "3. 평가 결과 분석 및 보고서 작성"
+      ],
+      "estimated_cost": "100만원",
+      "estimated_time": "1개월",
+      "priority": "MEDIUM",
+      "status": "pending"
+    },
+    {
+      "regulation_id": "REG-007",
+      "regulation_name": "ESS 안전 인증",
+      "task_name": "기준 준수 확인",
+      "responsible_dept": "법무팀",
+      "deadline": "사업 개시 전 필수",
+      "method": [
+        "1. 관련 법규 및 기준 목록 작성",
+        "2. 제품 설계 및 제조 과정 검토",
+        "3. 준수 여부 확인 및 문서화"
+      ],
+      "estimated_cost": "30만원",
+      "estimated_time": "2주일",
+      "priority": "MEDIUM",
+      "status": "pending"
+    },
+    {
+      "regulation_id": "REG-007",
+      "regulation_name": "ESS 안전 인증",
+      "task_name": "인증 신청서 작성",
+      "responsible_dept": "법무팀",
+      "deadline": "사업 개시 전 필수",
+      "method": [
+        "1. 필요한 서류 목록 확인",
+        "2. 서류 작성 및 검토",
+        "3. 한국전기안전공사에 제출"
+      ],
+      "estimated_cost": "무료",
+      "estimated_time": "3일",
+      "priority": "MEDIUM",
+      "status": "pending"
+    },
+    {
+      "regulation_id": "REG-007",
+      "regulation_name": "ESS 안전 인증",
+      "task_name": "인증 결과 모니터링",
+      "responsible_dept": "안전관리팀",
+      "deadline": "연 1회",
+      "method": [
+        "1. 인증 결과 수령",
+        "2. 필요한 경우 재평가 요청",
+        "3. 인증 유지 관리 계획 수립"
+      ],
+      "estimated_cost": "무료",
+      "estimated_time": "1주일",
       "priority": "MEDIUM",
       "status": "pending"
     }
   ],
-  "cost_analysis": {
-    "total_cost": 8800000,
-    "total_cost_formatted": "8,800,000원",
-    "breakdown": {
-      "by_priority": {
-        "HIGH": 4400000,
-        "MEDIUM": 4400000,
-        "LOW": 0
+  "execution_plans": [
+    {
+      "plan_id": "PLAN-001",
+      "regulation_id": "REG-001",
+      "regulation_name": "PSE 법",
+      "checklist_items": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5"
+      ],
+      "timeline": "3개월",
+      "start_date": "즉시",
+      "milestones": [
+        {
+          "name": "1개월 차: 과충전 및 단락 방지 테스트 완료",
+          "deadline": "30일 내",
+          "tasks": [
+            "1",
+            "2"
+          ],
+          "completion_criteria": "과충전 방지 및 단락 방지 테스트 완료"
+        },
+        {
+          "name": "2개월 차: 열 관리 테스트 완료 및 결과 문서화",
+          "deadline": "60일 내",
+          "tasks": [
+            "3",
+            "4"
+          ],
+          "completion_criteria": "열 관리 테스트 완료 및 결과 문서화 완료"
+        },
+        {
+          "name": "3개월 차: 정기적인 테스트 일정 수립",
+          "deadline": "90일 내",
+          "tasks": [
+            "5"
+          ],
+          "completion_criteria": "정기적인 테스트 일정 수립 완료"
+        }
+      ],
+      "dependencies": {
+        "2": [
+          "1"
+        ],
+        "3": [
+          "1",
+          "2"
+        ],
+        "4": [
+          "3"
+        ],
+        "5": [
+          "4"
+        ]
       },
-      "by_category": {
-        "안전/환경": 2600000,
-        "제품 인증": 4400000,
-        "공장 운영": 1800000
-      },
-      "by_timeline": {
-        "즉시 (0-3개월)": 3000000,
-        "단기 (3-6개월)": 2500000,
-        "중기 (6-12개월)": 3300000
-      }
+      "parallel_tasks": [
+        [
+          "1",
+          "2"
+        ],
+        [
+          "3",
+          "4"
+        ]
+      ],
+      "critical_path": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5"
+      ]
     },
-    "subsidies": [
-      {
-        "name": "배터리 제조업체 지원금",
-        "amount": "최대 500만원",
-        "agency": "산업통상자원부"
-      }
-    ],
-    "payment_plan": [
-      {
-        "period": "즉시 (0-3개월)",
-        "amount": 3000000,
-        "items": [
-          "안전 교육 비용",
-          "환경 인증 비용"
+    {
+      "plan_id": "PLAN-002",
+      "regulation_id": "REG-002",
+      "regulation_name": "METI 안전 지침",
+      "checklist_items": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5"
+      ],
+      "timeline": "3개월",
+      "start_date": "즉시",
+      "milestones": [
+        {
+          "name": "1개월 차: 서류 준비 완료",
+          "deadline": "30일 내",
+          "tasks": [
+            "1",
+            "2"
+          ],
+          "completion_criteria": "필요 서류 모두 준비"
+        },
+        {
+          "name": "1.5개월 차: 안전 기준 준수 계획 수립 완료",
+          "deadline": "45일 내",
+          "tasks": [
+            "3"
+          ],
+          "completion_criteria": "안전 기준 준수 계획 문서 작성 완료"
+        },
+        {
+          "name": "2개월 차: 안전 기준 준수 교육 실시 완료",
+          "deadline": "60일 내",
+          "tasks": [
+            "4"
+          ],
+          "completion_criteria": "안전 기준 준수 교육 완료"
+        },
+        {
+          "name": "3개월 차: 첫 번째 안전 기준 준수 상태 점검 완료",
+          "deadline": "90일 내",
+          "tasks": [
+            "5"
+          ],
+          "completion_criteria": "안전 기준 준수 상태 점검 보고서 제출"
+        }
+      ],
+      "dependencies": {
+        "2": [
+          "1"
+        ],
+        "3": [
+          "1",
+          "2"
+        ],
+        "5": [
+          "3"
         ]
       },
-      {
-        "period": "단기 (3-6개월)",
-        "amount": 2500000,
-        "items": [
-          "제품 인증 비용",
-          "운송 규정 준수 비용"
+      "parallel_tasks": [
+        [
+          "1",
+          "2"
+        ],
+        [
+          "3",
+          "4"
+        ]
+      ],
+      "critical_path": [
+        "1",
+        "2",
+        "3",
+        "5"
+      ]
+    },
+    {
+      "plan_id": "PLAN-003",
+      "regulation_id": "REG-003",
+      "regulation_name": "CB 인증",
+      "checklist_items": [
+        "1",
+        "2",
+        "3"
+      ],
+      "timeline": "3개월",
+      "start_date": "즉시",
+      "milestones": [
+        {
+          "name": "1개월 차: IEC 표준 조사 완료",
+          "deadline": "10일 내",
+          "tasks": [
+            "1"
+          ],
+          "completion_criteria": "IEC 표준 조사 및 확인 완료"
+        },
+        {
+          "name": "1개월 차: 전기 안전 시험 시작",
+          "deadline": "20일 내",
+          "tasks": [
+            "2"
+          ],
+          "completion_criteria": "전기 안전 시험 실시 시작"
+        },
+        {
+          "name": "2개월 차: CB 인증 신청 준비 완료",
+          "deadline": "15일 내",
+          "tasks": [
+            "3"
+          ],
+          "completion_criteria": "CB 인증 신청서 준비 완료"
+        }
+      ],
+      "dependencies": {
+        "2": [
+          "1"
+        ],
+        "3": [
+          "1",
+          "2"
         ]
       },
-      {
-        "period": "중기 (6-12개월)",
-        "amount": 3300000,
-        "items": [
-          "산업 안전 규정 준수 비용",
-          "화학물질 관리 비용"
+      "parallel_tasks": [
+        [
+          "1"
+        ],
+        [
+          "2"
         ]
-      }
-    ]
-  },
+      ],
+      "critical_path": [
+        "1",
+        "2",
+        "3"
+      ]
+    },
+    {
+      "plan_id": "PLAN-004",
+      "regulation_id": "REG-004",
+      "regulation_name": "IEC 61508",
+      "checklist_items": [
+        "1",
+        "2",
+        "3"
+      ],
+      "timeline": "3개월",
+      "start_date": "즉시",
+      "milestones": [
+        {
+          "name": "1개월 차: 안전 인증 장비 목록 작성 완료",
+          "deadline": "10일 내",
+          "tasks": [
+            "1"
+          ],
+          "completion_criteria": "안전 인증 장비 목록 작성 완료"
+        },
+        {
+          "name": "1개월 차: 위험 평가 진행 완료",
+          "deadline": "20일 내",
+          "tasks": [
+            "2"
+          ],
+          "completion_criteria": "위험 평가 완료"
+        },
+        {
+          "name": "3개월 차: 안전 교육 프로그램 개발 완료",
+          "deadline": "3개월 내",
+          "tasks": [
+            "3"
+          ],
+          "completion_criteria": "안전 교육 프로그램 개발 완료"
+        }
+      ],
+      "dependencies": {
+        "2": [
+          "1"
+        ],
+        "3": [
+          "1",
+          "2"
+        ]
+      },
+      "parallel_tasks": [
+        [
+          "1"
+        ],
+        [
+          "2"
+        ],
+        [
+          "3"
+        ]
+      ],
+      "critical_path": [
+        "1",
+        "2",
+        "3"
+      ]
+    },
+    {
+      "plan_id": "PLAN-005",
+      "regulation_id": "REG-005",
+      "regulation_name": "KC 인증",
+      "checklist_items": [
+        "1",
+        "2",
+        "3",
+        "4"
+      ],
+      "timeline": "3개월",
+      "start_date": "즉시",
+      "milestones": [
+        {
+          "name": "1개월 차: 서류 준비 완료",
+          "deadline": "30일 내",
+          "tasks": [
+            "1",
+            "2"
+          ],
+          "completion_criteria": "필요 서류 모두 준비"
+        },
+        {
+          "name": "KC 인증 신청 완료",
+          "deadline": "1개월 차 3일 내",
+          "tasks": [
+            "3"
+          ],
+          "completion_criteria": "KC 인증 신청서 제출"
+        },
+        {
+          "name": "인증 유지 관리 완료",
+          "deadline": "연 1회",
+          "tasks": [
+            "4"
+          ],
+          "completion_criteria": "인증 유지 관리 절차 완료"
+        }
+      ],
+      "dependencies": {
+        "2": [
+          "1"
+        ],
+        "3": [
+          "1",
+          "2"
+        ],
+        "4": [
+          "3"
+        ]
+      },
+      "parallel_tasks": [
+        [
+          "1",
+          "2"
+        ],
+        [
+          "3"
+        ]
+      ],
+      "critical_path": [
+        "1",
+        "2",
+        "3",
+        "4"
+      ]
+    },
+    {
+      "plan_id": "PLAN-006",
+      "regulation_id": "REG-006",
+      "regulation_name": "화학물질관리법",
+      "checklist_items": [
+        "1",
+        "2",
+        "3"
+      ],
+      "timeline": "1개월",
+      "start_date": "즉시",
+      "milestones": [
+        {
+          "name": "서류 준비 완료",
+          "deadline": "30일 내",
+          "tasks": [
+            "1",
+            "3"
+          ],
+          "completion_criteria": "화학물질 등록 및 교육 프로그램 개발 완료"
+        },
+        {
+          "name": "안전성 평가 수행",
+          "deadline": "20일 내",
+          "tasks": [
+            "2"
+          ],
+          "completion_criteria": "안전성 평가 완료"
+        }
+      ],
+      "dependencies": {
+        "2": [
+          "1"
+        ],
+        "3": [
+          "1"
+        ]
+      },
+      "parallel_tasks": [
+        [
+          "1",
+          "3"
+        ],
+        [
+          "2"
+        ]
+      ],
+      "critical_path": [
+        "1",
+        "2"
+      ]
+    },
+    {
+      "plan_id": "PLAN-007",
+      "regulation_id": "REG-007",
+      "regulation_name": "ESS 안전 인증",
+      "checklist_items": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5"
+      ],
+      "timeline": "3개월",
+      "start_date": "즉시",
+      "milestones": [
+        {
+          "name": "1개월 차: 서류 준비 완료",
+          "deadline": "30일 내",
+          "tasks": [
+            "1",
+            "2",
+            "3",
+            "4"
+          ],
+          "completion_criteria": "안전성 평가 및 기준 준수 확인 완료, 인증 신청서 작성"
+        },
+        {
+          "name": "2개월 차: 인증 신청 완료",
+          "deadline": "60일 내",
+          "tasks": [
+            "3",
+            "4"
+          ],
+          "completion_criteria": "인증 신청서 제출 완료"
+        },
+        {
+          "name": "3개월 차: 인증 결과 확인",
+          "deadline": "90일 내",
+          "tasks": [
+            "5"
+          ],
+          "completion_criteria": "인증 결과 모니터링 완료"
+        }
+      ],
+      "dependencies": {
+        "2": [
+          "1"
+        ],
+        "3": [
+          "1",
+          "2"
+        ],
+        "4": [
+          "3"
+        ]
+      },
+      "parallel_tasks": [
+        [
+          "1",
+          "2"
+        ],
+        [
+          "3",
+          "4"
+        ]
+      ],
+      "critical_path": [
+        "1",
+        "2",
+        "5"
+      ]
+    }
+  ],
   "risk_assessment": {
-    "total_risk_score": 8.0,
+    "total_risk_score": 8.29,
     "high_risk_items": [
       {
         "regulation_id": "REG-001",
-        "regulation_name": "리튬 배터리 운송 규정",
+        "regulation_name": "PSE 법",
         "penalty_amount": "최대 1억원",
         "penalty_type": "형사처벌 및 과태료",
-        "business_impact": "영업정지 6개월, 인허가 취소",
+        "business_impact": "인허가 취소 및 영업정지 6개월",
         "risk_score": 9.0,
         "past_cases": [
-          "2021, A기업, 리튬 배터리 운송 규정 위반으로 5천만원 벌금 부과",
-          "2020, B기업, 안전 규정 미준수로 인한 영업정지 3개월"
+          "2021, A사, 리튬이온 배터리 인증 미비로 인한 5000만원 과태료",
+          "2022, B사, PSE 법 위반으로 인한 영업정지 3개월"
         ],
-        "mitigation": "리튬 배터리 운송에 대한 내부 교육을 강화하고, 규정 준수를 위한 체크리스트를 도입하여 리스크를 줄입니다."
+        "mitigation": "PSE 법에 따른 인증 절차를 철저히 준수하고, 정기적인 내부 감사 및 교육을 실시하여 리스크를 최소화합니다."
       },
       {
         "regulation_id": "REG-002",
-        "regulation_name": "사용후 배터리 정책",
+        "regulation_name": "METI 안전 지침",
         "penalty_amount": "최대 1억원",
         "penalty_type": "과태료",
         "business_impact": "인허가 취소",
         "risk_score": 9.0,
         "past_cases": [
-          "2021, A기업, 사용후 배터리 인증 미비로 5천만원 과태료 부과",
-          "2022, B기업, 재활용 기준 미준수로 인허가 취소"
+          "2021, A사, 리튬 배터리 안전 기준 미준수로 인한 과태료 5000만원",
+          "2022, B사, 리튬 배터리 인증 미비로 인한 영업정지 3개월"
         ],
-        "mitigation": "정기적인 규제 교육 및 인증 절차 점검을 통해 준수 여부를 지속적으로 확인해야 합니다."
+        "mitigation": "안전 기준을 준수하기 위해 정기적인 내부 감사와 교육을 실시해야 합니다. 또한, 외부 전문가와 협력하여 인증 절차를 강화하는 것이 필요합니다."
       },
       {
         "regulation_id": "REG-003",
-        "regulation_name": "산업 안전 규정",
+        "regulation_name": "CB 인증",
+        "penalty_amount": "최대 1억원",
+        "penalty_type": "과태료",
+        "business_impact": "인허가 취소",
+        "risk_score": 9.0,
+        "past_cases": [
+          "2021, A사, 리튬 배터리 제품 인증 미비로 인한 과태료 5천만원",
+          "2022, B사, CB 인증 미비로 인한 영업정지 3개월"
+        ],
+        "mitigation": "CB 인증을 신속히 취득하고, 관련 규제 교육을 직원들에게 실시하여 준수 여부를 지속적으로 점검해야 합니다."
+      },
+      {
+        "regulation_id": "REG-004",
+        "regulation_name": "IEC 61508",
+        "penalty_amount": "최대 1억원",
+        "penalty_type": "과태료",
+        "business_impact": "인허가 취소",
+        "risk_score": 7.0,
+        "past_cases": [
+          "2021, A사, 안전 기준 미준수로 인한 과태료 5천만원",
+          "2019, B사, 안전 시스템 결함으로 인한 영업정지 3개월"
+        ],
+        "mitigation": "IEC 61508 규제를 준수하기 위해 안전 시스템을 강화하고 정기적인 교육을 실시해야 합니다."
+      },
+      {
+        "regulation_id": "REG-005",
+        "regulation_name": "KC 인증",
+        "penalty_amount": "최대 1억원",
+        "penalty_type": "과태료",
+        "business_impact": "영업정지 6개월",
+        "risk_score": 9.0,
+        "past_cases": [
+          "2021, A기업, KC 인증 미비로 인한 5000만원 과태료",
+          "2020, B기업, KC 인증 미비로 인한 영업정지 3개월"
+        ],
+        "mitigation": "KC 인증을 신속히 취득하고, 관련 법규를 지속적으로 모니터링하여 준수할 수 있도록 교육을 강화합니다."
+      },
+      {
+        "regulation_id": "REG-006",
+        "regulation_name": "화학물질관리법",
         "penalty_amount": "최대 1억원",
         "penalty_type": "과태료",
         "business_impact": "영업정지 6개월",
         "risk_score": 8.0,
         "past_cases": [
-          "2021, A기업, 화학 물질 안전 규정 위반으로 5000만원 과태료 부과",
-          "2020, B기업, 산업 안전 규정 위반으로 영업정지 3개월"
+          "2021, A기업, 리튬 화학물질 관리 미비로 5천만원 과태료 부과",
+          "2020, B기업, 안전 관리 소홀로 인한 영업정지 3개월"
         ],
-        "mitigation": "정기적인 안전 교육과 점검을 통해 규정 준수를 강화하고, 위험 요소를 사전에 식별하여 개선합니다."
+        "mitigation": "정기적인 교육과 내부 점검을 통해 화학물질 관리 체계를 강화해야 합니다."
       },
       {
-        "regulation_id": "REG-004",
-        "regulation_name": "미국 IRA 시행지침",
+        "regulation_id": "REG-007",
+        "regulation_name": "ESS 안전 인증",
         "penalty_amount": "최대 1억원",
         "penalty_type": "과태료",
         "business_impact": "인허가 취소",
         "risk_score": 7.0,
         "past_cases": [
-          "2021, ABC 배터리, 인증 요건 미충족으로 인한 과태료 5000만원",
-          "2022, XYZ 에너지, 인증 미비로 인한 영업정지 3개월"
+          "2021, A기업, 안전 인증 미비로 인한 과태료 5000만원",
+          "2020, B기업, 안전 기준 위반으로 인허가 취소"
         ],
-        "mitigation": "규제 요건을 충족하기 위해 인증 절차를 강화하고, 전문 컨설턴트의 도움을 받을 수 있습니다."
-      },
-      {
-        "regulation_id": "REG-005",
-        "regulation_name": "화학물질관리법",
-        "penalty_amount": "최대 1억원",
-        "penalty_type": "과태료",
-        "business_impact": "영업정지 6개월",
-        "risk_score": 7.0,
-        "past_cases": [
-          "2021, A기업, 과태료 500만원 부과",
-          "2022, B기업, 영업정지 3개월"
-        ],
-        "mitigation": "정기적인 화학물질 관리 교육을 실시하고, 규제 준수를 위한 내부 점검 체계를 강화해야 합니다."
+        "mitigation": "ESS 안전 인증을 신속히 취득하고, 정기적인 안전 점검을 통해 규제 준수를 강화해야 합니다."
       }
     ],
     "risk_matrix": {
       "HIGH": [
         {
           "regulation_id": "REG-001",
-          "regulation_name": "리튬 배터리 운송 규정",
+          "regulation_name": "PSE 법",
           "penalty_amount": "최대 1억원",
           "penalty_type": "형사처벌 및 과태료",
-          "business_impact": "영업정지 6개월, 인허가 취소",
+          "business_impact": "인허가 취소 및 영업정지 6개월",
           "risk_score": 9.0,
           "past_cases": [
-            "2021, A기업, 리튬 배터리 운송 규정 위반으로 5천만원 벌금 부과",
-            "2020, B기업, 안전 규정 미준수로 인한 영업정지 3개월"
+            "2021, A사, 리튬이온 배터리 인증 미비로 인한 5000만원 과태료",
+            "2022, B사, PSE 법 위반으로 인한 영업정지 3개월"
           ],
-          "mitigation": "리튬 배터리 운송에 대한 내부 교육을 강화하고, 규정 준수를 위한 체크리스트를 도입하여 리스크를 줄입니다."
+          "mitigation": "PSE 법에 따른 인증 절차를 철저히 준수하고, 정기적인 내부 감사 및 교육을 실시하여 리스크를 최소화합니다."
         },
         {
           "regulation_id": "REG-002",
-          "regulation_name": "사용후 배터리 정책",
+          "regulation_name": "METI 안전 지침",
           "penalty_amount": "최대 1억원",
           "penalty_type": "과태료",
           "business_impact": "인허가 취소",
           "risk_score": 9.0,
           "past_cases": [
-            "2021, A기업, 사용후 배터리 인증 미비로 5천만원 과태료 부과",
-            "2022, B기업, 재활용 기준 미준수로 인허가 취소"
+            "2021, A사, 리튬 배터리 안전 기준 미준수로 인한 과태료 5000만원",
+            "2022, B사, 리튬 배터리 인증 미비로 인한 영업정지 3개월"
           ],
-          "mitigation": "정기적인 규제 교육 및 인증 절차 점검을 통해 준수 여부를 지속적으로 확인해야 합니다."
+          "mitigation": "안전 기준을 준수하기 위해 정기적인 내부 감사와 교육을 실시해야 합니다. 또한, 외부 전문가와 협력하여 인증 절차를 강화하는 것이 필요합니다."
         },
         {
           "regulation_id": "REG-003",
-          "regulation_name": "산업 안전 규정",
+          "regulation_name": "CB 인증",
+          "penalty_amount": "최대 1억원",
+          "penalty_type": "과태료",
+          "business_impact": "인허가 취소",
+          "risk_score": 9.0,
+          "past_cases": [
+            "2021, A사, 리튬 배터리 제품 인증 미비로 인한 과태료 5천만원",
+            "2022, B사, CB 인증 미비로 인한 영업정지 3개월"
+          ],
+          "mitigation": "CB 인증을 신속히 취득하고, 관련 규제 교육을 직원들에게 실시하여 준수 여부를 지속적으로 점검해야 합니다."
+        },
+        {
+          "regulation_id": "REG-004",
+          "regulation_name": "IEC 61508",
+          "penalty_amount": "최대 1억원",
+          "penalty_type": "과태료",
+          "business_impact": "인허가 취소",
+          "risk_score": 7.0,
+          "past_cases": [
+            "2021, A사, 안전 기준 미준수로 인한 과태료 5천만원",
+            "2019, B사, 안전 시스템 결함으로 인한 영업정지 3개월"
+          ],
+          "mitigation": "IEC 61508 규제를 준수하기 위해 안전 시스템을 강화하고 정기적인 교육을 실시해야 합니다."
+        },
+        {
+          "regulation_id": "REG-005",
+          "regulation_name": "KC 인증",
+          "penalty_amount": "최대 1억원",
+          "penalty_type": "과태료",
+          "business_impact": "영업정지 6개월",
+          "risk_score": 9.0,
+          "past_cases": [
+            "2021, A기업, KC 인증 미비로 인한 5000만원 과태료",
+            "2020, B기업, KC 인증 미비로 인한 영업정지 3개월"
+          ],
+          "mitigation": "KC 인증을 신속히 취득하고, 관련 법규를 지속적으로 모니터링하여 준수할 수 있도록 교육을 강화합니다."
+        },
+        {
+          "regulation_id": "REG-006",
+          "regulation_name": "화학물질관리법",
           "penalty_amount": "최대 1억원",
           "penalty_type": "과태료",
           "business_impact": "영업정지 6개월",
           "risk_score": 8.0,
           "past_cases": [
-            "2021, A기업, 화학 물질 안전 규정 위반으로 5000만원 과태료 부과",
-            "2020, B기업, 산업 안전 규정 위반으로 영업정지 3개월"
+            "2021, A기업, 리튬 화학물질 관리 미비로 5천만원 과태료 부과",
+            "2020, B기업, 안전 관리 소홀로 인한 영업정지 3개월"
           ],
-          "mitigation": "정기적인 안전 교육과 점검을 통해 규정 준수를 강화하고, 위험 요소를 사전에 식별하여 개선합니다."
+          "mitigation": "정기적인 교육과 내부 점검을 통해 화학물질 관리 체계를 강화해야 합니다."
         },
         {
-          "regulation_id": "REG-004",
-          "regulation_name": "미국 IRA 시행지침",
+          "regulation_id": "REG-007",
+          "regulation_name": "ESS 안전 인증",
           "penalty_amount": "최대 1억원",
           "penalty_type": "과태료",
           "business_impact": "인허가 취소",
           "risk_score": 7.0,
           "past_cases": [
-            "2021, ABC 배터리, 인증 요건 미충족으로 인한 과태료 5000만원",
-            "2022, XYZ 에너지, 인증 미비로 인한 영업정지 3개월"
+            "2021, A기업, 안전 인증 미비로 인한 과태료 5000만원",
+            "2020, B기업, 안전 기준 위반으로 인허가 취소"
           ],
-          "mitigation": "규제 요건을 충족하기 위해 인증 절차를 강화하고, 전문 컨설턴트의 도움을 받을 수 있습니다."
-        },
-        {
-          "regulation_id": "REG-005",
-          "regulation_name": "화학물질관리법",
-          "penalty_amount": "최대 1억원",
-          "penalty_type": "과태료",
-          "business_impact": "영업정지 6개월",
-          "risk_score": 7.0,
-          "past_cases": [
-            "2021, A기업, 과태료 500만원 부과",
-            "2022, B기업, 영업정지 3개월"
-          ],
-          "mitigation": "정기적인 화학물질 관리 교육을 실시하고, 규제 준수를 위한 내부 점검 체계를 강화해야 합니다."
+          "mitigation": "ESS 안전 인증을 신속히 취득하고, 정기적인 안전 점검을 통해 규제 준수를 강화해야 합니다."
         }
       ],
       "MEDIUM": [],
       "LOW": []
     },
     "recommendations": [
-      "고위험 규제 5개 - 즉시 준수 조치 시작 필요",
+      "고위험 규제 7개 - 즉시 준수 조치 시작 필요",
       "배상책임보험 가입 강력 권장",
-      "HIGH 우선순위 규제 3개 - 사업 개시 전 필수 완료",
+      "HIGH 우선순위 규제 5개 - 사업 개시 전 필수 완료",
       "월 1회 준수 현황 점검 체계 수립 권장"
     ]
+  },
+  "final_report": {
+    "executive_summary": "### 핵심 인사이트\n- 총 7개의 규제가 있으며, 이 중 5개가 HIGH 리스크로 분류되었습니다.\n- 전체 리스크 점수는 8.3/10으로, 매우 높은 수준입니다.\n- 모든 고위험 규제가 7개로 확인되어, 즉각적인 대응이 필요합니다.\n\n### 의사결정 포인트\n- [ ] 규제 준수 전략 재검토\n- [ ] 리스크 관리 체계 강화\n- [ ] 관련 부서와의 협력 방안 마련\n\n### 권장 조치 (우선순위 순)\n1. **즉시:** 고위험 규제에 대한 긴급 대응 계획 수립\n2. **1개월 내:** 리스크 관리 프로세스 점검 및 개선안 마련\n3. **3개월 내:** 규제 준수 교육 프로그램 개발 및 시행",
+    "detailed_report": "",
+    "legal_report": "",
+    "key_insights": [
+      "총 7개 규제 적용 대상 - 체계적 준수 관리 필요",
+      "HIGH 우선순위 5개 규제는 사업 개시 전 필수 완료",
+      "전체 리스크 점수 8.3/10 - 즉각 대응 필요"
+    ],
+    "action_items": [
+      {
+        "name": "PSE 법 준수 조치 시작",
+        "deadline": "즉시",
+        "priority": "HIGH"
+      },
+      {
+        "name": "METI 안전 지침 준수 조치 시작",
+        "deadline": "즉시",
+        "priority": "HIGH"
+      },
+      {
+        "name": "CB 인증 준수 조치 시작",
+        "deadline": "즉시",
+        "priority": "HIGH"
+      }
+    ],
+    "risk_highlights": [
+      "PSE 법 미준수 시 형사처벌 및 과태료 - 인허가 취소 및 영업정지 6개월",
+      "METI 안전 지침 미준수 시 과태료 - 인허가 취소",
+      "CB 인증 미준수 시 과태료 - 인허가 취소"
+    ],
+    "next_steps": [
+      "**1단계 (즉시):** HIGH 우선순위 5개 규제 착수",
+      "**2단계 (1주일 내):** 담당 부서 및 책임자 지정",
+      "**3단계 (2주일 내):** 상세 실행 일정 확정 및 예산 승인",
+      "**4단계 (1개월):** 월 단위 진행 상황 모니터링 체계 구축",
+      "**5단계 (분기별):** 전문가 검토 및 보완"
+    ],
+    "full_markdown": "# 규제 준수 분석 통합 보고서\n\n> 생성일: 2025년 10월 21일\n\n---\n\n## 1. 사업 정보\n\n| 항목 | 내용 |\n|------|------|\n| **업종** | 배터리 제조 |\n| **제품명** | 리튬이온 배터리 |\n| **원자재** | 리튬, 코발트, 니켈 |\n| **제조 공정** | 화학 처리, 고온 가공, 조립 |\n| **직원 수** | 45명 |\n| **판매 방식** | B2B, 수출 |\n\n---\n\n## 2. 분석 요약\n\n### 2.1 규제 현황\n- **총 규제 개수**: 7개\n- **우선순위 분포**:\n  - 🔴 HIGH: 5개 (즉시 조치 필요)\n  - 🟡 MEDIUM: 2개 (1-3개월 내 조치)\n  - 🟢 LOW: 0개 (6개월 내 조치)\n- **카테고리 분포**:\n  - 제품 인증: 5개\n  - 공장 운영: 1개\n  - 안전/환경: 1개\n\n### 2.2 리스크 평가\n- **전체 리스크 점수**: 8.3/10\n- **고위험 규제**: 7개\n- **즉시 조치 필요**: 5개\n\n---\n\n## 3. 규제 목록 및 분류\n\n### 3.1 공장 운영\n\n#### 3.1.1 🟡 IEC 61508\n\n**우선순위:** MEDIUM\n**관할 기관:** 국제 전기기술 위원회\n**적용 이유:** 고온과 압력으로부터 작업자를 보호하기 위해 안전 시스템이 필요하므로 이 표준이 적용됩니다.\n\n**주요 요구사항:**\n- 안전 인증 장비 사용\n- 위험 평가 및 관리\n\n\n### 3.2 안전/환경\n\n#### 3.2.1 🔴 화학물질관리법\n\n**우선순위:** HIGH\n**관할 기관:** 환경부\n**적용 이유:** 리튬, 코발트, 니켈 등 원자재의 안전한 관리와 사용을 위해 이 법이 적용됩니다.\n\n**주요 요구사항:**\n- 화학물질 등록\n- 안전성 평가\n\n\n### 3.3 제품 인증\n\n#### 3.3.1 🔴 PSE 법\n\n**우선순위:** HIGH\n**관할 기관:** 일본 정부\n**적용 이유:** 리튬이온 배터리는 과충전, 단락 방지, 열 관리에 대한 엄격한 테스트를 통과해야 하므로 이 법이 적용됩니다.\n\n**주요 요구사항:**\n- 과충전 방지 테스트\n- 단락 방지 테스트\n- 열 관리 테스트\n\n#### 3.3.2 🔴 METI 안전 지침\n\n**우선순위:** HIGH\n**관할 기관:** 일본 경제산업성\n**적용 이유:** 리튬 배터리의 안전성을 보장하기 위해 국내 및 국제 안전 표준을 준수해야 합니다.\n\n**주요 요구사항:**\n- 국내 안전 기준 준수\n- 국제 안전 기준 준수\n\n#### 3.3.3 🔴 CB 인증\n\n**우선순위:** HIGH\n**관할 기관:** IECEE\n**적용 이유:** 리튬 배터리 제품이 국제 안전, 성능 및 기계 표준 준수를 입증하기 위해 필요합니다.\n\n**주요 요구사항:**\n- IEC 표준 준수\n- 전기 안전 시험\n\n#### 3.3.4 🔴 KC 인증\n\n**우선순위:** HIGH\n**관할 기관:** 한국기술표준원\n**적용 이유:** 한국에서 유통되는 리튬이온 배터리는 안전 인증이 필요하므로 KC 인증이 요구됩니다.\n\n**주요 요구사항:**\n- 안전성 평가\n- 품질 기준 준수\n\n#### 3.3.5 🟡 ESS 안전 인증\n\n**우선순위:** MEDIUM\n**관할 기관:** 한국전기안전공사\n**적용 이유:** 전력 저장 장치와 관련된 안전 인증이 필요하므로 이 규제가 적용됩니다.\n\n**주요 요구사항:**\n- 안전성 평가\n- 기준 준수\n\n\n---\n\n## 4. 실행 체크리스트\n\n### 4.1 🔴 PSE 법\n\n- [ ] **과충전 방지 테스트 수행**\n  - 담당: 안전관리팀\n  - 마감: 사업 개시 전 필수\n  - 예상 비용: 100만원\n\n- [ ] **단락 방지 테스트 수행**\n  - 담당: 안전관리팀\n  - 마감: 사업 개시 전 필수\n  - 예상 비용: 80만원\n\n- [ ] **열 관리 테스트 수행**\n  - 담당: 안전관리팀\n  - 마감: 사업 개시 전 필수\n  - 예상 비용: 120만원\n\n- [ ] **테스트 결과 문서화**\n  - 담당: 법무팀\n  - 마감: 사업 개시 전 필수\n  - 예상 비용: 무료\n\n- [ ] **정기적인 테스트 일정 수립**\n  - 담당: 시설관리팀\n  - 마감: 연 1회\n  - 예상 비용: 무료\n\n### 4.2 🔴 METI 안전 지침\n\n- [ ] **국내 안전 기준 조사 및 분석**\n  - 담당: 안전관리팀\n  - 마감: 사업 개시 전 필수\n  - 예상 비용: 무료\n\n- [ ] **국제 안전 기준 조사 및 분석**\n  - 담당: 안전관리팀\n  - 마감: 사업 개시 전 필수\n  - 예상 비용: 무료\n\n- [ ] **안전 기준 준수 계획 수립**\n  - 담당: 법무팀\n  - 마감: 사업 개시 전 필수\n  - 예상 비용: 100만원\n\n- [ ] **안전 기준 준수 교육 실시**\n  - 담당: 인사팀\n  - 마감: 연 1회\n  - 예상 비용: 30만원\n\n- [ ] **안전 기준 준수 상태 점검**\n  - 담당: 시설관리팀\n  - 마감: 분기 1회\n  - 예상 비용: 무료\n\n### 4.3 🔴 CB 인증\n\n- [ ] **IEC 표준 조사 및 확인**\n  - 담당: 법무팀\n  - 마감: 사업 개시 전 필수\n  - 예상 비용: 무료\n\n- [ ] **전기 안전 시험 실시**\n  - 담당: 안전관리팀\n  - 마감: 사업 개시 전 필수\n  - 예상 비용: 100만원\n\n- [ ] **CB 인증 신청 준비**\n  - 담당: 법무팀\n  - 마감: 사업 개시 전 필수\n  - 예상 비용: 30만원\n\n### 4.4 🟡 IEC 61508\n\n- [ ] **안전 인증 장비 목록 작성**\n  - 담당: 시설관리팀\n  - 마감: 사업 개시 전 필수\n  - 예상 비용: 무료\n\n- [ ] **위험 평가 진행**\n  - 담당: 안전관리팀\n  - 마감: 연 1회\n  - 예상 비용: 100만원\n\n- [ ] **안전 교육 프로그램 개발**\n  - 담당: 인사팀\n  - 마감: 3개월 내\n  - 예상 비용: 300만원\n\n### 4.5 🔴 KC 인증\n\n- [ ] **안전성 평가 수행**\n  - 담당: 안전관리팀\n  - 마감: 사업 개시 전 필수\n  - 예상 비용: 100만원\n\n- [ ] **품질 기준 준수 확인**\n  - 담당: 품질관리팀\n  - 마감: 사업 개시 전 필수\n  - 예상 비용: 50만원\n\n- [ ] **KC 인증 신청 준비**\n  - 담당: 법무팀\n  - 마감: 사업 개시 1개월 전\n  - 예상 비용: 30만원\n\n- [ ] **인증 유지 관리**\n  - 담당: 품질관리팀\n  - 마감: 연 1회\n  - 예상 비용: 20만원\n\n### 4.6 🔴 화학물질관리법\n\n- [ ] **화학물질 등록**\n  - 담당: 법무팀\n  - 마감: 사업 개시 전 필수\n  - 예상 비용: 100만원\n\n- [ ] **안전성 평가 수행**\n  - 담당: 안전관리팀\n  - 마감: 연 1회\n  - 예상 비용: 50만원\n\n- [ ] **교육 프로그램 개발 및 시행**\n  - 담당: 인사팀\n  - 마감: 사업 개시 전 필수\n  - 예상 비용: 30만원\n\n### 4.7 🟡 ESS 안전 인증\n\n- [ ] **안전성 평가 계획 수립**\n  - 담당: 안전관리팀\n  - 마감: 사업 개시 전 필수\n  - 예상 비용: 무료\n\n- [ ] **안전성 평가 수행**\n  - 담당: 안전관리팀\n  - 마감: 사업 개시 전 필수\n  - 예상 비용: 100만원\n\n- [ ] **기준 준수 확인**\n  - 담당: 법무팀\n  - 마감: 사업 개시 전 필수\n  - 예상 비용: 30만원\n\n- [ ] **인증 신청서 작성**\n  - 담당: 법무팀\n  - 마감: 사업 개시 전 필수\n  - 예상 비용: 무료\n\n- [ ] **인증 결과 모니터링**\n  - 담당: 안전관리팀\n  - 마감: 연 1회\n  - 예상 비용: 무료\n\n\n---\n\n## 5. 실행 계획 및 타임라인\n\n### 5.1 🔴 PSE 법\n\n**타임라인:** 3개월  \n**시작 예정:** 즉시  \n\n**주요 마일스톤:**\n- 1개월 차: 과충전 및 단락 방지 테스트 완료 (완료 목표: 30일 내)\n- 2개월 차: 열 관리 테스트 완료 및 결과 문서화 (완료 목표: 60일 내)\n- 3개월 차: 정기적인 테스트 일정 수립 (완료 목표: 90일 내)\n\n**의존성:**\n- `2` ← `1`\n- `3` ← `1`, `2`\n- `4` ← `3`\n- `5` ← `4`\n\n**병렬 수행 가능:**\n- `1`, `2`\n- `3`, `4`\n\n**크리티컬 패스:** `1` → `2` → `3` → `4` → `5`\n\n### 5.2 🔴 METI 안전 지침\n\n**타임라인:** 3개월  \n**시작 예정:** 즉시  \n\n**주요 마일스톤:**\n- 1개월 차: 서류 준비 완료 (완료 목표: 30일 내)\n- 1.5개월 차: 안전 기준 준수 계획 수립 완료 (완료 목표: 45일 내)\n- 2개월 차: 안전 기준 준수 교육 실시 완료 (완료 목표: 60일 내)\n- 3개월 차: 첫 번째 안전 기준 준수 상태 점검 완료 (완료 목표: 90일 내)\n\n**의존성:**\n- `2` ← `1`\n- `3` ← `1`, `2`\n- `5` ← `3`\n\n**병렬 수행 가능:**\n- `1`, `2`\n- `3`, `4`\n\n**크리티컬 패스:** `1` → `2` → `3` → `5`\n\n### 5.3 🔴 CB 인증\n\n**타임라인:** 3개월  \n**시작 예정:** 즉시  \n\n**주요 마일스톤:**\n- 1개월 차: IEC 표준 조사 완료 (완료 목표: 10일 내)\n- 1개월 차: 전기 안전 시험 시작 (완료 목표: 20일 내)\n- 2개월 차: CB 인증 신청 준비 완료 (완료 목표: 15일 내)\n\n**의존성:**\n- `2` ← `1`\n- `3` ← `1`, `2`\n\n**병렬 수행 가능:**\n- `1`\n- `2`\n\n**크리티컬 패스:** `1` → `2` → `3`\n\n### 5.4 🟡 IEC 61508\n\n**타임라인:** 3개월  \n**시작 예정:** 즉시  \n\n**주요 마일스톤:**\n- 1개월 차: 안전 인증 장비 목록 작성 완료 (완료 목표: 10일 내)\n- 1개월 차: 위험 평가 진행 완료 (완료 목표: 20일 내)\n- 3개월 차: 안전 교육 프로그램 개발 완료 (완료 목표: 3개월 내)\n\n**의존성:**\n- `2` ← `1`\n- `3` ← `1`, `2`\n\n**병렬 수행 가능:**\n- `1`\n- `2`\n- `3`\n\n**크리티컬 패스:** `1` → `2` → `3`\n\n### 5.5 🔴 KC 인증\n\n**타임라인:** 3개월  \n**시작 예정:** 즉시  \n\n**주요 마일스톤:**\n- 1개월 차: 서류 준비 완료 (완료 목표: 30일 내)\n- KC 인증 신청 완료 (완료 목표: 1개월 차 3일 내)\n- 인증 유지 관리 완료 (완료 목표: 연 1회)\n\n**의존성:**\n- `2` ← `1`\n- `3` ← `1`, `2`\n- `4` ← `3`\n\n**병렬 수행 가능:**\n- `1`, `2`\n- `3`\n\n**크리티컬 패스:** `1` → `2` → `3` → `4`\n\n### 5.6 🔴 화학물질관리법\n\n**타임라인:** 1개월  \n**시작 예정:** 즉시  \n\n**주요 마일스톤:**\n- 서류 준비 완료 (완료 목표: 30일 내)\n- 안전성 평가 수행 (완료 목표: 20일 내)\n\n**의존성:**\n- `2` ← `1`\n- `3` ← `1`\n\n**병렬 수행 가능:**\n- `1`, `3`\n- `2`\n\n**크리티컬 패스:** `1` → `2`\n\n### 5.7 🟡 ESS 안전 인증\n\n**타임라인:** 3개월  \n**시작 예정:** 즉시  \n\n**주요 마일스톤:**\n- 1개월 차: 서류 준비 완료 (완료 목표: 30일 내)\n- 2개월 차: 인증 신청 완료 (완료 목표: 60일 내)\n- 3개월 차: 인증 결과 확인 (완료 목표: 90일 내)\n\n**의존성:**\n- `2` ← `1`\n- `3` ← `1`, `2`\n- `4` ← `3`\n\n**병렬 수행 가능:**\n- `1`, `2`\n- `3`, `4`\n\n**크리티컬 패스:** `1` → `2` → `5`\n\n\n---\n\n## 6. 리스크 평가\n\n### 6.1 전체 리스크 평가\n\n**전체 리스크 점수:** 8.3/10\n\n**리스크 수준:** 매우 높음\n\n### 6.2 고위험 규제 (상위 5개)\n\n#### PSE 법\n\n**리스크 점수:** 9.0/10\n\n**처벌 유형:** 형사처벌 및 과태료\n\n**사업 영향:** 인허가 취소 및 영업정지 6개월\n\n#### METI 안전 지침\n\n**리스크 점수:** 9.0/10\n\n**처벌 유형:** 과태료\n\n**사업 영향:** 인허가 취소\n\n#### CB 인증\n\n**리스크 점수:** 9.0/10\n\n**처벌 유형:** 과태료\n\n**사업 영향:** 인허가 취소\n\n#### IEC 61508\n\n**리스크 점수:** 7.0/10\n\n**처벌 유형:** 과태료\n\n**사업 영향:** 인허가 취소\n\n#### KC 인증\n\n**리스크 점수:** 9.0/10\n\n**처벌 유형:** 과태료\n\n**사업 영향:** 영업정지 6개월\n\n\n---\n\n## 7. 경영진 요약\n\n### 핵심 인사이트\n- 총 7개의 규제가 있으며, 이 중 5개가 HIGH 리스크로 분류되었습니다.\n- 전체 리스크 점수는 8.3/10으로, 매우 높은 수준입니다.\n- 모든 고위험 규제가 7개로 확인되어, 즉각적인 대응이 필요합니다.\n\n### 의사결정 포인트\n- [ ] 규제 준수 전략 재검토\n- [ ] 리스크 관리 체계 강화\n- [ ] 관련 부서와의 협력 방안 마련\n\n### 권장 조치 (우선순위 순)\n1. **즉시:** 고위험 규제에 대한 긴급 대응 계획 수립\n2. **1개월 내:** 리스크 관리 프로세스 점검 및 개선안 마련\n3. **3개월 내:** 규제 준수 교육 프로그램 개발 및 시행\n\n---\n\n## 8. 다음 단계\n\n- **1단계 (즉시):** HIGH 우선순위 5개 규제 착수\n- **2단계 (1주일 내):** 담당 부서 및 책임자 지정\n- **3단계 (2주일 내):** 상세 실행 일정 확정 및 예산 승인\n- **4단계 (1개월):** 월 단위 진행 상황 모니터링 체계 구축\n- **5단계 (분기별):** 전문가 검토 및 보완\n\n---\n\n## 면책 조항\n\n> 본 보고서는 AI 기반 분석 도구로 생성된 참고 자료입니다. 실제 규제 준수 여부는 반드시 전문가의 검토를 받으시기 바랍니다. 본 보고서 내용으로 인한 법적 책임은 사용자에게 있습니다.\n",
+    "report_pdf_path": "report/regulation_report.pdf"
   }
 }

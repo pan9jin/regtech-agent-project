@@ -1,24 +1,21 @@
 """
-규제 AI Agent 서비스 - LangGraph Multi-Agent Workflow
+규제 AI Agent 서비스 - LangGraph Multi-Agent Workflow (병렬 처리 최적화)
 8개의 Agent로 구성된 규제 분석 시스템
 
 1. Analyzer Agent: 사업 정보 분석 및 키워드 추출
 2. Search Agent: Tavily API를 통한 규제 정보 검색
 3. Classifier Agent: 검색된 규제 분류 및 적용성 판단
 4. Prioritizer Agent: 규제 우선순위 결정 (HIGH/MEDIUM/LOW)
-5. Checklist Generator Agent: 규제별 실행 가능한 체크리스트 생성
-6. Planning Agent: 체크리스트 → 실행 계획 변환 (의존성, 타임라인, 마일스톤)
-7. Risk Assessment Agent: 미준수 시 리스크 평가 및 완화 방안 제시
+5. Checklist Generator Agent: 규제별 실행 가능한 체크리스트 생성 [병렬]
+6. Risk Assessment Agent: 미준수 시 리스크 평가 및 완화 방안 제시 [병렬]
+7. Planning Agent: 체크리스트 → 실행 계획 변환 (의존성, 타임라인, 마일스톤)
 8. Report Generation Agent: 최종 통합 보고서 생성 (경영진/실무진/법무팀용)
-
-워크플로우:
-START → Analyzer → Searcher → Classifier → Prioritizer
-→ Checklist Generator → Planning Agent → Risk Assessor
-→ Report Generator → END
 """
 
-import os
+import re
+import sys
 import json
+import time
 from typing import List, Optional, Dict, Any, Iterable, Union
 from typing_extensions import TypedDict
 from datetime import datetime
@@ -27,7 +24,6 @@ from enum import Enum
 from markdown import markdown
 from pathlib import Path
 from weasyprint import HTML, CSS
-import re
 
 from langchain_openai import ChatOpenAI
 from langchain_tavily import TavilySearch
@@ -74,7 +70,8 @@ class EvidenceItem(TypedDict, total=False):
     source_id: str                   # 검색 결과 식별자 (예: SRC-001)
     title: str                       # 문서 제목
     url: str                         # 문서 URL
-    snippet: str                     # 발췌 내용
+    snippet: str                     # 발췌 내용 (원본, 생략 가능)
+    justification: str               # LLM이 생성한 concise 요약 (우선 사용)
 
 
 class Regulation(TypedDict):
@@ -96,9 +93,8 @@ class ChecklistItem(TypedDict):
     regulation_name: str        # 규제명
     task_name: str              # 작업명
     responsible_dept: str       # 담당 부서
-    deadline: str               # 마감 기한
+    deadline: str               # 마감 기한 (YYYY-MM-DD 형식)
     method: List[str]           # 실행 방법 (단계별)
-    estimated_cost: str         # 예상 비용
     estimated_time: str         # 소요 시간
     priority: str               # 우선순위 (상위 규제와 동일)
     status: str                 # 상태 (pending/in_progress/completed)
@@ -191,6 +187,7 @@ def _build_tavily_tool(max_results: int = 8, search_depth: str = "basic") -> Tav
             include_answer=True,
             include_raw_content=False,
             search_depth=search_depth,
+            include_domains=["go.kr", "or.kr", "law.go.kr", "korea.kr"]
         )
     except Exception as exc:
         raise RuntimeError(
@@ -256,21 +253,171 @@ def _normalize_evidence_payload(
     for entry in raw_iterable:
         if isinstance(entry, dict):
             src_id = entry.get("source_id") or ""
-            justification = entry.get("justification") or entry.get("excerpt") or ""
+            justification_text = entry.get("justification") or entry.get("excerpt") or ""
         else:
             text = str(entry)
             match = re.match(r"(SRC-\d+)", text.strip())
             src_id = match.group(1) if match else ""
-            justification = text
+            justification_text = text
 
         source_meta = source_lookup.get(src_id, {}) if src_id else {}
-        snippet_text = str(justification or source_meta.get("snippet", "") or "")
+        # snippet은 원본 유지 (fallback용), justification은 LLM 요약 (우선 사용)
         normalized.append({
             "source_id": src_id,
             "title": source_meta.get("title", ""),
             "url": source_meta.get("url", ""),
-            "snippet": snippet_text[:300]
+            "snippet": source_meta.get("snippet", "")[:300],  # 원본 snippet (fallback)
+            "justification": justification_text  # LLM이 생성한 요약 (생략 없음)
         })
+
+    return normalized
+
+
+def _ensure_dict_list(payload: Any) -> List[Dict[str, Any]]:
+    """LLM 응답(payload)을 Dict 리스트 형태로 강제 변환합니다."""
+    if payload is None:
+        return []
+
+    if isinstance(payload, str):
+        text = payload.strip()
+        if not text:
+            return []
+        try:
+            parsed = json.loads(text)
+        except json.JSONDecodeError:
+            return []
+        return _ensure_dict_list(parsed)
+
+    if isinstance(payload, dict):
+        for key in ("items", "checklists", "tasks", "data", "results"):
+            value = payload.get(key)
+            if isinstance(value, list):
+                return _ensure_dict_list(value)
+        return [payload]
+
+    if isinstance(payload, list):
+        normalized_items: List[Dict[str, Any]] = []
+        for entry in payload:
+            if isinstance(entry, dict):
+                normalized_items.append(entry)
+                continue
+            nested_items = _ensure_dict_list(entry)
+            if nested_items:
+                normalized_items.extend(nested_items)
+        return normalized_items
+
+    return []
+
+
+def _normalize_task_ids(value: Any) -> List[str]:
+    """작업 ID 필드를 문자열 리스트로 변환합니다."""
+    if value is None:
+        return []
+
+    if isinstance(value, str):
+        tokens = [token.strip() for token in re.split(r"[,\s]+", value) if token.strip()]
+        return tokens
+
+    if isinstance(value, Iterable) and not isinstance(value, (bytes, bytearray)):
+        result: List[str] = []
+        for item in value:
+            if isinstance(item, str):
+                text = item.strip()
+            else:
+                text = str(item).strip()
+            if text:
+                result.append(text)
+        return result
+
+    return []
+
+
+def _normalize_milestones(
+    raw_milestones: Any,
+    default_task_ids: List[str]
+) -> List[Milestone]:
+    """마일스톤 목록을 Milestone 스키마에 맞춰 정리합니다."""
+    if not isinstance(raw_milestones, Iterable) or isinstance(raw_milestones, (str, bytes, bytearray)):
+        return []
+
+    normalized: List[Milestone] = []
+    remaining = list(default_task_ids)
+
+    for entry in raw_milestones:
+        if not isinstance(entry, dict):
+            continue
+
+        name = str(entry.get("name", "")).strip() or "마일스톤"
+        deadline = str(entry.get("deadline", "")).strip()
+        tasks = _normalize_task_ids(entry.get("tasks"))
+        if not tasks:
+            if remaining:
+                tasks = [remaining.pop(0)]
+            else:
+                tasks = default_task_ids[:] or []
+        else:
+            remaining = [task for task in remaining if task not in tasks]
+
+        completion = str(entry.get("completion_criteria", "")).strip()
+
+        normalized.append({
+            "name": name,
+            "deadline": deadline,
+            "tasks": tasks,
+            "completion_criteria": completion
+        })
+
+    return normalized
+
+
+def _normalize_dependencies(
+    raw_dependencies: Any,
+    allowable_tasks: List[str]
+) -> Dict[str, List[str]]:
+    """의존성 정보를 Dict[str, List[str]] 형태로 정리합니다."""
+    normalized: Dict[str, List[str]] = {}
+    if not isinstance(raw_dependencies, dict):
+        return normalized
+
+    allowable = set(allowable_tasks)
+
+    for key, value in raw_dependencies.items():
+        dep_key = str(key).strip()
+        if not dep_key:
+            continue
+        deps = _normalize_task_ids(value)
+        if allowable:
+            deps = [dep for dep in deps if dep in allowable]
+        normalized[dep_key] = deps
+
+    return normalized
+
+
+def _normalize_parallel_tasks(
+    raw_parallel: Any,
+    allowable_tasks: List[str]
+) -> List[List[str]]:
+    """병렬 작업 그룹을 정규화합니다."""
+    normalized: List[List[str]] = []
+    allowable = set(allowable_tasks)
+
+    if raw_parallel is None:
+        return normalized
+
+    candidates: Iterable[Any]
+    if isinstance(raw_parallel, str):
+        candidates = [raw_parallel]
+    elif isinstance(raw_parallel, Iterable) and not isinstance(raw_parallel, (bytes, bytearray)):
+        candidates = raw_parallel
+    else:
+        return normalized
+
+    for group in candidates:
+        group_items = _normalize_task_ids(group)
+        if allowable:
+            group_items = [item for item in group_items if item in allowable]
+        if group_items:
+            normalized.append(group_items)
 
     return normalized
 
@@ -405,7 +552,7 @@ def search_regulations(keywords: List[str]) -> Dict[str, Any]:
     print(f"   검색 키워드: {', '.join(keywords[:3])}...")
 
     # TavilySearch 도구 생성
-    tavily_tool = _build_tavily_tool(max_results=8, search_depth="advanced")
+    tavily_tool = _build_tavily_tool(max_results=10, search_depth="advanced")
 
     # 검색 쿼리 생성
     query = f"{' '.join(keywords)} 제조업 규제 법률 안전 인증 한국"
@@ -454,7 +601,7 @@ def classify_regulations(
     """
     print("📋 [Classifier Agent] 규제 분류 및 적용성 판단 중...")
 
-    llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.3)
+    llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
 
     # 검색 결과를 텍스트로 정리
     search_summary = "\n\n".join([
@@ -679,6 +826,9 @@ def generate_checklists(regulations: List[Regulation]) -> Dict[str, Any]:
 
     all_checklists = []
 
+    # 현재 시스템 시간 가져오기
+    current_date = datetime.now().strftime("%Y-%m-%d")
+
     for reg in regulations:
         print(f"   {reg['name']} - 체크리스트 생성 중...")
 
@@ -703,19 +853,26 @@ def generate_checklists(regulations: List[Regulation]) -> Dict[str, Any]:
 [사용 가능한 출처]
 {source_summary}
 
+[현재 날짜]
+{current_date}
+
 [생성 지침]
 1) 작업 수: 3~5개.
 2) method[0]에는 "(매핑: 요구사항 N)" 형식으로 매핑 정보를 기재합니다.
 3) evidence에는 [사용 가능한 출처]에서 선택한 source_id와 해당 출처의 핵심 문장을 1~2개 포함합니다.
 4) method 단계는 3~5개, 마지막 단계에는 증빙/기록 확보를 포함합니다.
-5) deadline, estimated_cost, estimated_time은 우선순위에 맞게 구체적으로 작성합니다.
-6) JSON 배열 외 텍스트는 금지합니다.
+5) deadline은 현재 날짜({current_date})를 기준으로 우선순위에 맞게 YYYY-MM-DD 형식으로 계산합니다.
+   - HIGH: 현재일 + 1~3개월
+   - MEDIUM: 현재일 + 3~6개월
+   - LOW: 현재일 + 6~12개월
+6) estimated_time은 실제 소요 시간을 구체적으로 작성합니다 (예: "2주", "1개월").
+7) JSON 배열 외 텍스트는 금지합니다.
 
 [출력 스키마]
 {{
   "task_name": "구체적인 작업명(명령형)",
   "responsible_dept": "담당 부서",
-  "deadline": "마감 기한",
+  "deadline": "YYYY-MM-DD",
   "method": [
     "1. (매핑: 요구사항 N) ...",
     "2. ...",
@@ -723,7 +880,6 @@ def generate_checklists(regulations: List[Regulation]) -> Dict[str, Any]:
     "4. ...",
     "5. ..."
   ],
-  "estimated_cost": "예상 비용",
   "estimated_time": "소요 시간",
   "evidence": [
     {{
@@ -744,7 +900,12 @@ def generate_checklists(regulations: List[Regulation]) -> Dict[str, Any]:
                 if content.startswith("json"):
                     content = content[4:]
 
-            checklist_items = json.loads(content.strip())
+            raw_payload = json.loads(content.strip())
+            checklist_items = _ensure_dict_list(raw_payload)
+
+            if not checklist_items:
+                print("      ⚠️  체크리스트 응답이 비어 있거나 형식이 올바르지 않습니다.")
+                continue
 
             source_lookup = {
                 src.get("source_id"): src for src in reg.get("sources", [])
@@ -753,10 +914,17 @@ def generate_checklists(regulations: List[Regulation]) -> Dict[str, Any]:
 
             # ChecklistItem 형식으로 변환
             for item in checklist_items:
+                if not isinstance(item, dict):
+                    continue
+
                 evidence_entries = _normalize_evidence_payload(
                     item.get("evidence"),
                     source_lookup
                 )
+
+                method_steps = item.get("method") or []
+                if isinstance(method_steps, str):
+                    method_steps = [method_steps]
 
                 all_checklists.append({
                     "regulation_id": reg['id'],
@@ -764,8 +932,7 @@ def generate_checklists(regulations: List[Regulation]) -> Dict[str, Any]:
                     "task_name": item.get("task_name", ""),
                     "responsible_dept": item.get("responsible_dept", "담당 부서"),
                     "deadline": item.get("deadline", "미정"),
-                    "method": item.get("method", []),
-                    "estimated_cost": item.get("estimated_cost", "미정"),
+                    "method": method_steps,
                     "estimated_time": item.get("estimated_time", "미정"),
                     "priority": reg['priority'],
                     "status": "pending",
@@ -821,6 +988,8 @@ def plan_execution(
             continue
 
         print(f"   {reg_name} - 실행 계획 생성 중...")
+
+        task_ids = [str(i + 1) for i in range(len(reg_checklists))]
 
         # 체크리스트 요약
         checklist_summary = "\n".join([
@@ -890,21 +1059,51 @@ def plan_execution(
                     content = content[4:]
 
             plan_data = json.loads(content.strip())
+            if isinstance(plan_data, list):
+                plan_data = plan_data[0] if plan_data else {}
+            if not isinstance(plan_data, dict):
+                plan_data = {}
 
             plan_evidence = _merge_evidence([item.get("evidence", []) for item in reg_checklists])
 
-            # ExecutionPlan 형식으로 변환
+            milestones = _normalize_milestones(
+                plan_data.get("milestones"),
+                task_ids
+            )
+
+            dependencies = _normalize_dependencies(
+                plan_data.get("dependencies"),
+                task_ids
+            )
+
+            parallel_tasks = _normalize_parallel_tasks(
+                plan_data.get("parallel_tasks"),
+                task_ids
+            )
+
+            critical_path = _normalize_task_ids(plan_data.get("critical_path"))
+            if task_ids:
+                critical_path = [cp for cp in critical_path if cp in task_ids]
+                if not critical_path:
+                    critical_path = task_ids[:]
+
+            default_start = (
+                "즉시" if reg_priority == "HIGH"
+                else "1개월 내" if reg_priority == "MEDIUM"
+                else "3개월 내"
+            )
+
             execution_plan: ExecutionPlan = {
                 "plan_id": f"PLAN-{len(all_execution_plans) + 1:03d}",
                 "regulation_id": reg_id,
                 "regulation_name": reg_name,
-                "checklist_items": [str(i+1) for i in range(len(reg_checklists))],
-                "timeline": plan_data.get("timeline", "3개월"),
-                "start_date": plan_data.get("start_date", "즉시"),
-                "milestones": plan_data.get("milestones", []),
-                "dependencies": plan_data.get("dependencies", {}),
-                "parallel_tasks": plan_data.get("parallel_tasks", []),
-                "critical_path": plan_data.get("critical_path", []),
+                "checklist_items": task_ids,
+                "timeline": str(plan_data.get("timeline") or "3개월"),
+                "start_date": str(plan_data.get("start_date") or default_start),
+                "milestones": milestones,
+                "dependencies": dependencies,
+                "parallel_tasks": parallel_tasks,
+                "critical_path": critical_path,
                 "evidence": plan_evidence
             }
 
@@ -919,13 +1118,13 @@ def plan_execution(
                 "plan_id": f"PLAN-{len(all_execution_plans) + 1:03d}",
                 "regulation_id": reg_id,
                 "regulation_name": reg_name,
-                "checklist_items": [str(i+1) for i in range(len(reg_checklists))],
+                "checklist_items": task_ids,
                 "timeline": "3개월",
                 "start_date": "즉시" if reg_priority == "HIGH" else "1개월 내",
                 "milestones": [],
                 "dependencies": {},
                 "parallel_tasks": [],
-                "critical_path": [],
+                "critical_path": task_ids,
                 "evidence": plan_evidence
             }
             all_execution_plans.append(default_plan)
@@ -951,7 +1150,7 @@ def assess_risks(
     """
     print("⚠️  [Risk Assessment Agent] 리스크 평가 중...")
 
-    llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.3)
+    llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.7)
 
     risk_items = []
 
@@ -1123,7 +1322,7 @@ def generate_final_report(
     """
     print("📄 [Report Generation Agent] 통합 보고서 생성 중...")
 
-    llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.3)
+    llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.7)
 
     # === 1. 기본 통계 계산 ===
     priority_count = {"HIGH": 0, "MEDIUM": 0, "LOW": 0}
@@ -1217,15 +1416,21 @@ def generate_final_report(
                 full_markdown += f"**벌칙:** {reg['penalty']}\n\n"
 
             if reg.get('sources'):
-                full_markdown += "**근거 출처:**\n"
-                for src in reg['sources']:
+                full_markdown += "**근거 출처:**\n\n"
+                for idx, src in enumerate(reg['sources']):
                     link_title = src.get('title') or src.get('url', '')
                     url = src.get('url', '')
-                    snippet = (src.get('snippet') or "").replace('\n', ' ')
+                    # justification 우선 사용 (LLM 요약), 없으면 snippet 사용
+                    summary = src.get('justification') or (src.get('snippet') or "").replace('\n', ' ')
                     if url:
-                        full_markdown += f"- [{link_title}]({url}) — {snippet}\n"
+                        full_markdown += f"**[{link_title}]** {url}\n{summary}"
                     else:
-                        full_markdown += f"- {link_title} — {snippet}\n"
+                        full_markdown += f"**[{link_title}]**\n{summary}"
+                    # 마지막 항목이 아니면 줄바꿈 추가
+                    if idx < len(reg['sources']) - 1:
+                        full_markdown += "\n\n"
+                    else:
+                        full_markdown += "\n"
                 full_markdown += "\n"
 
     # 2-3. 실행 체크리스트
@@ -1241,19 +1446,24 @@ def generate_final_report(
                 full_markdown += f"- [ ] **{item['task_name']}**\n"
                 full_markdown += f"  - 담당: {item['responsible_dept']}\n"
                 full_markdown += f"  - 마감: {item['deadline']}\n"
-                if item.get('estimated_cost'):
-                    full_markdown += f"  - 예상 비용: {item['estimated_cost']}\n"
                 full_markdown += "\n"
                 if item.get('evidence'):
-                    for ev in item['evidence']:
+                    full_markdown += "  **근거 출처:**\n\n"
+                    for idx, ev in enumerate(item['evidence']):
                         link_title = ev.get('title') or ev.get('url', '')
                         url = ev.get('url', '')
-                        snippet = (ev.get('snippet') or "").replace('\n', ' ')
-                        full_markdown += f"    • 근거: "
+                        # justification 우선 사용 (LLM 요약), 없으면 snippet 사용
+                        summary = ev.get('justification') or (ev.get('snippet') or "").replace('\n', ' ')
+                        full_markdown += f"  "
                         if url:
-                            full_markdown += f"[{link_title}]({url}) — {snippet}\n"
+                            full_markdown += f"**[{link_title}]** {url}\n  {summary}"
                         else:
-                            full_markdown += f"{link_title} — {snippet}\n"
+                            full_markdown += f"**[{link_title}]**\n  {summary}"
+                        # 마지막 항목이 아니면 줄바꿈 추가
+                        if idx < len(item['evidence']) - 1:
+                            full_markdown += "\n\n  "
+                        else:
+                            full_markdown += "\n"
                     full_markdown += "\n"
 
     # 2-4. 실행 계획 및 타임라인
@@ -1275,35 +1485,22 @@ def generate_final_report(
                 full_markdown += f"- {milestone['name']} (완료 목표: {milestone['deadline']})\n"
             full_markdown += "\n"
 
-        # 의존성
-        if plan.get('dependencies') and any(plan['dependencies'].values()):
-            full_markdown += "**의존성:**\n"
-            for task, deps in plan['dependencies'].items():
-                if deps:
-                    full_markdown += f"- `{task}` ← {', '.join(f'`{d}`' for d in deps)}\n"
-            full_markdown += "\n"
-
-        # 병렬 작업
-        if plan.get('parallel_tasks'):
-            full_markdown += "**병렬 수행 가능:**\n"
-            for group in plan['parallel_tasks']:
-                full_markdown += f"- {', '.join(f'`{t}`' for t in group)}\n"
-            full_markdown += "\n"
-
-        # 크리티컬 패스
-        if plan.get('critical_path'):
-            full_markdown += f"**크리티컬 패스:** {' → '.join(f'`{t}`' for t in plan['critical_path'])}\n\n"
-
         if plan.get('evidence'):
-            full_markdown += "**근거 출처:**\n"
-            for ev in plan['evidence']:
+            full_markdown += "**근거 출처:**\n\n"
+            for idx, ev in enumerate(plan['evidence']):
                 link_title = ev.get('title') or ev.get('url', '')
                 url = ev.get('url', '')
-                snippet = (ev.get('snippet') or "").replace('\n', ' ')
+                # justification 우선 사용 (LLM 요약), 없으면 snippet 사용
+                summary = ev.get('justification') or (ev.get('snippet') or "").replace('\n', ' ')
                 if url:
-                    full_markdown += f"- [{link_title}]({url}) — {snippet}\n"
+                    full_markdown += f"**[{link_title}]** {url}\n{summary}"
                 else:
-                    full_markdown += f"- {link_title} — {snippet}\n"
+                    full_markdown += f"**[{link_title}]**\n{summary}"
+                # 마지막 항목이 아니면 줄바꿈 추가
+                if idx < len(plan['evidence']) - 1:
+                    full_markdown += "\n\n"
+                else:
+                    full_markdown += "\n"
             full_markdown += "\n"
 
     # 2-5. 리스크 평가
@@ -1326,15 +1523,21 @@ def generate_final_report(
                 full_markdown += f"**완화 우선순위:** {item['mitigation_priority']}\n\n"
 
             if item.get('evidence'):
-                full_markdown += "**근거 출처:**\n"
-                for ev in item['evidence']:
+                full_markdown += "**근거 출처:**\n\n"
+                for idx, ev in enumerate(item['evidence']):
                     link_title = ev.get('title') or ev.get('url', '')
                     url = ev.get('url', '')
-                    snippet = (ev.get('snippet') or "").replace('\n', ' ')
+                    # justification 우선 사용 (LLM 요약), 없으면 snippet 사용
+                    summary = ev.get('justification') or (ev.get('snippet') or "").replace('\n', ' ')
                     if url:
-                        full_markdown += f"- [{link_title}]({url}) — {snippet}\n"
+                        full_markdown += f"**[{link_title}]** {url}\n{summary}"
                     else:
-                        full_markdown += f"- {link_title} — {snippet}\n"
+                        full_markdown += f"**[{link_title}]**\n{summary}"
+                    # 마지막 항목이 아니면 줄바꿈 추가
+                    if idx < len(item['evidence']) - 1:
+                        full_markdown += "\n\n"
+                    else:
+                        full_markdown += "\n"
                 full_markdown += "\n"
 
     # 2-6. 경영진 요약 (LLM으로 생성)
@@ -1393,11 +1596,17 @@ def generate_final_report(
         for idx, citation in enumerate(all_citations, 1):
             link_title = citation.get('title') or citation.get('url', '')
             url = citation.get('url', '')
-            snippet = (citation.get('snippet') or "").replace('\n', ' ')
+            # justification 우선 사용 (LLM 요약), 없으면 snippet 사용
+            summary = citation.get('justification') or (citation.get('snippet') or "").replace('\n', ' ')
             if url:
-                full_markdown += f"{idx}. [{link_title}]({url}) — {snippet}\n"
+                full_markdown += f"{idx}. **[{link_title}]** {url}\n{summary}"
             else:
-                full_markdown += f"{idx}. {link_title} — {snippet}\n"
+                full_markdown += f"{idx}. **[{link_title}]**\n{summary}"
+            # 마지막 항목이 아니면 줄바꿈 추가
+            if idx < len(all_citations):
+                full_markdown += "\n\n"
+            else:
+                full_markdown += "\n"
 
     # 2-8. 면책 조항
     full_markdown += "\n---\n\n## 면책 조항\n\n"
@@ -1540,15 +1749,19 @@ def report_generator_node(state: AgentState) -> Dict[str, Any]:
 def build_workflow() -> StateGraph:
     """LangGraph 워크플로우를 구성합니다.
 
-    실행 순서:
+    실행 순서 (병렬 처리 최적화):
     1. analyzer: 사업 정보 분석 및 키워드 추출
     2. searcher: Tavily로 규제 검색
     3. classifier: 규제 분류
     4. prioritizer: 우선순위 결정
-    5. checklist_generator: 규제별 체크리스트 생성
-    6. planning_agent: 실행 계획 수립
-    7. risk_assessor: 리스크 평가
-    8. report_generator: 최종 보고서 생성
+    5-6. [병렬 실행]
+         - checklist_generator: 규제별 체크리스트 생성
+         - risk_assessor: 리스크 평가
+    7. planning_agent: 실행 계획 수립 (checklist_generator 완료 후)
+    8. report_generator: 최종 보고서 생성 (planning_agent + risk_assessor 완료 후)
+
+    병렬화 이점: Risk Assessment Agent가 Checklist Generator/Planning Agent와
+                동시 실행되어 전체 소요 시간 약 30초~1분 단축
     """
     graph = StateGraph(AgentState)
 
@@ -1564,15 +1777,23 @@ def build_workflow() -> StateGraph:
     graph.add_node("planning_agent", planning_agent_node)
     graph.add_node("report_generator", report_generator_node)
 
-    # 엣지 추가: 순차 실행
+    # 엣지 추가: 순차 실행 (Prioritizer까지)
     graph.add_edge(START, "analyzer")
     graph.add_edge("analyzer", "searcher")
     graph.add_edge("searcher", "classifier")
     graph.add_edge("classifier", "prioritizer")
+
+    # 병렬 실행: Prioritizer 이후 Checklist Generator와 Risk Assessor 동시 시작
     graph.add_edge("prioritizer", "checklist_generator")
+    graph.add_edge("prioritizer", "risk_assessor")
+
+    # Checklist Generator → Planning Agent (순차)
     graph.add_edge("checklist_generator", "planning_agent")
-    graph.add_edge("planning_agent", "risk_assessor")
+
+    # Report Generator는 Planning Agent와 Risk Assessor 모두 완료 후 실행
+    graph.add_edge("planning_agent", "report_generator")
     graph.add_edge("risk_assessor", "report_generator")
+
     graph.add_edge("report_generator", END)
 
     return graph
@@ -1659,7 +1880,6 @@ def print_checklists(checklists: List[ChecklistItem]):
             print(f"\n   {idx}. {item['task_name']}")
             print(f"      담당: {item['responsible_dept']}")
             print(f"      마감: {item['deadline']}")
-            print(f"      비용: {item['estimated_cost']}")
             print(f"      기간: {item['estimated_time']}")
             if item['method']:
                 print(f"      실행 방법:")
@@ -1840,6 +2060,7 @@ def print_risk_assessment(risk_assessment: RiskAssessment):
 
 def main():
     """샘플 데이터로 Workflow 실행"""
+    start_time = time.time()
 
     print("=" * 60)
     print("🤖 규제 AI Agent 시스템 시작")
@@ -1856,16 +2077,29 @@ def main():
         "sales_channels": ["B2B", "수출"],
         "export_countries": ["미국", "유럽"]
     }
+    
+    # 다른 샘플 사업 정보 (전자제품 제조)
+    sample_business_info2: BusinessInfo = {
+    "industry": "전자제품 제조",
+    "product_name": "스마트 LED 전구 (Wi-Fi)",
+    "raw_materials": "ABS 수지, PCB, 구리, LED 칩, 주석-은 납땜 합금",
+    "processes": ["사출 성형", "SMT(표면실장)", "납땜 리플로우", "펌웨어 플래싱", "최종 조립", "기능/안전 시험"],
+    "employee_count": 80,
+    "sales_channels": ["B2C", "온라인", "오프라인 리테일", "수출"],
+    "export_countries": ["미국", "유럽연합(EU)", "일본"]
+}
 
+    select = sys.argv[1] if len(sys.argv) > 1 else "1"
+    
     print("📝 입력된 사업 정보:")
-    print(json.dumps(sample_business_info, indent=2, ensure_ascii=False))
+    print(json.dumps(sample_business_info if select == "1" else sample_business_info2, indent=2, ensure_ascii=False))
     print()
     print("-" * 60)
     print()
 
     # Workflow 실행
     try:
-        result = run_regulation_agent(sample_business_info)
+        result = run_regulation_agent(sample_business_info if select == "1" else sample_business_info2)
     except Exception as exc:
         print(f"[ERROR] 분석 파이프라인이 실패했습니다: {exc}")
         raise
@@ -1936,30 +2170,32 @@ def main():
     print()
 
     print_final_report(result.get('final_report', {}))
+    end_time = time.time()
+    print(f"⏱️ 총 처리 시간: {end_time - start_time:.2f}초")
 
     # JSON 파일로 저장 (모든 데이터 포함)
-    complete_output = {
-        "business_info": result.get('business_info', {}),
-        "summary": {
-            "total_regulations": final_output.get('total_count', 0),
-            "priority_distribution": priority_dist,
-            "total_checklist_items": len(result.get('checklists', [])),
-            "total_execution_plans": len(result.get('execution_plans', [])),
-            "risk_score": result.get('risk_assessment', {}).get('total_risk_score', 0.0)
-        },
-        "regulations": regulations,
-        "checklists": result.get('checklists', []),
-        "execution_plans": result.get('execution_plans', []),
-        "risk_assessment": result.get('risk_assessment', {}),
-        "final_report": result.get('final_report', {})
-    }
+    # complete_output = {
+    #     "business_info": result.get('business_info', {}),
+    #     "summary": {
+    #         "total_regulations": final_output.get('total_count', 0),
+    #         "priority_distribution": priority_dist,
+    #         "total_checklist_items": len(result.get('checklists', [])),
+    #         "total_execution_plans": len(result.get('execution_plans', [])),
+    #         "risk_score": result.get('risk_assessment', {}).get('total_risk_score', 0.0)
+    #     },
+    #     "regulations": regulations,
+    #     "checklists": result.get('checklists', []),
+    #     "execution_plans": result.get('execution_plans', []),
+    #     "risk_assessment": result.get('risk_assessment', {}),
+    #     "final_report": result.get('final_report', {})
+    # }
 
-    output_file = "regulation_analysis_result.json"
-    with open(output_file, 'w', encoding='utf-8') as f:
-        json.dump(complete_output, f, indent=2, ensure_ascii=False)
+    # output_file = "regulation_analysis_result.json"
+    # with open(output_file, 'w', encoding='utf-8') as f:
+    #     json.dump(complete_output, f, indent=2, ensure_ascii=False)
 
-    print(f"💾 전체 결과가 '{output_file}' 파일로 저장되었습니다.")
-    print()
+    # print(f"💾 전체 결과가 '{output_file}' 파일로 저장되었습니다.")
+    # print()
 
 
 if __name__ == "__main__":

@@ -25,26 +25,26 @@
       "MEDIUM": 1,
       "LOW": 0
     },
-    "total_checklist_items": 14,
-    "total_execution_plans": 3,
-    "risk_score": 8.0
+    "total_checklist_items": 13,
+    "total_execution_plans": 4,
+    "risk_score": 8.25
   },
   "regulations": [
     {
       "id": "REG-001",
-      "name": "리튬 배터리 안전 인증",
+      "name": "PSE 마크 인증",
       "category": "제품 인증",
-      "why_applicable": "리튬이온 배터리 제조업체는 제품의 안전성을 보장하기 위해 다양한 인증을 받아야 합니다.",
-      "authority": "국가별 인증 기관",
+      "why_applicable": "리튬이온 배터리는 과충전, 단락 방지, 열 관리에 대한 엄격한 테스트를 포함하는 제품 안전 전기제품 및 재료(PSE) 법을 통과해야 합니다.",
+      "authority": "일본 산업부(METI)",
       "priority": "HIGH",
       "key_requirements": [
-        "리튬 배터리는 과충전, 단락 방지, 열 관리에 대한 엄격한 테스트를 통과해야 합니다.",
-        "국내 및 국제 안전 표준을 모두 준수해야 합니다."
+        "리튬 배터리는 과충전, 단락 방지, 열 관리에 대한 테스트를 통과해야 함.",
+        "국내 및 국제 안전 표준을 모두 준수해야 함."
       ],
       "reference_url": "https://www.rhybattery.com/ko/news/lithium-battery-safety-certification-standards-across-different-countries.html",
       "sources": [
         {
-          "source_id": "SRC-002",
+          "source_id": "SRC-001",
           "title": "국가별 리튬 배터리 안전 인증 기준 - RHY Battery",
           "url": "https://www.rhybattery.com/ko/news/lithium-battery-safety-certification-standards-across-different-countries.html",
           "snippet": "리튬 배터리는 과충전, 단락 방지, 열 관리에 대한 엄격한 테스트를 포함하는 제품 안전 전기제품 및 재료(PSE) 법을 통과해야 합니다."
@@ -53,64 +53,64 @@
     },
     {
       "id": "REG-002",
-      "name": "CB 인증",
+      "name": "IEC 62133 인증",
       "category": "제품 인증",
-      "why_applicable": "리튬이온 배터리는 국제 시장에 진출하기 위해 CB 인증을 받아야 합니다.",
-      "authority": "IECEE",
+      "why_applicable": "리튬이온 배터리의 안전을 보장하기 위해 국제적으로 인정된 안전 표준을 준수해야 합니다.",
+      "authority": "국제전기기술위원회(IEC)",
       "priority": "HIGH",
       "key_requirements": [
-        "리튬 배터리 제품은 IEC 표준에 따라 포괄적인 시험 및 평가를 받아야 합니다.",
-        "전기 안전, 신뢰성 및 규정 준수에 대한 국제적인 요구 사항을 충족해야 합니다."
+        "리튬이온 배터리는 IEC 62133, UL 1642, ISO 12405와 같은 안전 기준을 준수해야 함.",
+        "제조업체는 배터리 팩의 안전한 작동을 위해 설계, 테스트 및 인증해야 함."
       ],
-      "reference_url": "https://www.large-battery.com/ko/blog/cb-certification-for-lithium-batteries-global-market-access/",
+      "reference_url": "https://www.large-battery.com/ko/blog/making-lithium-ion-safe-protection-standards-best-practices/",
       "sources": [
         {
-          "source_id": "SRC-003",
-          "title": "리튬 배터리 CB 인증 및 글로벌 영향 - Large Battery",
-          "url": "https://www.large-battery.com/ko/blog/cb-certification-for-lithium-batteries-global-market-access/",
-          "snippet": "리튬 배터리 CB 인증은 IECEE CB 제도에 따라 국제적으로 인정받는 시스템입니다."
+          "source_id": "SRC-002",
+          "title": "Large Power 리튬 이온 배터리를 안전하게 만드는 방법",
+          "url": "https://www.large-battery.com/ko/blog/making-lithium-ion-safe-protection-standards-best-practices/",
+          "snippet": "제품에 사용되는 리튬 이온 배터리의 안전을 보장하려면 국제적으로 인정된 안전 표준을 준수해야 합니다."
         }
       ]
     },
     {
       "id": "REG-003",
-      "name": "공정 안전 규제",
-      "category": "안전/환경",
-      "why_applicable": "리튬이온 배터리 제조 과정에서 고온과 압력으로부터 작업자를 보호하기 위한 안전 시스템이 필요합니다.",
-      "authority": "규제 기관 및 보험사",
+      "name": "KC 인증",
+      "category": "제품 인증",
+      "why_applicable": "리튬이온 배터리는 KC 인증을 받아야 하며, 충전 유무에 따라 인증 종류가 다름.",
+      "authority": "한국 국가기술표준원",
       "priority": "HIGH",
       "key_requirements": [
-        "안전 인증을 받은 계기를 사용하여 작업자를 보호해야 합니다.",
-        "고온과 압력으로부터 작업 환경을 안전하게 유지해야 합니다."
+        "리튬이온 배터리는 KC 인증을 받아야 하며, 충전지와 일차전지에 따라 다른 인증이 필요함.",
+        "모든 배터리는 전기용품 및 생활용품에 대한 인증을 받아야 함."
       ],
-      "reference_url": "https://www.emerson.com/documents/automation/ebook-measurement-instrumentation-for-lithium-ion-battery-component-manufacturing-ko-kr-11362096.pdf",
+      "reference_url": "https://m.blog.naver.com/aboutcustoms/221691090040",
       "sources": [
         {
           "source_id": "SRC-004",
-          "title": "[PDF] 리튬 이온 배터리 부품 제조를 위한 계측 솔루션 - Emerson",
-          "url": "https://www.emerson.com/documents/automation/ebook-measurement-instrumentation-for-lithium-ion-battery-component-manufacturing-ko-kr-11362096.pdf",
-          "snippet": "많은 배치 공정에는 장비를 손상시키고 작업자를 위협할 수 있는 고온과 압력으로부터 작업자를 보호하기 위한 안전 시스템이 필요합니다."
+          "title": "KC 인증이 뭐길래... 인증이 없이 수입도 없다! - 배터리 종류별 인증이 ...",
+          "url": "https://m.blog.naver.com/aboutcustoms/221691090040",
+          "snippet": "리튬이온배터리라 하더라도 충전 유무에 따라 KC 인증 종류가 다르다는 사실!"
         }
       ]
     },
     {
       "id": "REG-004",
-      "name": "습도 관리 규제",
-      "category": "공장 운영",
-      "why_applicable": "리튬이온 배터리 제조 과정에서 습도 관리는 제품 품질에 중요한 영향을 미칩니다.",
-      "authority": "내부 품질 관리 팀",
+      "name": "CE 인증",
+      "category": "제품 인증",
+      "why_applicable": "리튬 배터리 제품은 CE 인증을 통해 품질과 안전에 대한 의지를 입증해야 함.",
+      "authority": "유럽연합",
       "priority": "MEDIUM",
       "key_requirements": [
-        "슬러리 혼합을 위한 전극 생산 작업장은 상대 습도를 10% 이하로 유지해야 합니다.",
-        "전해액 주입 및 밀봉 공정은 이슬점 습도가 -45℃ DP 이하이어야 합니다."
+        "제조업체는 CE 인증을 획득하여 품질과 안전에 대한 의지를 입증해야 함.",
+        "리튬 배터리는 EN 62133-2:2017과 같은 안전 표준을 준수해야 함."
       ],
-      "reference_url": "https://ko.tobmachine.com/the-influence-of-moisture-in-the-lithium-battery-manufacturing-process_n726",
+      "reference_url": "https://www.large-battery.com/ko/blog/ce-certification-requirements-lithium-batteries/",
       "sources": [
         {
           "source_id": "SRC-005",
-          "title": "리튬 배터리 제조 공정에서 수분의 영향",
-          "url": "https://ko.tobmachine.com/the-influence-of-moisture-in-the-lithium-battery-manufacturing-process_n726",
-          "snippet": "생산 작업장의 습도를 엄격하게 관리합니다."
+          "title": "리튬 배터리에 대한 CE 인증 요구 사항 이해 - Large Battery",
+          "url": "https://www.large-battery.com/ko/blog/ce-certification-requirements-lithium-batteries/",
+          "snippet": "제조업체는 CE 인증을 획득함으로써 품질과 안전에 대한 의지를 입증합니다."
         }
       ]
     }
@@ -118,214 +118,134 @@
   "checklists": [
     {
       "regulation_id": "REG-001",
-      "regulation_name": "리튬 배터리 안전 인증",
+      "regulation_name": "PSE 마크 인증",
       "task_name": "리튬 배터리 과충전 테스트 수행",
-      "responsible_dept": "품질 관리팀",
-      "deadline": "2024-01-15",
-      "method": [
-        "1. (매핑: 요구사항 1) 리튬 배터리에 대한 과충전 테스트를 설계하고 수행한다.",
-        "2. 테스트 결과를 기록하고 분석하여 필요한 개선 사항을 도출한다.",
-        "3. 테스트 장비의 교정 및 유지보수를 진행한다."
-      ],
-      "estimated_cost": "500만원",
-      "estimated_time": "2주",
-      "priority": "HIGH",
-      "status": "pending",
-      "evidence": [
-        {
-          "source_id": "SRC-002",
-          "title": "국가별 리튬 배터리 안전 인증 기준 - RHY Battery",
-          "url": "https://www.rhybattery.com/ko/news/lithium-battery-safety-certification-standards-across-different-countries.html",
-          "snippet": "리튬 배터리는 과충전, 단락 방지, 열 관리에 대한 엄격한 테스트를 포함하는 제품 안전 전기제품 및 재료(PSE) 법을 통과해야 합니다."
-        }
-      ]
-    },
-    {
-      "regulation_id": "REG-001",
-      "regulation_name": "리튬 배터리 안전 인증",
-      "task_name": "단락 방지 테스트 계획 수립",
-      "responsible_dept": "연구개발팀",
-      "deadline": "2024-01-30",
-      "method": [
-        "1. (매핑: 요구사항 1) 리튬 배터리의 단락 방지 테스트 기준을 설정한다.",
-        "2. 테스트 프로토콜을 개발하고 필요한 자원을 확보한다.",
-        "3. 테스트를 수행하고 결과를 문서화한다."
-      ],
-      "estimated_cost": "300만원",
-      "estimated_time": "1주",
-      "priority": "HIGH",
-      "status": "pending",
-      "evidence": [
-        {
-          "source_id": "SRC-002",
-          "title": "국가별 리튬 배터리 안전 인증 기준 - RHY Battery",
-          "url": "https://www.rhybattery.com/ko/news/lithium-battery-safety-certification-standards-across-different-countries.html",
-          "snippet": "리튬 배터리는 과충전, 단락 방지, 열 관리에 대한 엄격한 테스트를 포함하는 제품 안전 전기제품 및 재료(PSE) 법을 통과해야 합니다."
-        }
-      ]
-    },
-    {
-      "regulation_id": "REG-001",
-      "regulation_name": "리튬 배터리 안전 인증",
-      "task_name": "열 관리 시스템 검토 및 개선",
-      "responsible_dept": "기술팀",
-      "deadline": "2024-02-15",
-      "method": [
-        "1. (매핑: 요구사항 1) 기존 열 관리 시스템의 성능을 분석한다.",
-        "2. 개선이 필요한 부분을 식별하고 수정 방안을 제시한다.",
-        "3. 수정된 시스템에 대한 테스트를 수행하고 결과를 기록한다."
-      ],
-      "estimated_cost": "400만원",
-      "estimated_time": "2주",
-      "priority": "HIGH",
-      "status": "pending",
-      "evidence": [
-        {
-          "source_id": "SRC-002",
-          "title": "국가별 리튬 배터리 안전 인증 기준 - RHY Battery",
-          "url": "https://www.rhybattery.com/ko/news/lithium-battery-safety-certification-standards-across-different-countries.html",
-          "snippet": "리튬 배터리는 과충전, 단락 방지, 열 관리에 대한 엄격한 테스트를 포함하는 제품 안전 전기제품 및 재료(PSE) 법을 통과해야 합니다."
-        }
-      ]
-    },
-    {
-      "regulation_id": "REG-001",
-      "regulation_name": "리튬 배터리 안전 인증",
-      "task_name": "국내 및 국제 안전 표준 준수 확인",
-      "responsible_dept": "법무팀",
-      "deadline": "2024-03-01",
-      "method": [
-        "1. (매핑: 요구사항 2) 국내 및 국제 안전 표준 목록을 작성한다.",
-        "2. 리튬 배터리가 모든 기준을 충족하는지 검토한다.",
-        "3. 필요한 경우 추가 인증을 위한 절차를 수립한다."
-      ],
-      "estimated_cost": "150만원",
-      "estimated_time": "1주",
-      "priority": "HIGH",
-      "status": "pending",
-      "evidence": [
-        {
-          "source_id": "SRC-002",
-          "title": "국가별 리튬 배터리 안전 인증 기준 - RHY Battery",
-          "url": "https://www.rhybattery.com/ko/news/lithium-battery-safety-certification-standards-across-different-countries.html",
-          "snippet": "리튬 배터리는 과충전, 단락 방지, 열 관리에 대한 엄격한 테스트를 포함하는 제품 안전 전기제품 및 재료(PSE) 법을 통과해야 합니다."
-        }
-      ]
-    },
-    {
-      "regulation_id": "REG-001",
-      "regulation_name": "리튬 배터리 안전 인증",
-      "task_name": "테스트 결과 및 인증 기록 확보",
-      "responsible_dept": "품질 관리팀",
-      "deadline": "2024-03-15",
-      "method": [
-        "1. (매핑: 요구사항 1, 2) 모든 테스트 결과를 문서화하여 기록으로 남긴다.",
-        "2. 인증 관련 문서를 준비하고 각 인증 기관에 제출한다.",
-        "3. 인증 기관으로부터 받은 피드백을 기록하고 필요한 조치를 취한다."
-      ],
-      "estimated_cost": "100만원",
-      "estimated_time": "1주",
-      "priority": "HIGH",
-      "status": "pending",
-      "evidence": [
-        {
-          "source_id": "SRC-002",
-          "title": "국가별 리튬 배터리 안전 인증 기준 - RHY Battery",
-          "url": "https://www.rhybattery.com/ko/news/lithium-battery-safety-certification-standards-across-different-countries.html",
-          "snippet": "리튬 배터리는 과충전, 단락 방지, 열 관리에 대한 엄격한 테스트를 포함하는 제품 안전 전기제품 및 재료(PSE) 법을 통과해야 합니다."
-        }
-      ]
-    },
-    {
-      "regulation_id": "REG-002",
-      "regulation_name": "CB 인증",
-      "task_name": "IEC 표준에 따른 시험 및 평가 계획 수립",
       "responsible_dept": "품질 관리 부서",
       "deadline": "2024-01-15",
       "method": [
-        "1. (매핑: 요구사항 1) IEC 표준에 따른 시험 및 평가 항목을 선정한다.",
-        "2. 시험 기관과 협력하여 테스트 프로세스를 수립한다.",
-        "3. 필요한 시험 장비 및 자원을 확보한다.",
-        "4. 시험 일정과 방법을 문서화한다.",
-        "5. 시험 결과를 분석하고 보고서를 작성한다."
+        "1. (매핑: 요구사항 1) 리튬 배터리의 과충전 테스트를 설계하고 수행한다.",
+        "2. 배터리의 전압 및 온도를 모니터링한다.",
+        "3. 테스트 결과를 문서화하고 분석한다."
       ],
-      "estimated_cost": "5,000,000 KRW",
-      "estimated_time": "4주",
-      "priority": "HIGH",
-      "status": "pending",
-      "evidence": [
-        {
-          "source_id": "SRC-003",
-          "title": "리튬 배터리 CB 인증 및 글로벌 영향 - Large Battery",
-          "url": "https://www.large-battery.com/ko/blog/cb-certification-for-lithium-batteries-global-market-access/",
-          "snippet": "리튬 배터리 CB 인증은 IECEE CB 제도에 따라 국제적으로 인정받는 시스템입니다."
-        }
-      ]
-    },
-    {
-      "regulation_id": "REG-002",
-      "regulation_name": "CB 인증",
-      "task_name": "전기 안전 및 신뢰성 요구사항 점검",
-      "responsible_dept": "안전 관리 부서",
-      "deadline": "2024-01-30",
-      "method": [
-        "1. (매핑: 요구사항 2) 리튬 배터리의 전기 안전 기준을 검토한다.",
-        "2. 신뢰성 테스트 계획을 수립한다.",
-        "3. 각 요구 사항에 대한 준수 여부를 점검한다.",
-        "4. 필요 시 추가 테스트를 실시한다.",
-        "5. 점검 결과를 문서화하고 개선 사항을 제안한다."
-      ],
-      "estimated_cost": "3,000,000 KRW",
-      "estimated_time": "3주",
-      "priority": "HIGH",
-      "status": "pending",
-      "evidence": [
-        {
-          "source_id": "SRC-003",
-          "title": "리튬 배터리 CB 인증 및 글로벌 영향 - Large Battery",
-          "url": "https://www.large-battery.com/ko/blog/cb-certification-for-lithium-batteries-global-market-access/",
-          "snippet": "리튬 배터리 제품은 IEC 표준에 따라 포괄적인 시험 및 평가를 받아야 합니다."
-        }
-      ]
-    },
-    {
-      "regulation_id": "REG-002",
-      "regulation_name": "CB 인증",
-      "task_name": "CB 인증 신청서 및 서류 준비",
-      "responsible_dept": "인증 관리 부서",
-      "deadline": "2024-02-05",
-      "method": [
-        "1. (매핑: 요구사항 1) CB 인증 신청서를 작성한다.",
-        "2. 모든 필요한 시험 및 평가 결과를 첨부한다.",
-        "3. 관련 문서 및 인증서 사본을 준비한다.",
-        "4. 제출할 서류를 검토하여 누락된 부분이 없는지 확인한다.",
-        "5. CB 인증 기관에 서류를 제출한다."
-      ],
-      "estimated_cost": "1,000,000 KRW",
+      "estimated_cost": "5000 USD",
       "estimated_time": "2주",
       "priority": "HIGH",
       "status": "pending",
       "evidence": [
         {
-          "source_id": "SRC-003",
-          "title": "리튬 배터리 CB 인증 및 글로벌 영향 - Large Battery",
-          "url": "https://www.large-battery.com/ko/blog/cb-certification-for-lithium-batteries-global-market-access/",
-          "snippet": "리튬 배터리 CB 인증은 IECEE CB 제도에 따라 국제적으로 인정받는 시스템입니다."
+          "source_id": "SRC-001",
+          "title": "국가별 리튬 배터리 안전 인증 기준 - RHY Battery",
+          "url": "https://www.rhybattery.com/ko/news/lithium-battery-safety-certification-standards-across-different-countries.html",
+          "snippet": "리튬 배터리는 과충전, 단락 방지, 열 관리에 대한 엄격한 테스트를 포함하는 제품 안전 전기제품 및 재료(PSE) 법을 통과해야 합니다."
+        }
+      ]
+    },
+    {
+      "regulation_id": "REG-001",
+      "regulation_name": "PSE 마크 인증",
+      "task_name": "단락 방지 테스트 수행",
+      "responsible_dept": "품질 관리 부서",
+      "deadline": "2024-02-01",
+      "method": [
+        "1. (매핑: 요구사항 1) 리튬 배터리의 단락 방지 테스트를 설계하고 수행한다.",
+        "2. 테스트 중 배터리의 반응을 기록한다.",
+        "3. 결과를 분석하고 문제점이 있을 경우 개선안을 마련한다."
+      ],
+      "estimated_cost": "3000 USD",
+      "estimated_time": "1주",
+      "priority": "HIGH",
+      "status": "pending",
+      "evidence": [
+        {
+          "source_id": "SRC-001",
+          "title": "국가별 리튬 배터리 안전 인증 기준 - RHY Battery",
+          "url": "https://www.rhybattery.com/ko/news/lithium-battery-safety-certification-standards-across-different-countries.html",
+          "snippet": "리튬 배터리는 과충전, 단락 방지, 열 관리에 대한 엄격한 테스트를 포함하는 제품 안전 전기제품 및 재료(PSE) 법을 통과해야 합니다."
+        }
+      ]
+    },
+    {
+      "regulation_id": "REG-001",
+      "regulation_name": "PSE 마크 인증",
+      "task_name": "열 관리 테스트 수행",
+      "responsible_dept": "품질 관리 부서",
+      "deadline": "2024-02-15",
+      "method": [
+        "1. (매핑: 요구사항 1) 리튬 배터리의 열 관리 테스트를 설계하고 수행한다.",
+        "2. 배터리의 온도 변화 및 성능을 모니터링한다.",
+        "3. 테스트 결과를 문서화하고 필요한 개선 사항을 도출한다."
+      ],
+      "estimated_cost": "4000 USD",
+      "estimated_time": "1주",
+      "priority": "HIGH",
+      "status": "pending",
+      "evidence": [
+        {
+          "source_id": "SRC-001",
+          "title": "국가별 리튬 배터리 안전 인증 기준 - RHY Battery",
+          "url": "https://www.rhybattery.com/ko/news/lithium-battery-safety-certification-standards-across-different-countries.html",
+          "snippet": "리튬 배터리는 과충전, 단락 방지, 열 관리에 대한 엄격한 테스트를 포함하는 제품 안전 전기제품 및 재료(PSE) 법을 통과해야 합니다."
+        }
+      ]
+    },
+    {
+      "regulation_id": "REG-001",
+      "regulation_name": "PSE 마크 인증",
+      "task_name": "국내 및 국제 안전 표준 검토",
+      "responsible_dept": "규제 준수 부서",
+      "deadline": "2024-03-01",
+      "method": [
+        "1. (매핑: 요구사항 2) 국내 및 국제 안전 표준을 조사하고 목록화한다.",
+        "2. 리튬 배터리와 관련된 모든 안전 표준을 검토한다.",
+        "3. 인증을 위한 요구 사항을 정리하여 문서화한다."
+      ],
+      "estimated_cost": "2000 USD",
+      "estimated_time": "1주",
+      "priority": "HIGH",
+      "status": "pending",
+      "evidence": [
+        {
+          "source_id": "SRC-001",
+          "title": "국가별 리튬 배터리 안전 인증 기준 - RHY Battery",
+          "url": "https://www.rhybattery.com/ko/news/lithium-battery-safety-certification-standards-across-different-countries.html",
+          "snippet": "리튬 배터리는 과충전, 단락 방지, 열 관리에 대한 엄격한 테스트를 포함하는 제품 안전 전기제품 및 재료(PSE) 법을 통과해야 합니다."
+        }
+      ]
+    },
+    {
+      "regulation_id": "REG-001",
+      "regulation_name": "PSE 마크 인증",
+      "task_name": "증빙 및 기록 확보",
+      "responsible_dept": "품질 관리 부서",
+      "deadline": "2024-03-15",
+      "method": [
+        "1. (매핑: 요구사항 1, 2) 모든 테스트 결과 및 문서를 정리하여 기록한다.",
+        "2. 각 테스트에 대한 인증 문서 및 결과를 검토한다.",
+        "3. 필요한 모든 서류를 관리하여 제출 준비를 한다."
+      ],
+      "estimated_cost": "1000 USD",
+      "estimated_time": "1주",
+      "priority": "HIGH",
+      "status": "pending",
+      "evidence": [
+        {
+          "source_id": "SRC-001",
+          "title": "국가별 리튬 배터리 안전 인증 기준 - RHY Battery",
+          "url": "https://www.rhybattery.com/ko/news/lithium-battery-safety-certification-standards-across-different-countries.html",
+          "snippet": "리튬 배터리는 과충전, 단락 방지, 열 관리에 대한 엄격한 테스트를 포함하는 제품 안전 전기제품 및 재료(PSE) 법을 통과해야 합니다."
         }
       ]
     },
     {
       "regulation_id": "REG-002",
-      "regulation_name": "CB 인증",
-      "task_name": "CB 인증 진행 상황 모니터링",
-      "responsible_dept": "프로젝트 관리 부서",
-      "deadline": "2024-03-01",
+      "regulation_name": "IEC 62133 인증",
+      "task_name": "IEC 62133 인증 요건 검토",
+      "responsible_dept": "품질 관리 부서",
+      "deadline": "2023-11-15",
       "method": [
-        "1. (매핑: 요구사항 2) 인증 기관과의 연락을 유지한다.",
-        "2. 진행 상황을 주기적으로 확인한다.",
-        "3. 인증 기관의 피드백을 수집하고 대응한다.",
-        "4. 필요한 경우 추가 자료를 제출한다.",
-        "5. 인증 완료 여부를 확인한다."
+        "1. (매핑: 요구사항 1) IEC 62133 및 UL 1642의 요구사항을 분석하고 문서화한다.",
+        "2. 해당 기준이 자사 제품에 어떻게 적용되는지를 검토한다.",
+        "3. ISO 12405와 같은 추가적인 안전 기준도 함께 검토한다."
       ],
       "estimated_cost": "500,000 KRW",
       "estimated_time": "2주",
@@ -333,140 +253,184 @@
       "status": "pending",
       "evidence": [
         {
-          "source_id": "SRC-003",
-          "title": "리튬 배터리 CB 인증 및 글로벌 영향 - Large Battery",
-          "url": "https://www.large-battery.com/ko/blog/cb-certification-for-lithium-batteries-global-market-access/",
-          "snippet": "리튬 배터리 제품은 IEC 표준에 따라 포괄적인 시험 및 평가를 받아야 합니다."
+          "source_id": "SRC-002",
+          "title": "Large Power 리튬 이온 배터리를 안전하게 만드는 방법",
+          "url": "https://www.large-battery.com/ko/blog/making-lithium-ion-safe-protection-standards-best-practices/",
+          "snippet": "제품에 사용되는 리튬 이온 배터리의 안전을 보장하려면 국제적으로 인정된 안전 표준을 준수해야 합니다."
         }
       ]
     },
     {
       "regulation_id": "REG-002",
-      "regulation_name": "CB 인증",
-      "task_name": "CB 인증 증빙 및 기록 확보",
-      "responsible_dept": "문서 관리 부서",
-      "deadline": "2024-03-10",
+      "regulation_name": "IEC 62133 인증",
+      "task_name": "리튬이온 배터리 설계 개선",
+      "responsible_dept": "제품 개발 부서",
+      "deadline": "2023-12-01",
       "method": [
-        "1. (매핑: 요구사항 2) 인증서 및 관련 문서를 수집한다.",
-        "2. 모든 서류를 정리하여 보관한다.",
-        "3. 전자 문서화하여 접근성을 높인다.",
-        "4. 인증 관련 기록을 주기적으로 업데이트한다.",
-        "5. 관련 부서에 인증서 사본을 배포한다."
+        "1. (매핑: 요구사항 2) 배터리 팩의 설계에 대한 안전 기준을 반영하여 개선안을 마련한다.",
+        "2. 설계 변경에 따른 위험 분석을 실시한다.",
+        "3. 개선된 설계에 대해 내부 검토 및 승인 절차를 진행한다."
       ],
-      "estimated_cost": "200,000 KRW",
-      "estimated_time": "1주",
+      "estimated_cost": "1,000,000 KRW",
+      "estimated_time": "3주",
       "priority": "HIGH",
       "status": "pending",
       "evidence": [
         {
-          "source_id": "SRC-003",
-          "title": "리튬 배터리 CB 인증 및 글로벌 영향 - Large Battery",
-          "url": "https://www.large-battery.com/ko/blog/cb-certification-for-lithium-batteries-global-market-access/",
-          "snippet": "리튬 배터리 CB 인증은 IECEE CB 제도에 따라 국제적으로 인정받는 시스템입니다."
+          "source_id": "SRC-002",
+          "title": "Large Power 리튬 이온 배터리를 안전하게 만드는 방법",
+          "url": "https://www.large-battery.com/ko/blog/making-lithium-ion-safe-protection-standards-best-practices/",
+          "snippet": "국제적으로 인정된 안전 표준을 준수해야 합니다."
         }
       ]
     },
     {
-      "regulation_id": "REG-003",
-      "regulation_name": "공정 안전 규제",
-      "task_name": "안전 인증 계기 확보",
-      "responsible_dept": "구매팀",
-      "deadline": "2023-12-01",
+      "regulation_id": "REG-002",
+      "regulation_name": "IEC 62133 인증",
+      "task_name": "리튬이온 배터리 테스트 및 인증 진행",
+      "responsible_dept": "테스트 및 인증 부서",
+      "deadline": "2024-01-15",
       "method": [
-        "1. (매핑: 요구사항 1) 안전 인증을 받은 계기를 확인하고 리스트업 한다.",
-        "2. 인증기관에서 인증 받은 계기의 목록을 요청한다.",
-        "3. 인증된 계기의 공급업체와 협의하여 구매를 진행한다.",
-        "4. 구매한 계기의 안전 인증서를 확보한다.",
-        "5. 계기를 설치하고 작동 테스트를 실시한다."
+        "1. (매핑: 요구사항 2) 인증 기관과 협력하여 배터리 테스트 계획을 수립한다.",
+        "2. 리튬이온 배터리를 IEC 62133 및 UL 1642 기준에 따라 테스트한다.",
+        "3. 테스트 결과를 분석하고 필요한 경우 추가 개선 작업을 계획한다."
       ],
-      "estimated_cost": "5,000,000원",
+      "estimated_cost": "2,500,000 KRW",
       "estimated_time": "4주",
       "priority": "HIGH",
       "status": "pending",
       "evidence": [
         {
-          "source_id": "SRC-004",
-          "title": "[PDF] 리튬 이온 배터리 부품 제조를 위한 계측 솔루션 - Emerson",
-          "url": "https://www.emerson.com/documents/automation/ebook-measurement-instrumentation-for-lithium-ion-battery-component-manufacturing-ko-kr-11362096.pdf",
-          "snippet": "안전 시스템이 필요합니다."
+          "source_id": "SRC-002",
+          "title": "Large Power 리튬 이온 배터리를 안전하게 만드는 방법",
+          "url": "https://www.large-battery.com/ko/blog/making-lithium-ion-safe-protection-standards-best-practices/",
+          "snippet": "제조업체는 배터리 팩의 안전한 작동을 위해 설계, 테스트 및 인증해야 함."
+        }
+      ]
+    },
+    {
+      "regulation_id": "REG-002",
+      "regulation_name": "IEC 62133 인증",
+      "task_name": "인증 문서 및 기록 확보",
+      "responsible_dept": "품질 관리 부서",
+      "deadline": "2024-01-31",
+      "method": [
+        "1. (매핑: 요구사항 2) 모든 테스트 및 인증 관련 문서를 수집하고 정리한다.",
+        "2. 인증 완료 후 관련 기록을 전자적으로 보관한다.",
+        "3. 필요 시 인증 문서를 외부 감사에 대비하여 준비한다."
+      ],
+      "estimated_cost": "300,000 KRW",
+      "estimated_time": "1주",
+      "priority": "HIGH",
+      "status": "pending",
+      "evidence": [
+        {
+          "source_id": "SRC-002",
+          "title": "Large Power 리튬 이온 배터리를 안전하게 만드는 방법",
+          "url": "https://www.large-battery.com/ko/blog/making-lithium-ion-safe-protection-standards-best-practices/",
+          "snippet": "배터리 팩의 안전한 작동을 위해 설계, 테스트 및 인증해야 함."
         }
       ]
     },
     {
       "regulation_id": "REG-003",
-      "regulation_name": "공정 안전 규제",
-      "task_name": "고온 및 압력 모니터링 시스템 구축",
-      "responsible_dept": "설비팀",
+      "regulation_name": "KC 인증",
+      "task_name": "KC 인증 신청 준비",
+      "responsible_dept": "품질 관리 부서",
       "deadline": "2024-01-15",
       "method": [
-        "1. (매핑: 요구사항 2) 고온 및 압력 모니터링 시스템의 필요성을 분석한다.",
-        "2. 기존 시스템의 기능을 검토하여 개선점을 도출한다.",
-        "3. 신뢰성 있는 모니터링 장비를 선정한다.",
-        "4. 새 장비를 설치하고 운영 매뉴얼을 작성한다.",
-        "5. 정기적으로 시스템 점검 및 유지보수 계획을 수립한다."
+        "1. (매핑: 요구사항 1) 리튬이온 배터리의 충전지와 일차전지를 구분한다.",
+        "2. (매핑: 요구사항 1) 각 배터리 유형에 맞는 KC 인증 요구사항을 확인한다.",
+        "3. (매핑: 요구사항 2) 모든 배터리에 대한 전기용품 및 생활용품 인증 요구사항을 파악한다.",
+        "4. (매핑: 요구사항 2) 인증에 필요한 서류 및 샘플을 준비한다.",
+        "5. (매핑: 요구사항 1) 인증 신청서를 작성하여 제출 준비를 완료한다."
       ],
-      "estimated_cost": "10,000,000원",
-      "estimated_time": "6주",
-      "priority": "HIGH",
-      "status": "pending",
-      "evidence": [
-        {
-          "source_id": "SRC-004",
-          "title": "[PDF] 리튬 이온 배터리 부품 제조를 위한 계측 솔루션 - Emerson",
-          "url": "https://www.emerson.com/documents/automation/ebook-measurement-instrumentation-for-lithium-ion-battery-component-manufacturing-ko-kr-11362096.pdf",
-          "snippet": "고온과 압력으로부터 작업자를 보호하기 위한 안전 시스템이 필요합니다."
-        }
-      ]
-    },
-    {
-      "regulation_id": "REG-003",
-      "regulation_name": "공정 안전 규제",
-      "task_name": "안전 교육 및 훈련 실시",
-      "responsible_dept": "인사팀",
-      "deadline": "2024-01-30",
-      "method": [
-        "1. (매핑: 요구사항 1) 안전 교육 프로그램을 개발한다.",
-        "2. 교육 대상자를 선정하고 일정 조정한다.",
-        "3. 외부 안전 전문가를 초빙하여 교육을 실시한다.",
-        "4. 교육 후 평가 및 피드백을 수집한다.",
-        "5. 교육 기록을 문서화하여 보관한다."
-      ],
-      "estimated_cost": "2,000,000원",
-      "estimated_time": "2주",
-      "priority": "HIGH",
-      "status": "pending",
-      "evidence": [
-        {
-          "source_id": "SRC-004",
-          "title": "[PDF] 리튬 이온 배터리 부품 제조를 위한 계측 솔루션 - Emerson",
-          "url": "https://www.emerson.com/documents/automation/ebook-measurement-instrumentation-for-lithium-ion-battery-component-manufacturing-ko-kr-11362096.pdf",
-          "snippet": "작업자를 보호하기 위한 안전 시스템이 필요합니다."
-        }
-      ]
-    },
-    {
-      "regulation_id": "REG-003",
-      "regulation_name": "공정 안전 규제",
-      "task_name": "안전 기록 및 증빙 확보",
-      "responsible_dept": "품질관리팀",
-      "deadline": "2024-02-15",
-      "method": [
-        "1. (매핑: 요구사항 1) 모든 안전 관련 문서와 인증서를 정리하고 확인한다.",
-        "2. 안전 장비의 테스트 결과 및 인증서를 디지털화하여 기록한다.",
-        "3. 정기적으로 안전 점검 기록을 업데이트한다.",
-        "4. 사고 발생 시 보고 및 기록 절차를 수립한다.",
-        "5. 모든 기록을 중앙 데이터베이스에 저장하여 접근성을 높인다."
-      ],
-      "estimated_cost": "1,000,000원",
+      "estimated_cost": "500,000원",
       "estimated_time": "3주",
       "priority": "HIGH",
       "status": "pending",
       "evidence": [
         {
           "source_id": "SRC-004",
-          "title": "[PDF] 리튬 이온 배터리 부품 제조를 위한 계측 솔루션 - Emerson",
-          "url": "https://www.emerson.com/documents/automation/ebook-measurement-instrumentation-for-lithium-ion-battery-component-manufacturing-ko-kr-11362096.pdf",
-          "snippet": "작업자를 보호하기 위한 안전 시스템이 필요합니다."
+          "title": "KC 인증이 뭐길래... 인증이 없이 수입도 없다! - 배터리 종류별 인증이 ...",
+          "url": "https://m.blog.naver.com/aboutcustoms/221691090040",
+          "snippet": "리튬이온배터리라 하더라도 충전 유무에 따라 KC 인증 종류가 다르다는 사실!"
+        }
+      ]
+    },
+    {
+      "regulation_id": "REG-004",
+      "regulation_name": "CE 인증",
+      "task_name": "CE 인증 신청 준비",
+      "responsible_dept": "품질 관리팀",
+      "deadline": "2024-03-15",
+      "method": [
+        "1. (매핑: 요구사항 1) CE 인증에 필요한 서류를 준비한다.",
+        "2. 리튬 배터리의 기술 문서를 작성한다.",
+        "3. 제품의 안전성 테스트를 수행하고 결과를 기록한다.",
+        "4. EN 62133-2:2017 안전 표준 준수 여부를 점검한다.",
+        "5. CE 인증 신청서를 작성하여 제출한다."
+      ],
+      "estimated_cost": "5000 USD",
+      "estimated_time": "4 주",
+      "priority": "MEDIUM",
+      "status": "pending",
+      "evidence": [
+        {
+          "source_id": "SRC-005",
+          "title": "리튬 배터리에 대한 CE 인증 요구 사항 이해 - Large Battery",
+          "url": "https://www.large-battery.com/ko/blog/ce-certification-requirements-lithium-batteries/",
+          "snippet": "제조업체는 CE 인증을 획득함으로써 품질과 안전에 대한 의지를 입증합니다."
+        }
+      ]
+    },
+    {
+      "regulation_id": "REG-004",
+      "regulation_name": "CE 인증",
+      "task_name": "EN 62133-2:2017 표준 준수 확인",
+      "responsible_dept": "제품 개발팀",
+      "deadline": "2024-02-20",
+      "method": [
+        "1. (매핑: 요구사항 2) EN 62133-2:2017 표준 문서를 검토한다.",
+        "2. 리튬 배터리 설계가 표준에 부합하는지 검토한다.",
+        "3. 필요한 경우 설계를 수정하여 표준에 맞춘다.",
+        "4. 수정된 설계에 대해 재검토 및 테스트를 실시한다."
+      ],
+      "estimated_cost": "3000 USD",
+      "estimated_time": "3 주",
+      "priority": "MEDIUM",
+      "status": "pending",
+      "evidence": [
+        {
+          "source_id": "SRC-005",
+          "title": "리튬 배터리에 대한 CE 인증 요구 사항 이해 - Large Battery",
+          "url": "https://www.large-battery.com/ko/blog/ce-certification-requirements-lithium-batteries/",
+          "snippet": "리튬 배터리는 EN 62133-2:2017과 같은 안전 표준을 준수해야 함."
+        }
+      ]
+    },
+    {
+      "regulation_id": "REG-004",
+      "regulation_name": "CE 인증",
+      "task_name": "CE 인증 증빙 자료 확보",
+      "responsible_dept": "품질 관리팀",
+      "deadline": "2024-03-30",
+      "method": [
+        "1. (매핑: 요구사항 1) CE 인증 관련 문서 및 자료를 정리한다.",
+        "2. 테스트 결과 및 인증서 사본을 확보한다.",
+        "3. 모든 인증 관련 문서가 최신임을 확인한다.",
+        "4. 필요한 경우 외부 감사인을 통해 문서 검토를 받는다."
+      ],
+      "estimated_cost": "1000 USD",
+      "estimated_time": "2 주",
+      "priority": "MEDIUM",
+      "status": "pending",
+      "evidence": [
+        {
+          "source_id": "SRC-005",
+          "title": "리튬 배터리에 대한 CE 인증 요구 사항 이해 - Large Battery",
+          "url": "https://www.large-battery.com/ko/blog/ce-certification-requirements-lithium-batteries/",
+          "snippet": "제조업체는 CE 인증을 획득함으로써 품질과 안전에 대한 의지를 입증합니다."
         }
       ]
     }
@@ -475,7 +439,7 @@
     {
       "plan_id": "PLAN-001",
       "regulation_id": "REG-001",
-      "regulation_name": "리튬 배터리 안전 인증",
+      "regulation_name": "PSE 마크 인증",
       "checklist_items": [
         "1",
         "2",
@@ -487,44 +451,30 @@
       "start_date": "즉시",
       "milestones": [
         {
-          "name": "1개월 차: 리튬 배터리 과충전 테스트 완료",
+          "name": "1개월 차: 리튬 배터리 과충전 및 단락 방지 테스트 완료",
           "deadline": "2024-01-15",
           "tasks": [
-            "1"
-          ],
-          "completion_criteria": "리튬 배터리 과충전 테스트 완료 및 결과 기록"
-        },
-        {
-          "name": "1개월 차: 단락 방지 테스트 계획 수립 완료",
-          "deadline": "2024-01-30",
-          "tasks": [
+            "1",
             "2"
           ],
-          "completion_criteria": "단락 방지 테스트 계획 수립 및 승인"
+          "completion_criteria": "리튬 배터리 과충전 및 단락 방지 테스트 완료"
         },
         {
-          "name": "2개월 차: 열 관리 시스템 검토 및 개선 완료",
+          "name": "2개월 차: 열 관리 테스트 및 안전 표준 검토 완료",
           "deadline": "2024-02-15",
           "tasks": [
-            "3"
-          ],
-          "completion_criteria": "열 관리 시스템 검토 및 개선 완료"
-        },
-        {
-          "name": "2개월 차: 국내 및 국제 안전 표준 준수 확인 완료",
-          "deadline": "2024-03-01",
-          "tasks": [
+            "3",
             "4"
           ],
-          "completion_criteria": "안전 표준 준수 확인 완료"
+          "completion_criteria": "열 관리 테스트 및 안전 표준 검토 완료"
         },
         {
-          "name": "3개월 차: 테스트 결과 및 인증 기록 확보 완료",
+          "name": "3개월 차: 증빙 및 기록 확보 완료",
           "deadline": "2024-03-15",
           "tasks": [
             "5"
           ],
-          "completion_criteria": "테스트 결과 및 인증 기록 확보"
+          "completion_criteria": "모든 증빙 및 기록 확보"
         }
       ],
       "dependencies": {
@@ -561,7 +511,7 @@
       ],
       "evidence": [
         {
-          "source_id": "SRC-002",
+          "source_id": "SRC-001",
           "title": "국가별 리튬 배터리 안전 인증 기준 - RHY Battery",
           "url": "https://www.rhybattery.com/ko/news/lithium-battery-safety-certification-standards-across-different-countries.html",
           "snippet": "리튬 배터리는 과충전, 단락 방지, 열 관리에 대한 엄격한 테스트를 포함하는 제품 안전 전기제품 및 재료(PSE) 법을 통과해야 합니다."
@@ -571,49 +521,47 @@
     {
       "plan_id": "PLAN-002",
       "regulation_id": "REG-002",
-      "regulation_name": "CB 인증",
+      "regulation_name": "IEC 62133 인증",
       "checklist_items": [
         "1",
         "2",
         "3",
-        "4",
-        "5"
+        "4"
       ],
       "timeline": "3개월",
       "start_date": "즉시",
       "milestones": [
         {
           "name": "1개월 차: 서류 준비 완료",
-          "deadline": "2024-01-30",
+          "deadline": "2023-11-15",
           "tasks": [
-            "1",
-            "2"
+            "1"
           ],
-          "completion_criteria": "IEC 표준 시험 계획 및 전기 안전 점검 완료"
+          "completion_criteria": "IEC 62133 인증 요건 검토 완료"
         },
         {
-          "name": "2개월 차: CB 인증 신청서 제출",
-          "deadline": "2024-02-05",
+          "name": "2개월 차: 설계 개선 완료",
+          "deadline": "2023-12-01",
+          "tasks": [
+            "2"
+          ],
+          "completion_criteria": "리튬이온 배터리 설계 개선 완료"
+        },
+        {
+          "name": "3개월 차: 테스트 및 인증 완료",
+          "deadline": "2024-01-15",
           "tasks": [
             "3"
           ],
-          "completion_criteria": "CB 인증 신청서 및 서류 준비 완료"
+          "completion_criteria": "리튬이온 배터리 테스트 및 인증 완료"
         },
         {
-          "name": "2개월 차: 인증 진행 상황 모니터링",
-          "deadline": "2024-03-01",
+          "name": "3개월 차: 인증 문서 확보",
+          "deadline": "2024-01-31",
           "tasks": [
             "4"
           ],
-          "completion_criteria": "CB 인증 진행 상황 점검 완료"
-        },
-        {
-          "name": "3개월 차: 인증 증빙 확보",
-          "deadline": "2024-03-10",
-          "tasks": [
-            "5"
-          ],
-          "completion_criteria": "CB 인증 증빙 및 기록 확보 완료"
+          "completion_criteria": "인증 문서 및 기록 확보 완료"
         }
       ],
       "dependencies": {
@@ -626,81 +574,103 @@
         ],
         "4": [
           "3"
-        ],
-        "5": [
-          "4"
         ]
       },
       "parallel_tasks": [
         [
-          "1",
+          "1"
+        ],
+        [
           "2"
         ],
         [
-          "3",
-          "4"
+          "3"
         ]
       ],
       "critical_path": [
         "1",
         "2",
         "3",
-        "4",
-        "5"
+        "4"
       ],
       "evidence": [
         {
-          "source_id": "SRC-003",
-          "title": "리튬 배터리 CB 인증 및 글로벌 영향 - Large Battery",
-          "url": "https://www.large-battery.com/ko/blog/cb-certification-for-lithium-batteries-global-market-access/",
-          "snippet": "리튬 배터리 CB 인증은 IECEE CB 제도에 따라 국제적으로 인정받는 시스템입니다."
+          "source_id": "SRC-002",
+          "title": "Large Power 리튬 이온 배터리를 안전하게 만드는 방법",
+          "url": "https://www.large-battery.com/ko/blog/making-lithium-ion-safe-protection-standards-best-practices/",
+          "snippet": "제품에 사용되는 리튬 이온 배터리의 안전을 보장하려면 국제적으로 인정된 안전 표준을 준수해야 합니다."
         }
       ]
     },
     {
       "plan_id": "PLAN-003",
       "regulation_id": "REG-003",
-      "regulation_name": "공정 안전 규제",
+      "regulation_name": "KC 인증",
+      "checklist_items": [
+        "1"
+      ],
+      "timeline": "3주",
+      "start_date": "즉시",
+      "milestones": [
+        {
+          "name": "KC 인증 신청 준비 완료",
+          "deadline": "2024-01-15",
+          "tasks": [
+            "1"
+          ],
+          "completion_criteria": "KC 인증 신청서 및 필요 서류 모두 준비"
+        }
+      ],
+      "dependencies": {},
+      "parallel_tasks": [],
+      "critical_path": [
+        "1"
+      ],
+      "evidence": [
+        {
+          "source_id": "SRC-004",
+          "title": "KC 인증이 뭐길래... 인증이 없이 수입도 없다! - 배터리 종류별 인증이 ...",
+          "url": "https://m.blog.naver.com/aboutcustoms/221691090040",
+          "snippet": "리튬이온배터리라 하더라도 충전 유무에 따라 KC 인증 종류가 다르다는 사실!"
+        }
+      ]
+    },
+    {
+      "plan_id": "PLAN-004",
+      "regulation_id": "REG-004",
+      "regulation_name": "CE 인증",
       "checklist_items": [
         "1",
         "2",
-        "3",
-        "4"
+        "3"
       ],
       "timeline": "3개월",
       "start_date": "즉시",
       "milestones": [
         {
-          "name": "1개월 차: 안전 인증 계기 확보",
-          "deadline": "2023-12-01",
+          "name": "1개월 차: 서류 준비 완료",
+          "deadline": "2024-02-20",
+          "tasks": [
+            "1",
+            "2"
+          ],
+          "completion_criteria": "필요 서류 모두 준비"
+        },
+        {
+          "name": "2개월 차: CE 인증 신청 완료",
+          "deadline": "2024-03-15",
           "tasks": [
             "1"
           ],
-          "completion_criteria": "안전 인증 계기 구매 완료"
+          "completion_criteria": "CE 인증 신청서 제출"
         },
         {
-          "name": "2개월 차: 고온 및 압력 모니터링 시스템 구축 완료",
-          "deadline": "2024-01-15",
-          "tasks": [
-            "2"
-          ],
-          "completion_criteria": "모니터링 시스템 설치 및 테스트 완료"
-        },
-        {
-          "name": "2개월 차: 안전 교육 및 훈련 실시",
-          "deadline": "2024-01-30",
+          "name": "3개월 차: CE 인증 증빙 자료 확보",
+          "deadline": "2024-03-30",
           "tasks": [
             "3"
           ],
-          "completion_criteria": "모든 직원 교육 완료"
-        },
-        {
-          "name": "3개월 차: 안전 기록 및 증빙 확보",
-          "deadline": "2024-02-15",
-          "tasks": [
-            "4"
-          ],
-          "completion_criteria": "모든 안전 기록 및 증빙 확보"
+          "completion_criteria": "모든 증빙 자료 확보"
         }
       ],
       "dependencies": {
@@ -710,53 +680,49 @@
         "3": [
           "1",
           "2"
-        ],
-        "4": [
-          "3"
         ]
       },
       "parallel_tasks": [
         [
-          "1"
+          "1",
+          "2"
         ],
         [
-          "2",
           "3"
         ]
       ],
       "critical_path": [
         "1",
         "2",
-        "3",
-        "4"
+        "3"
       ],
       "evidence": [
         {
-          "source_id": "SRC-004",
-          "title": "[PDF] 리튬 이온 배터리 부품 제조를 위한 계측 솔루션 - Emerson",
-          "url": "https://www.emerson.com/documents/automation/ebook-measurement-instrumentation-for-lithium-ion-battery-component-manufacturing-ko-kr-11362096.pdf",
-          "snippet": "안전 시스템이 필요합니다."
+          "source_id": "SRC-005",
+          "title": "리튬 배터리에 대한 CE 인증 요구 사항 이해 - Large Battery",
+          "url": "https://www.large-battery.com/ko/blog/ce-certification-requirements-lithium-batteries/",
+          "snippet": "제조업체는 CE 인증을 획득함으로써 품질과 안전에 대한 의지를 입증합니다."
         }
       ]
     }
   ],
   "risk_assessment": {
-    "total_risk_score": 8.0,
+    "total_risk_score": 8.25,
     "high_risk_items": [
       {
         "regulation_id": "REG-001",
-        "regulation_name": "리튬 배터리 안전 인증",
-        "penalty_amount": "300만원 이하",
+        "regulation_name": "PSE 마크 인증",
+        "penalty_amount": "없으면 \"\"",
         "penalty_type": "과태료",
         "business_impact": "영업정지 6개월",
         "risk_score": 9.0,
         "past_cases": [
-          "2021, ABC Battery, 리튬 배터리 안전 인증 미비로 인한 과태료 500만원 부과"
+          "2020, ABC Battery, PSE 마크 미획득으로 인한 500만원 과태료"
         ],
-        "mitigation": "리튬 배터리 안전 인증을 신속히 취득하고, 관련 법규를 준수하여 제품 안전성을 확보해야 합니다.",
+        "mitigation": "PSE 마크 인증을 조속히 취득하여 규제 준수를 확립하고, 내부 품질 관리 시스템을 강화해야 합니다.",
         "evidence": [
           {
-            "source_id": "SRC-002",
+            "source_id": "SRC-001",
             "title": "국가별 리튬 배터리 안전 인증 기준 - RHY Battery",
             "url": "https://www.rhybattery.com/ko/news/lithium-battery-safety-certification-standards-across-different-countries.html",
             "snippet": "리튬 배터리는 과충전, 단락 방지, 열 관리에 대한 엄격한 테스트를 포함하는 제품 안전 전기제품 및 재료(PSE) 법을 통과해야 합니다."
@@ -765,61 +731,61 @@
       },
       {
         "regulation_id": "REG-002",
-        "regulation_name": "CB 인증",
-        "penalty_amount": "없으면 \"\"",
+        "regulation_name": "IEC 62133 인증",
+        "penalty_amount": "최대 1억원",
         "penalty_type": "과태료",
-        "business_impact": "없으면 \"\"",
+        "business_impact": "영업정지 6개월",
         "risk_score": 8.0,
         "past_cases": [
-          "2021, ABC 배터리, CB 인증 미비로 인한 500만원 과태료"
+          "2021, ABC 배터리, 과태료 5천만원 부과"
         ],
-        "mitigation": "CB 인증을 조속히 취득하여 국제 시장 진출을 위한 법적 요건을 충족해야 합니다.",
+        "mitigation": "IEC 62133 인증을 조속히 취득하고, 내부 품질 관리 시스템을 강화하여 리스크를 줄입니다.",
         "evidence": [
           {
-            "source_id": "SRC-003",
-            "title": "리튬 배터리 CB 인증 및 글로벌 영향 - Large Battery",
-            "url": "https://www.large-battery.com/ko/blog/cb-certification-for-lithium-batteries-global-market-access/",
-            "snippet": "리튬 배터리 CB 인증은 IECEE CB 제도에 따라 국제적으로 인정받는 시스템입니다."
+            "source_id": "SRC-002",
+            "title": "Large Power 리튬 이온 배터리를 안전하게 만드는 방법",
+            "url": "https://www.large-battery.com/ko/blog/making-lithium-ion-safe-protection-standards-best-practices/",
+            "snippet": "제품에 사용되는 리튬 이온 배터리의 안전을 보장하려면 국제적으로 인정된 안전 표준을 준수해야 합니다."
           }
         ]
       },
       {
         "regulation_id": "REG-003",
-        "regulation_name": "공정 안전 규제",
-        "penalty_amount": "300만원 이하",
+        "regulation_name": "KC 인증",
+        "penalty_amount": "최대 1억원",
         "penalty_type": "과태료",
-        "business_impact": "영업정지 6개월",
-        "risk_score": 8.0,
+        "business_impact": "인허가 취소",
+        "risk_score": 9.0,
         "past_cases": [
-          "2021, A사, 고온 작업 환경에서의 안전 규제 위반으로 500만원 과태료"
+          "2020, A기업, KC 인증 미이행으로 인한 과태료 부과"
         ],
-        "mitigation": "안전 시스템을 강화하고 정기적인 교육을 통해 작업자의 안전을 보장해야 합니다.",
+        "mitigation": "KC 인증을 사전에 확보하고, 규정을 지속적으로 모니터링하여 준수할 수 있도록 교육 및 시스템을 마련해야 합니다.",
         "evidence": [
           {
             "source_id": "SRC-004",
-            "title": "[PDF] 리튬 이온 배터리 부품 제조를 위한 계측 솔루션 - Emerson",
-            "url": "https://www.emerson.com/documents/automation/ebook-measurement-instrumentation-for-lithium-ion-battery-component-manufacturing-ko-kr-11362096.pdf",
-            "snippet": "많은 배치 공정에는 장비를 손상시키고 작업자를 위협할 수 있는 고온과 압력으로부터 작업자를 보호하기 위한 안전 시스템이 필요합니다."
+            "title": "KC 인증이 뭐길래... 인증이 없이 수입도 없다! - 배터리 종류별 인증이 ...",
+            "url": "https://m.blog.naver.com/aboutcustoms/221691090040",
+            "snippet": "리튬이온배터리라 하더라도 충전 유무에 따라 KC 인증 종류가 다르다는 사실!"
           }
         ]
       },
       {
         "regulation_id": "REG-004",
-        "regulation_name": "습도 관리 규제",
+        "regulation_name": "CE 인증",
         "penalty_amount": "300만원 이하",
         "penalty_type": "과태료",
-        "business_impact": "없으면",
+        "business_impact": "없으면 ",
         "risk_score": 7.0,
         "past_cases": [
-          "2021, ABC 배터리, 과태료 200만원 부과"
+          "2021, ABC 배터리 회사, CE 인증 미비로 인해 200만원 과태료"
         ],
-        "mitigation": "정기적인 습도 점검 및 관리 시스템을 도입하여 규제를 준수할 수 있도록 합니다.",
+        "mitigation": "CE 인증 절차를 신속히 진행하여 규제를 준수하고, 관련 교육을 통해 직원들의 인식을 높입니다.",
         "evidence": [
           {
             "source_id": "SRC-005",
-            "title": "리튬 배터리 제조 공정에서 수분의 영향",
-            "url": "https://ko.tobmachine.com/the-influence-of-moisture-in-the-lithium-battery-manufacturing-process_n726",
-            "snippet": "생산 작업장의 습도를 엄격하게 관리합니다."
+            "title": "리튬 배터리에 대한 CE 인증 요구 사항 이해 - Large Battery",
+            "url": "https://www.large-battery.com/ko/blog/ce-certification-requirements-lithium-batteries/",
+            "snippet": "제조업체는 CE 인증을 획득함으로써 품질과 안전에 대한 의지를 입증합니다."
           }
         ]
       }
@@ -828,18 +794,18 @@
       "HIGH": [
         {
           "regulation_id": "REG-001",
-          "regulation_name": "리튬 배터리 안전 인증",
-          "penalty_amount": "300만원 이하",
+          "regulation_name": "PSE 마크 인증",
+          "penalty_amount": "없으면 \"\"",
           "penalty_type": "과태료",
           "business_impact": "영업정지 6개월",
           "risk_score": 9.0,
           "past_cases": [
-            "2021, ABC Battery, 리튬 배터리 안전 인증 미비로 인한 과태료 500만원 부과"
+            "2020, ABC Battery, PSE 마크 미획득으로 인한 500만원 과태료"
           ],
-          "mitigation": "리튬 배터리 안전 인증을 신속히 취득하고, 관련 법규를 준수하여 제품 안전성을 확보해야 합니다.",
+          "mitigation": "PSE 마크 인증을 조속히 취득하여 규제 준수를 확립하고, 내부 품질 관리 시스템을 강화해야 합니다.",
           "evidence": [
             {
-              "source_id": "SRC-002",
+              "source_id": "SRC-001",
               "title": "국가별 리튬 배터리 안전 인증 기준 - RHY Battery",
               "url": "https://www.rhybattery.com/ko/news/lithium-battery-safety-certification-standards-across-different-countries.html",
               "snippet": "리튬 배터리는 과충전, 단락 방지, 열 관리에 대한 엄격한 테스트를 포함하는 제품 안전 전기제품 및 재료(PSE) 법을 통과해야 합니다."
@@ -848,61 +814,61 @@
         },
         {
           "regulation_id": "REG-002",
-          "regulation_name": "CB 인증",
-          "penalty_amount": "없으면 \"\"",
+          "regulation_name": "IEC 62133 인증",
+          "penalty_amount": "최대 1억원",
           "penalty_type": "과태료",
-          "business_impact": "없으면 \"\"",
+          "business_impact": "영업정지 6개월",
           "risk_score": 8.0,
           "past_cases": [
-            "2021, ABC 배터리, CB 인증 미비로 인한 500만원 과태료"
+            "2021, ABC 배터리, 과태료 5천만원 부과"
           ],
-          "mitigation": "CB 인증을 조속히 취득하여 국제 시장 진출을 위한 법적 요건을 충족해야 합니다.",
+          "mitigation": "IEC 62133 인증을 조속히 취득하고, 내부 품질 관리 시스템을 강화하여 리스크를 줄입니다.",
           "evidence": [
             {
-              "source_id": "SRC-003",
-              "title": "리튬 배터리 CB 인증 및 글로벌 영향 - Large Battery",
-              "url": "https://www.large-battery.com/ko/blog/cb-certification-for-lithium-batteries-global-market-access/",
-              "snippet": "리튬 배터리 CB 인증은 IECEE CB 제도에 따라 국제적으로 인정받는 시스템입니다."
+              "source_id": "SRC-002",
+              "title": "Large Power 리튬 이온 배터리를 안전하게 만드는 방법",
+              "url": "https://www.large-battery.com/ko/blog/making-lithium-ion-safe-protection-standards-best-practices/",
+              "snippet": "제품에 사용되는 리튬 이온 배터리의 안전을 보장하려면 국제적으로 인정된 안전 표준을 준수해야 합니다."
             }
           ]
         },
         {
           "regulation_id": "REG-003",
-          "regulation_name": "공정 안전 규제",
-          "penalty_amount": "300만원 이하",
+          "regulation_name": "KC 인증",
+          "penalty_amount": "최대 1억원",
           "penalty_type": "과태료",
-          "business_impact": "영업정지 6개월",
-          "risk_score": 8.0,
+          "business_impact": "인허가 취소",
+          "risk_score": 9.0,
           "past_cases": [
-            "2021, A사, 고온 작업 환경에서의 안전 규제 위반으로 500만원 과태료"
+            "2020, A기업, KC 인증 미이행으로 인한 과태료 부과"
           ],
-          "mitigation": "안전 시스템을 강화하고 정기적인 교육을 통해 작업자의 안전을 보장해야 합니다.",
+          "mitigation": "KC 인증을 사전에 확보하고, 규정을 지속적으로 모니터링하여 준수할 수 있도록 교육 및 시스템을 마련해야 합니다.",
           "evidence": [
             {
               "source_id": "SRC-004",
-              "title": "[PDF] 리튬 이온 배터리 부품 제조를 위한 계측 솔루션 - Emerson",
-              "url": "https://www.emerson.com/documents/automation/ebook-measurement-instrumentation-for-lithium-ion-battery-component-manufacturing-ko-kr-11362096.pdf",
-              "snippet": "많은 배치 공정에는 장비를 손상시키고 작업자를 위협할 수 있는 고온과 압력으로부터 작업자를 보호하기 위한 안전 시스템이 필요합니다."
+              "title": "KC 인증이 뭐길래... 인증이 없이 수입도 없다! - 배터리 종류별 인증이 ...",
+              "url": "https://m.blog.naver.com/aboutcustoms/221691090040",
+              "snippet": "리튬이온배터리라 하더라도 충전 유무에 따라 KC 인증 종류가 다르다는 사실!"
             }
           ]
         },
         {
           "regulation_id": "REG-004",
-          "regulation_name": "습도 관리 규제",
+          "regulation_name": "CE 인증",
           "penalty_amount": "300만원 이하",
           "penalty_type": "과태료",
-          "business_impact": "없으면",
+          "business_impact": "없으면 ",
           "risk_score": 7.0,
           "past_cases": [
-            "2021, ABC 배터리, 과태료 200만원 부과"
+            "2021, ABC 배터리 회사, CE 인증 미비로 인해 200만원 과태료"
           ],
-          "mitigation": "정기적인 습도 점검 및 관리 시스템을 도입하여 규제를 준수할 수 있도록 합니다.",
+          "mitigation": "CE 인증 절차를 신속히 진행하여 규제를 준수하고, 관련 교육을 통해 직원들의 인식을 높입니다.",
           "evidence": [
             {
               "source_id": "SRC-005",
-              "title": "리튬 배터리 제조 공정에서 수분의 영향",
-              "url": "https://ko.tobmachine.com/the-influence-of-moisture-in-the-lithium-battery-manufacturing-process_n726",
-              "snippet": "생산 작업장의 습도를 엄격하게 관리합니다."
+              "title": "리튬 배터리에 대한 CE 인증 요구 사항 이해 - Large Battery",
+              "url": "https://www.large-battery.com/ko/blog/ce-certification-requirements-lithium-batteries/",
+              "snippet": "제조업체는 CE 인증을 획득함으로써 품질과 안전에 대한 의지를 입증합니다."
             }
           ]
         }
@@ -918,35 +884,35 @@
     ]
   },
   "final_report": {
-    "executive_summary": "### 핵심 인사이트\n- 총 4개의 규제가 있으며, 이 중 3개는 HIGH 리스크로 분류되었습니다.\n- 전체 리스크 점수는 8.0/10으로, 상당히 높은 수준입니다.\n- 모든 고위험 규제는 4개로, 즉각적인 대응이 필요합니다.\n\n### 의사결정 포인트\n- [ ] 고위험 규제에 대한 우선 대응 방안 마련\n- [ ] 리스크 관리 체계 강화 방안 검토\n- [ ] 규제 준수 모니터링 시스템 구축 계획 수립\n\n### 권장 조치 (우선순위 순)\n1. **즉시:** 고위험 규제에 대한 리스크 평가 및 대응 전략 수립\n2. **1개월 내:** 리스크 관리 체계 개선을 위한 내부 감사 실시\n3. **3개월 내:** 규제 준수 모니터링 시스템 구축 및 운영 계획 수립",
+    "executive_summary": "### 핵심 인사이트\n- 총 4개의 규제가 있으며, 그 중 3개는 HIGH 리스크 수준으로 분류됨.\n- 리스크 점수는 8.2/10으로, 상당히 높은 위험도를 나타냄.\n- 고위험 규제는 총 4개로, 추가적인 관리와 대응이 필요함.\n\n### 의사결정 포인트\n- [ ] 규제 대응 전략 수립\n- [ ] 리스크 관리 팀 구성\n- [ ] 규제 준수 교육 프로그램 개발\n\n### 권장 조치 (우선순위 순)\n1. **즉시:** 고위험 규제에 대한 포괄적인 리스크 평가 실시\n2. **1개월 내:** 규제 대응 전략 초안 작성 및 검토\n3. **3개월 내:** 규제 준수 교육 프로그램 실행 및 평가",
     "detailed_report": "",
     "legal_report": "",
     "key_insights": [
       "총 4개 규제 적용 대상 - 체계적 준수 관리 필요",
       "HIGH 우선순위 3개 규제는 사업 개시 전 필수 완료",
-      "전체 리스크 점수 8.0/10 - 즉각 대응 필요"
+      "전체 리스크 점수 8.2/10 - 즉각 대응 필요"
     ],
     "action_items": [
       {
-        "name": "리튬 배터리 안전 인증 준수 조치 시작",
+        "name": "PSE 마크 인증 준수 조치 시작",
         "deadline": "즉시",
         "priority": "HIGH"
       },
       {
-        "name": "CB 인증 준수 조치 시작",
+        "name": "IEC 62133 인증 준수 조치 시작",
         "deadline": "즉시",
         "priority": "HIGH"
       },
       {
-        "name": "공정 안전 규제 준수 조치 시작",
+        "name": "KC 인증 준수 조치 시작",
         "deadline": "즉시",
         "priority": "HIGH"
       }
     ],
     "risk_highlights": [
-      "리튬 배터리 안전 인증 미준수 시 과태료 - 영업정지 6개월",
-      "CB 인증 미준수 시 과태료 - 없으면 \"\"",
-      "공정 안전 규제 미준수 시 과태료 - 영업정지 6개월"
+      "PSE 마크 인증 미준수 시 과태료 - 영업정지 6개월",
+      "IEC 62133 인증 미준수 시 과태료 - 영업정지 6개월",
+      "KC 인증 미준수 시 과태료 - 인허가 취소"
     ],
     "next_steps": [
       "**1단계 (즉시):** HIGH 우선순위 3개 규제 착수",
@@ -955,32 +921,32 @@
       "**4단계 (1개월):** 월 단위 진행 상황 모니터링 체계 구축",
       "**5단계 (분기별):** 전문가 검토 및 보완"
     ],
-    "full_markdown": "# 규제 준수 분석 통합 보고서\n\n> 생성일: 2025년 10월 21일\n\n---\n\n## 1. 사업 정보\n\n| 항목 | 내용 |\n|------|------|\n| **업종** | 배터리 제조 |\n| **제품명** | 리튬이온 배터리 |\n| **원자재** | 리튬, 코발트, 니켈 |\n| **제조 공정** | 화학 처리, 고온 가공, 조립 |\n| **직원 수** | 45명 |\n| **판매 방식** | B2B, 수출 |\n\n---\n\n## 2. 분석 요약\n\n### 2.1 규제 현황\n- **총 규제 개수**: 4개\n- **우선순위 분포**:\n  - 🔴 HIGH: 3개 (즉시 조치 필요)\n  - 🟡 MEDIUM: 1개 (1-3개월 내 조치)\n  - 🟢 LOW: 0개 (6개월 내 조치)\n- **카테고리 분포**:\n  - 제품 인증: 2개\n  - 안전/환경: 1개\n  - 공장 운영: 1개\n\n### 2.2 리스크 평가\n- **전체 리스크 점수**: 8.0/10\n- **고위험 규제**: 4개\n- **즉시 조치 필요**: 3개\n\n---\n\n## 3. 규제 목록 및 분류\n\n### 3.1 안전/환경\n\n#### 3.1.1 🔴 공정 안전 규제\n\n**우선순위:** HIGH\n**관할 기관:** 규제 기관 및 보험사\n**적용 이유:** 리튬이온 배터리 제조 과정에서 고온과 압력으로부터 작업자를 보호하기 위한 안전 시스템이 필요합니다.\n\n**주요 요구사항:**\n- 안전 인증을 받은 계기를 사용하여 작업자를 보호해야 합니다.\n- 고온과 압력으로부터 작업 환경을 안전하게 유지해야 합니다.\n\n**근거 출처:**\n- [[PDF] 리튬 이온 배터리 부품 제조를 위한 계측 솔루션 - Emerson](https://www.emerson.com/documents/automation/ebook-measurement-instrumentation-for-lithium-ion-battery-component-manufacturing-ko-kr-11362096.pdf) — 많은 배치 공정에는 장비를 손상시키고 작업자를 위협할 수 있는 고온과 압력으로부터 작업자를 보호하기 위한 안전 시스템이 필요합니다.\n\n\n### 3.2 공장 운영\n\n#### 3.2.1 🟡 습도 관리 규제\n\n**우선순위:** MEDIUM\n**관할 기관:** 내부 품질 관리 팀\n**적용 이유:** 리튬이온 배터리 제조 과정에서 습도 관리는 제품 품질에 중요한 영향을 미칩니다.\n\n**주요 요구사항:**\n- 슬러리 혼합을 위한 전극 생산 작업장은 상대 습도를 10% 이하로 유지해야 합니다.\n- 전해액 주입 및 밀봉 공정은 이슬점 습도가 -45℃ DP 이하이어야 합니다.\n\n**근거 출처:**\n- [리튬 배터리 제조 공정에서 수분의 영향](https://ko.tobmachine.com/the-influence-of-moisture-in-the-lithium-battery-manufacturing-process_n726) — 생산 작업장의 습도를 엄격하게 관리합니다.\n\n\n### 3.3 제품 인증\n\n#### 3.3.1 🔴 리튬 배터리 안전 인증\n\n**우선순위:** HIGH\n**관할 기관:** 국가별 인증 기관\n**적용 이유:** 리튬이온 배터리 제조업체는 제품의 안전성을 보장하기 위해 다양한 인증을 받아야 합니다.\n\n**주요 요구사항:**\n- 리튬 배터리는 과충전, 단락 방지, 열 관리에 대한 엄격한 테스트를 통과해야 합니다.\n- 국내 및 국제 안전 표준을 모두 준수해야 합니다.\n\n**근거 출처:**\n- [국가별 리튬 배터리 안전 인증 기준 - RHY Battery](https://www.rhybattery.com/ko/news/lithium-battery-safety-certification-standards-across-different-countries.html) — 리튬 배터리는 과충전, 단락 방지, 열 관리에 대한 엄격한 테스트를 포함하는 제품 안전 전기제품 및 재료(PSE) 법을 통과해야 합니다.\n\n#### 3.3.2 🔴 CB 인증\n\n**우선순위:** HIGH\n**관할 기관:** IECEE\n**적용 이유:** 리튬이온 배터리는 국제 시장에 진출하기 위해 CB 인증을 받아야 합니다.\n\n**주요 요구사항:**\n- 리튬 배터리 제품은 IEC 표준에 따라 포괄적인 시험 및 평가를 받아야 합니다.\n- 전기 안전, 신뢰성 및 규정 준수에 대한 국제적인 요구 사항을 충족해야 합니다.\n\n**근거 출처:**\n- [리튬 배터리 CB 인증 및 글로벌 영향 - Large Battery](https://www.large-battery.com/ko/blog/cb-certification-for-lithium-batteries-global-market-access/) — 리튬 배터리 CB 인증은 IECEE CB 제도에 따라 국제적으로 인정받는 시스템입니다.\n\n\n---\n\n## 4. 실행 체크리스트\n\n### 4.1 🔴 리튬 배터리 안전 인증\n\n- [ ] **리튬 배터리 과충전 테스트 수행**\n  - 담당: 품질 관리팀\n  - 마감: 2024-01-15\n  - 예상 비용: 500만원\n\n    • 근거: [국가별 리튬 배터리 안전 인증 기준 - RHY Battery](https://www.rhybattery.com/ko/news/lithium-battery-safety-certification-standards-across-different-countries.html) — 리튬 배터리는 과충전, 단락 방지, 열 관리에 대한 엄격한 테스트를 포함하는 제품 안전 전기제품 및 재료(PSE) 법을 통과해야 합니다.\n\n- [ ] **단락 방지 테스트 계획 수립**\n  - 담당: 연구개발팀\n  - 마감: 2024-01-30\n  - 예상 비용: 300만원\n\n    • 근거: [국가별 리튬 배터리 안전 인증 기준 - RHY Battery](https://www.rhybattery.com/ko/news/lithium-battery-safety-certification-standards-across-different-countries.html) — 리튬 배터리는 과충전, 단락 방지, 열 관리에 대한 엄격한 테스트를 포함하는 제품 안전 전기제품 및 재료(PSE) 법을 통과해야 합니다.\n\n- [ ] **열 관리 시스템 검토 및 개선**\n  - 담당: 기술팀\n  - 마감: 2024-02-15\n  - 예상 비용: 400만원\n\n    • 근거: [국가별 리튬 배터리 안전 인증 기준 - RHY Battery](https://www.rhybattery.com/ko/news/lithium-battery-safety-certification-standards-across-different-countries.html) — 리튬 배터리는 과충전, 단락 방지, 열 관리에 대한 엄격한 테스트를 포함하는 제품 안전 전기제품 및 재료(PSE) 법을 통과해야 합니다.\n\n- [ ] **국내 및 국제 안전 표준 준수 확인**\n  - 담당: 법무팀\n  - 마감: 2024-03-01\n  - 예상 비용: 150만원\n\n    • 근거: [국가별 리튬 배터리 안전 인증 기준 - RHY Battery](https://www.rhybattery.com/ko/news/lithium-battery-safety-certification-standards-across-different-countries.html) — 리튬 배터리는 과충전, 단락 방지, 열 관리에 대한 엄격한 테스트를 포함하는 제품 안전 전기제품 및 재료(PSE) 법을 통과해야 합니다.\n\n- [ ] **테스트 결과 및 인증 기록 확보**\n  - 담당: 품질 관리팀\n  - 마감: 2024-03-15\n  - 예상 비용: 100만원\n\n    • 근거: [국가별 리튬 배터리 안전 인증 기준 - RHY Battery](https://www.rhybattery.com/ko/news/lithium-battery-safety-certification-standards-across-different-countries.html) — 리튬 배터리는 과충전, 단락 방지, 열 관리에 대한 엄격한 테스트를 포함하는 제품 안전 전기제품 및 재료(PSE) 법을 통과해야 합니다.\n\n### 4.2 🔴 CB 인증\n\n- [ ] **IEC 표준에 따른 시험 및 평가 계획 수립**\n  - 담당: 품질 관리 부서\n  - 마감: 2024-01-15\n  - 예상 비용: 5,000,000 KRW\n\n    • 근거: [리튬 배터리 CB 인증 및 글로벌 영향 - Large Battery](https://www.large-battery.com/ko/blog/cb-certification-for-lithium-batteries-global-market-access/) — 리튬 배터리 CB 인증은 IECEE CB 제도에 따라 국제적으로 인정받는 시스템입니다.\n\n- [ ] **전기 안전 및 신뢰성 요구사항 점검**\n  - 담당: 안전 관리 부서\n  - 마감: 2024-01-30\n  - 예상 비용: 3,000,000 KRW\n\n    • 근거: [리튬 배터리 CB 인증 및 글로벌 영향 - Large Battery](https://www.large-battery.com/ko/blog/cb-certification-for-lithium-batteries-global-market-access/) — 리튬 배터리 제품은 IEC 표준에 따라 포괄적인 시험 및 평가를 받아야 합니다.\n\n- [ ] **CB 인증 신청서 및 서류 준비**\n  - 담당: 인증 관리 부서\n  - 마감: 2024-02-05\n  - 예상 비용: 1,000,000 KRW\n\n    • 근거: [리튬 배터리 CB 인증 및 글로벌 영향 - Large Battery](https://www.large-battery.com/ko/blog/cb-certification-for-lithium-batteries-global-market-access/) — 리튬 배터리 CB 인증은 IECEE CB 제도에 따라 국제적으로 인정받는 시스템입니다.\n\n- [ ] **CB 인증 진행 상황 모니터링**\n  - 담당: 프로젝트 관리 부서\n  - 마감: 2024-03-01\n  - 예상 비용: 500,000 KRW\n\n    • 근거: [리튬 배터리 CB 인증 및 글로벌 영향 - Large Battery](https://www.large-battery.com/ko/blog/cb-certification-for-lithium-batteries-global-market-access/) — 리튬 배터리 제품은 IEC 표준에 따라 포괄적인 시험 및 평가를 받아야 합니다.\n\n- [ ] **CB 인증 증빙 및 기록 확보**\n  - 담당: 문서 관리 부서\n  - 마감: 2024-03-10\n  - 예상 비용: 200,000 KRW\n\n    • 근거: [리튬 배터리 CB 인증 및 글로벌 영향 - Large Battery](https://www.large-battery.com/ko/blog/cb-certification-for-lithium-batteries-global-market-access/) — 리튬 배터리 CB 인증은 IECEE CB 제도에 따라 국제적으로 인정받는 시스템입니다.\n\n### 4.3 🔴 공정 안전 규제\n\n- [ ] **안전 인증 계기 확보**\n  - 담당: 구매팀\n  - 마감: 2023-12-01\n  - 예상 비용: 5,000,000원\n\n    • 근거: [[PDF] 리튬 이온 배터리 부품 제조를 위한 계측 솔루션 - Emerson](https://www.emerson.com/documents/automation/ebook-measurement-instrumentation-for-lithium-ion-battery-component-manufacturing-ko-kr-11362096.pdf) — 안전 시스템이 필요합니다.\n\n- [ ] **고온 및 압력 모니터링 시스템 구축**\n  - 담당: 설비팀\n  - 마감: 2024-01-15\n  - 예상 비용: 10,000,000원\n\n    • 근거: [[PDF] 리튬 이온 배터리 부품 제조를 위한 계측 솔루션 - Emerson](https://www.emerson.com/documents/automation/ebook-measurement-instrumentation-for-lithium-ion-battery-component-manufacturing-ko-kr-11362096.pdf) — 고온과 압력으로부터 작업자를 보호하기 위한 안전 시스템이 필요합니다.\n\n- [ ] **안전 교육 및 훈련 실시**\n  - 담당: 인사팀\n  - 마감: 2024-01-30\n  - 예상 비용: 2,000,000원\n\n    • 근거: [[PDF] 리튬 이온 배터리 부품 제조를 위한 계측 솔루션 - Emerson](https://www.emerson.com/documents/automation/ebook-measurement-instrumentation-for-lithium-ion-battery-component-manufacturing-ko-kr-11362096.pdf) — 작업자를 보호하기 위한 안전 시스템이 필요합니다.\n\n- [ ] **안전 기록 및 증빙 확보**\n  - 담당: 품질관리팀\n  - 마감: 2024-02-15\n  - 예상 비용: 1,000,000원\n\n    • 근거: [[PDF] 리튬 이온 배터리 부품 제조를 위한 계측 솔루션 - Emerson](https://www.emerson.com/documents/automation/ebook-measurement-instrumentation-for-lithium-ion-battery-component-manufacturing-ko-kr-11362096.pdf) — 작업자를 보호하기 위한 안전 시스템이 필요합니다.\n\n\n---\n\n## 5. 실행 계획 및 타임라인\n\n### 5.1 🔴 리튬 배터리 안전 인증\n\n**타임라인:** 3개월  \n**시작 예정:** 즉시  \n\n**주요 마일스톤:**\n- 1개월 차: 리튬 배터리 과충전 테스트 완료 (완료 목표: 2024-01-15)\n- 1개월 차: 단락 방지 테스트 계획 수립 완료 (완료 목표: 2024-01-30)\n- 2개월 차: 열 관리 시스템 검토 및 개선 완료 (완료 목표: 2024-02-15)\n- 2개월 차: 국내 및 국제 안전 표준 준수 확인 완료 (완료 목표: 2024-03-01)\n- 3개월 차: 테스트 결과 및 인증 기록 확보 완료 (완료 목표: 2024-03-15)\n\n**의존성:**\n- `2` ← `1`\n- `3` ← `1`, `2`\n- `4` ← `3`\n- `5` ← `4`\n\n**병렬 수행 가능:**\n- `1`, `2`\n- `3`, `4`\n\n**크리티컬 패스:** `1` → `2` → `3` → `4` → `5`\n\n**근거 출처:**\n- [국가별 리튬 배터리 안전 인증 기준 - RHY Battery](https://www.rhybattery.com/ko/news/lithium-battery-safety-certification-standards-across-different-countries.html) — 리튬 배터리는 과충전, 단락 방지, 열 관리에 대한 엄격한 테스트를 포함하는 제품 안전 전기제품 및 재료(PSE) 법을 통과해야 합니다.\n\n### 5.2 🔴 CB 인증\n\n**타임라인:** 3개월  \n**시작 예정:** 즉시  \n\n**주요 마일스톤:**\n- 1개월 차: 서류 준비 완료 (완료 목표: 2024-01-30)\n- 2개월 차: CB 인증 신청서 제출 (완료 목표: 2024-02-05)\n- 2개월 차: 인증 진행 상황 모니터링 (완료 목표: 2024-03-01)\n- 3개월 차: 인증 증빙 확보 (완료 목표: 2024-03-10)\n\n**의존성:**\n- `2` ← `1`\n- `3` ← `1`, `2`\n- `4` ← `3`\n- `5` ← `4`\n\n**병렬 수행 가능:**\n- `1`, `2`\n- `3`, `4`\n\n**크리티컬 패스:** `1` → `2` → `3` → `4` → `5`\n\n**근거 출처:**\n- [리튬 배터리 CB 인증 및 글로벌 영향 - Large Battery](https://www.large-battery.com/ko/blog/cb-certification-for-lithium-batteries-global-market-access/) — 리튬 배터리 CB 인증은 IECEE CB 제도에 따라 국제적으로 인정받는 시스템입니다.\n\n### 5.3 🔴 공정 안전 규제\n\n**타임라인:** 3개월  \n**시작 예정:** 즉시  \n\n**주요 마일스톤:**\n- 1개월 차: 안전 인증 계기 확보 (완료 목표: 2023-12-01)\n- 2개월 차: 고온 및 압력 모니터링 시스템 구축 완료 (완료 목표: 2024-01-15)\n- 2개월 차: 안전 교육 및 훈련 실시 (완료 목표: 2024-01-30)\n- 3개월 차: 안전 기록 및 증빙 확보 (완료 목표: 2024-02-15)\n\n**의존성:**\n- `2` ← `1`\n- `3` ← `1`, `2`\n- `4` ← `3`\n\n**병렬 수행 가능:**\n- `1`\n- `2`, `3`\n\n**크리티컬 패스:** `1` → `2` → `3` → `4`\n\n**근거 출처:**\n- [[PDF] 리튬 이온 배터리 부품 제조를 위한 계측 솔루션 - Emerson](https://www.emerson.com/documents/automation/ebook-measurement-instrumentation-for-lithium-ion-battery-component-manufacturing-ko-kr-11362096.pdf) — 안전 시스템이 필요합니다.\n\n\n---\n\n## 6. 리스크 평가\n\n### 6.1 전체 리스크 평가\n\n**전체 리스크 점수:** 8.0/10\n\n**리스크 수준:** 매우 높음\n\n### 6.2 고위험 규제 (상위 5개)\n\n#### 리튬 배터리 안전 인증\n\n**리스크 점수:** 9.0/10\n\n**처벌 유형:** 과태료\n\n**사업 영향:** 영업정지 6개월\n\n**근거 출처:**\n- [국가별 리튬 배터리 안전 인증 기준 - RHY Battery](https://www.rhybattery.com/ko/news/lithium-battery-safety-certification-standards-across-different-countries.html) — 리튬 배터리는 과충전, 단락 방지, 열 관리에 대한 엄격한 테스트를 포함하는 제품 안전 전기제품 및 재료(PSE) 법을 통과해야 합니다.\n\n#### CB 인증\n\n**리스크 점수:** 8.0/10\n\n**처벌 유형:** 과태료\n\n**사업 영향:** 없으면 \"\"\n\n**근거 출처:**\n- [리튬 배터리 CB 인증 및 글로벌 영향 - Large Battery](https://www.large-battery.com/ko/blog/cb-certification-for-lithium-batteries-global-market-access/) — 리튬 배터리 CB 인증은 IECEE CB 제도에 따라 국제적으로 인정받는 시스템입니다.\n\n#### 공정 안전 규제\n\n**리스크 점수:** 8.0/10\n\n**처벌 유형:** 과태료\n\n**사업 영향:** 영업정지 6개월\n\n**근거 출처:**\n- [[PDF] 리튬 이온 배터리 부품 제조를 위한 계측 솔루션 - Emerson](https://www.emerson.com/documents/automation/ebook-measurement-instrumentation-for-lithium-ion-battery-component-manufacturing-ko-kr-11362096.pdf) — 많은 배치 공정에는 장비를 손상시키고 작업자를 위협할 수 있는 고온과 압력으로부터 작업자를 보호하기 위한 안전 시스템이 필요합니다.\n\n#### 습도 관리 규제\n\n**리스크 점수:** 7.0/10\n\n**처벌 유형:** 과태료\n\n**사업 영향:** 없으면\n\n**근거 출처:**\n- [리튬 배터리 제조 공정에서 수분의 영향](https://ko.tobmachine.com/the-influence-of-moisture-in-the-lithium-battery-manufacturing-process_n726) — 생산 작업장의 습도를 엄격하게 관리합니다.\n\n\n---\n\n## 7. 경영진 요약\n\n### 핵심 인사이트\n- 총 4개의 규제가 있으며, 이 중 3개는 HIGH 리스크로 분류되었습니다.\n- 전체 리스크 점수는 8.0/10으로, 상당히 높은 수준입니다.\n- 모든 고위험 규제는 4개로, 즉각적인 대응이 필요합니다.\n\n### 의사결정 포인트\n- [ ] 고위험 규제에 대한 우선 대응 방안 마련\n- [ ] 리스크 관리 체계 강화 방안 검토\n- [ ] 규제 준수 모니터링 시스템 구축 계획 수립\n\n### 권장 조치 (우선순위 순)\n1. **즉시:** 고위험 규제에 대한 리스크 평가 및 대응 전략 수립\n2. **1개월 내:** 리스크 관리 체계 개선을 위한 내부 감사 실시\n3. **3개월 내:** 규제 준수 모니터링 시스템 구축 및 운영 계획 수립\n\n---\n\n## 8. 다음 단계\n\n- **1단계 (즉시):** HIGH 우선순위 3개 규제 착수\n- **2단계 (1주일 내):** 담당 부서 및 책임자 지정\n- **3단계 (2주일 내):** 상세 실행 일정 확정 및 예산 승인\n- **4단계 (1개월):** 월 단위 진행 상황 모니터링 체계 구축\n- **5단계 (분기별):** 전문가 검토 및 보완\n\n---\n\n## 9. 근거 출처 모음\n\n1. [국가별 리튬 배터리 안전 인증 기준 - RHY Battery](https://www.rhybattery.com/ko/news/lithium-battery-safety-certification-standards-across-different-countries.html) — 리튬 배터리는 과충전, 단락 방지, 열 관리에 대한 엄격한 테스트를 포함하는 제품 안전 전기제품 및 재료(PSE) 법을 통과해야 합니다.\n2. [리튬 배터리 CB 인증 및 글로벌 영향 - Large Battery](https://www.large-battery.com/ko/blog/cb-certification-for-lithium-batteries-global-market-access/) — 리튬 배터리 CB 인증은 IECEE CB 제도에 따라 국제적으로 인정받는 시스템입니다.\n3. [[PDF] 리튬 이온 배터리 부품 제조를 위한 계측 솔루션 - Emerson](https://www.emerson.com/documents/automation/ebook-measurement-instrumentation-for-lithium-ion-battery-component-manufacturing-ko-kr-11362096.pdf) — 많은 배치 공정에는 장비를 손상시키고 작업자를 위협할 수 있는 고온과 압력으로부터 작업자를 보호하기 위한 안전 시스템이 필요합니다.\n4. [리튬 배터리 제조 공정에서 수분의 영향](https://ko.tobmachine.com/the-influence-of-moisture-in-the-lithium-battery-manufacturing-process_n726) — 생산 작업장의 습도를 엄격하게 관리합니다.\n\n---\n\n## 면책 조항\n\n> 본 보고서는 AI 기반 분석 도구로 생성된 참고 자료입니다. 실제 규제 준수 여부는 반드시 전문가의 검토를 받으시기 바랍니다. 본 보고서 내용으로 인한 법적 책임은 사용자에게 있습니다.\n",
+    "full_markdown": "# 규제 준수 분석 통합 보고서\n\n> 생성일: 2025년 10월 22일\n\n---\n\n## 1. 사업 정보\n\n| 항목 | 내용 |\n|------|------|\n| **업종** | 배터리 제조 |\n| **제품명** | 리튬이온 배터리 |\n| **원자재** | 리튬, 코발트, 니켈 |\n| **제조 공정** | 화학 처리, 고온 가공, 조립 |\n| **직원 수** | 45명 |\n| **판매 방식** | B2B, 수출 |\n\n---\n\n## 2. 분석 요약\n\n### 2.1 규제 현황\n- **총 규제 개수**: 4개\n- **우선순위 분포**:\n  - 🔴 HIGH: 3개 (즉시 조치 필요)\n  - 🟡 MEDIUM: 1개 (1-3개월 내 조치)\n  - 🟢 LOW: 0개 (6개월 내 조치)\n- **카테고리 분포**:\n  - 제품 인증: 4개\n\n### 2.2 리스크 평가\n- **전체 리스크 점수**: 8.2/10\n- **고위험 규제**: 4개\n- **즉시 조치 필요**: 3개\n\n---\n\n## 3. 규제 목록 및 분류\n\n### 3.1 제품 인증\n\n#### 3.1.1 🔴 PSE 마크 인증\n\n**우선순위:** HIGH\n**관할 기관:** 일본 산업부(METI)\n**적용 이유:** 리튬이온 배터리는 과충전, 단락 방지, 열 관리에 대한 엄격한 테스트를 포함하는 제품 안전 전기제품 및 재료(PSE) 법을 통과해야 합니다.\n\n**주요 요구사항:**\n- 리튬 배터리는 과충전, 단락 방지, 열 관리에 대한 테스트를 통과해야 함.\n- 국내 및 국제 안전 표준을 모두 준수해야 함.\n\n**근거 출처:**\n- [국가별 리튬 배터리 안전 인증 기준 - RHY Battery](https://www.rhybattery.com/ko/news/lithium-battery-safety-certification-standards-across-different-countries.html) — 리튬 배터리는 과충전, 단락 방지, 열 관리에 대한 엄격한 테스트를 포함하는 제품 안전 전기제품 및 재료(PSE) 법을 통과해야 합니다.\n\n#### 3.1.2 🔴 IEC 62133 인증\n\n**우선순위:** HIGH\n**관할 기관:** 국제전기기술위원회(IEC)\n**적용 이유:** 리튬이온 배터리의 안전을 보장하기 위해 국제적으로 인정된 안전 표준을 준수해야 합니다.\n\n**주요 요구사항:**\n- 리튬이온 배터리는 IEC 62133, UL 1642, ISO 12405와 같은 안전 기준을 준수해야 함.\n- 제조업체는 배터리 팩의 안전한 작동을 위해 설계, 테스트 및 인증해야 함.\n\n**근거 출처:**\n- [Large Power 리튬 이온 배터리를 안전하게 만드는 방법](https://www.large-battery.com/ko/blog/making-lithium-ion-safe-protection-standards-best-practices/) — 제품에 사용되는 리튬 이온 배터리의 안전을 보장하려면 국제적으로 인정된 안전 표준을 준수해야 합니다.\n\n#### 3.1.3 🔴 KC 인증\n\n**우선순위:** HIGH\n**관할 기관:** 한국 국가기술표준원\n**적용 이유:** 리튬이온 배터리는 KC 인증을 받아야 하며, 충전 유무에 따라 인증 종류가 다름.\n\n**주요 요구사항:**\n- 리튬이온 배터리는 KC 인증을 받아야 하며, 충전지와 일차전지에 따라 다른 인증이 필요함.\n- 모든 배터리는 전기용품 및 생활용품에 대한 인증을 받아야 함.\n\n**근거 출처:**\n- [KC 인증이 뭐길래... 인증이 없이 수입도 없다! - 배터리 종류별 인증이 ...](https://m.blog.naver.com/aboutcustoms/221691090040) — 리튬이온배터리라 하더라도 충전 유무에 따라 KC 인증 종류가 다르다는 사실!\n\n#### 3.1.4 🟡 CE 인증\n\n**우선순위:** MEDIUM\n**관할 기관:** 유럽연합\n**적용 이유:** 리튬 배터리 제품은 CE 인증을 통해 품질과 안전에 대한 의지를 입증해야 함.\n\n**주요 요구사항:**\n- 제조업체는 CE 인증을 획득하여 품질과 안전에 대한 의지를 입증해야 함.\n- 리튬 배터리는 EN 62133-2:2017과 같은 안전 표준을 준수해야 함.\n\n**근거 출처:**\n- [리튬 배터리에 대한 CE 인증 요구 사항 이해 - Large Battery](https://www.large-battery.com/ko/blog/ce-certification-requirements-lithium-batteries/) — 제조업체는 CE 인증을 획득함으로써 품질과 안전에 대한 의지를 입증합니다.\n\n\n---\n\n## 4. 실행 체크리스트\n\n### 4.1 🔴 PSE 마크 인증\n\n- [ ] **리튬 배터리 과충전 테스트 수행**\n  - 담당: 품질 관리 부서\n  - 마감: 2024-01-15\n  - 예상 비용: 5000 USD\n\n    • 근거: [국가별 리튬 배터리 안전 인증 기준 - RHY Battery](https://www.rhybattery.com/ko/news/lithium-battery-safety-certification-standards-across-different-countries.html) — 리튬 배터리는 과충전, 단락 방지, 열 관리에 대한 엄격한 테스트를 포함하는 제품 안전 전기제품 및 재료(PSE) 법을 통과해야 합니다.\n\n- [ ] **단락 방지 테스트 수행**\n  - 담당: 품질 관리 부서\n  - 마감: 2024-02-01\n  - 예상 비용: 3000 USD\n\n    • 근거: [국가별 리튬 배터리 안전 인증 기준 - RHY Battery](https://www.rhybattery.com/ko/news/lithium-battery-safety-certification-standards-across-different-countries.html) — 리튬 배터리는 과충전, 단락 방지, 열 관리에 대한 엄격한 테스트를 포함하는 제품 안전 전기제품 및 재료(PSE) 법을 통과해야 합니다.\n\n- [ ] **열 관리 테스트 수행**\n  - 담당: 품질 관리 부서\n  - 마감: 2024-02-15\n  - 예상 비용: 4000 USD\n\n    • 근거: [국가별 리튬 배터리 안전 인증 기준 - RHY Battery](https://www.rhybattery.com/ko/news/lithium-battery-safety-certification-standards-across-different-countries.html) — 리튬 배터리는 과충전, 단락 방지, 열 관리에 대한 엄격한 테스트를 포함하는 제품 안전 전기제품 및 재료(PSE) 법을 통과해야 합니다.\n\n- [ ] **국내 및 국제 안전 표준 검토**\n  - 담당: 규제 준수 부서\n  - 마감: 2024-03-01\n  - 예상 비용: 2000 USD\n\n    • 근거: [국가별 리튬 배터리 안전 인증 기준 - RHY Battery](https://www.rhybattery.com/ko/news/lithium-battery-safety-certification-standards-across-different-countries.html) — 리튬 배터리는 과충전, 단락 방지, 열 관리에 대한 엄격한 테스트를 포함하는 제품 안전 전기제품 및 재료(PSE) 법을 통과해야 합니다.\n\n- [ ] **증빙 및 기록 확보**\n  - 담당: 품질 관리 부서\n  - 마감: 2024-03-15\n  - 예상 비용: 1000 USD\n\n    • 근거: [국가별 리튬 배터리 안전 인증 기준 - RHY Battery](https://www.rhybattery.com/ko/news/lithium-battery-safety-certification-standards-across-different-countries.html) — 리튬 배터리는 과충전, 단락 방지, 열 관리에 대한 엄격한 테스트를 포함하는 제품 안전 전기제품 및 재료(PSE) 법을 통과해야 합니다.\n\n### 4.2 🔴 IEC 62133 인증\n\n- [ ] **IEC 62133 인증 요건 검토**\n  - 담당: 품질 관리 부서\n  - 마감: 2023-11-15\n  - 예상 비용: 500,000 KRW\n\n    • 근거: [Large Power 리튬 이온 배터리를 안전하게 만드는 방법](https://www.large-battery.com/ko/blog/making-lithium-ion-safe-protection-standards-best-practices/) — 제품에 사용되는 리튬 이온 배터리의 안전을 보장하려면 국제적으로 인정된 안전 표준을 준수해야 합니다.\n\n- [ ] **리튬이온 배터리 설계 개선**\n  - 담당: 제품 개발 부서\n  - 마감: 2023-12-01\n  - 예상 비용: 1,000,000 KRW\n\n    • 근거: [Large Power 리튬 이온 배터리를 안전하게 만드는 방법](https://www.large-battery.com/ko/blog/making-lithium-ion-safe-protection-standards-best-practices/) — 국제적으로 인정된 안전 표준을 준수해야 합니다.\n\n- [ ] **리튬이온 배터리 테스트 및 인증 진행**\n  - 담당: 테스트 및 인증 부서\n  - 마감: 2024-01-15\n  - 예상 비용: 2,500,000 KRW\n\n    • 근거: [Large Power 리튬 이온 배터리를 안전하게 만드는 방법](https://www.large-battery.com/ko/blog/making-lithium-ion-safe-protection-standards-best-practices/) — 제조업체는 배터리 팩의 안전한 작동을 위해 설계, 테스트 및 인증해야 함.\n\n- [ ] **인증 문서 및 기록 확보**\n  - 담당: 품질 관리 부서\n  - 마감: 2024-01-31\n  - 예상 비용: 300,000 KRW\n\n    • 근거: [Large Power 리튬 이온 배터리를 안전하게 만드는 방법](https://www.large-battery.com/ko/blog/making-lithium-ion-safe-protection-standards-best-practices/) — 배터리 팩의 안전한 작동을 위해 설계, 테스트 및 인증해야 함.\n\n### 4.3 🔴 KC 인증\n\n- [ ] **KC 인증 신청 준비**\n  - 담당: 품질 관리 부서\n  - 마감: 2024-01-15\n  - 예상 비용: 500,000원\n\n    • 근거: [KC 인증이 뭐길래... 인증이 없이 수입도 없다! - 배터리 종류별 인증이 ...](https://m.blog.naver.com/aboutcustoms/221691090040) — 리튬이온배터리라 하더라도 충전 유무에 따라 KC 인증 종류가 다르다는 사실!\n\n### 4.4 🟡 CE 인증\n\n- [ ] **CE 인증 신청 준비**\n  - 담당: 품질 관리팀\n  - 마감: 2024-03-15\n  - 예상 비용: 5000 USD\n\n    • 근거: [리튬 배터리에 대한 CE 인증 요구 사항 이해 - Large Battery](https://www.large-battery.com/ko/blog/ce-certification-requirements-lithium-batteries/) — 제조업체는 CE 인증을 획득함으로써 품질과 안전에 대한 의지를 입증합니다.\n\n- [ ] **EN 62133-2:2017 표준 준수 확인**\n  - 담당: 제품 개발팀\n  - 마감: 2024-02-20\n  - 예상 비용: 3000 USD\n\n    • 근거: [리튬 배터리에 대한 CE 인증 요구 사항 이해 - Large Battery](https://www.large-battery.com/ko/blog/ce-certification-requirements-lithium-batteries/) — 리튬 배터리는 EN 62133-2:2017과 같은 안전 표준을 준수해야 함.\n\n- [ ] **CE 인증 증빙 자료 확보**\n  - 담당: 품질 관리팀\n  - 마감: 2024-03-30\n  - 예상 비용: 1000 USD\n\n    • 근거: [리튬 배터리에 대한 CE 인증 요구 사항 이해 - Large Battery](https://www.large-battery.com/ko/blog/ce-certification-requirements-lithium-batteries/) — 제조업체는 CE 인증을 획득함으로써 품질과 안전에 대한 의지를 입증합니다.\n\n\n---\n\n## 5. 실행 계획 및 타임라인\n\n### 5.1 🔴 PSE 마크 인증\n\n**타임라인:** 3개월  \n**시작 예정:** 즉시  \n\n**주요 마일스톤:**\n- 1개월 차: 리튬 배터리 과충전 및 단락 방지 테스트 완료 (완료 목표: 2024-01-15)\n- 2개월 차: 열 관리 테스트 및 안전 표준 검토 완료 (완료 목표: 2024-02-15)\n- 3개월 차: 증빙 및 기록 확보 완료 (완료 목표: 2024-03-15)\n\n**의존성:**\n- `2` ← `1`\n- `3` ← `1`, `2`\n- `4` ← `3`\n- `5` ← `4`\n\n**병렬 수행 가능:**\n- `1`, `2`\n- `3`, `4`\n\n**크리티컬 패스:** `1` → `2` → `3` → `4` → `5`\n\n**근거 출처:**\n- [국가별 리튬 배터리 안전 인증 기준 - RHY Battery](https://www.rhybattery.com/ko/news/lithium-battery-safety-certification-standards-across-different-countries.html) — 리튬 배터리는 과충전, 단락 방지, 열 관리에 대한 엄격한 테스트를 포함하는 제품 안전 전기제품 및 재료(PSE) 법을 통과해야 합니다.\n\n### 5.2 🔴 IEC 62133 인증\n\n**타임라인:** 3개월  \n**시작 예정:** 즉시  \n\n**주요 마일스톤:**\n- 1개월 차: 서류 준비 완료 (완료 목표: 2023-11-15)\n- 2개월 차: 설계 개선 완료 (완료 목표: 2023-12-01)\n- 3개월 차: 테스트 및 인증 완료 (완료 목표: 2024-01-15)\n- 3개월 차: 인증 문서 확보 (완료 목표: 2024-01-31)\n\n**의존성:**\n- `2` ← `1`\n- `3` ← `1`, `2`\n- `4` ← `3`\n\n**병렬 수행 가능:**\n- `1`\n- `2`\n- `3`\n\n**크리티컬 패스:** `1` → `2` → `3` → `4`\n\n**근거 출처:**\n- [Large Power 리튬 이온 배터리를 안전하게 만드는 방법](https://www.large-battery.com/ko/blog/making-lithium-ion-safe-protection-standards-best-practices/) — 제품에 사용되는 리튬 이온 배터리의 안전을 보장하려면 국제적으로 인정된 안전 표준을 준수해야 합니다.\n\n### 5.3 🔴 KC 인증\n\n**타임라인:** 3주  \n**시작 예정:** 즉시  \n\n**주요 마일스톤:**\n- KC 인증 신청 준비 완료 (완료 목표: 2024-01-15)\n\n**크리티컬 패스:** `1`\n\n**근거 출처:**\n- [KC 인증이 뭐길래... 인증이 없이 수입도 없다! - 배터리 종류별 인증이 ...](https://m.blog.naver.com/aboutcustoms/221691090040) — 리튬이온배터리라 하더라도 충전 유무에 따라 KC 인증 종류가 다르다는 사실!\n\n### 5.4 🟡 CE 인증\n\n**타임라인:** 3개월  \n**시작 예정:** 즉시  \n\n**주요 마일스톤:**\n- 1개월 차: 서류 준비 완료 (완료 목표: 2024-02-20)\n- 2개월 차: CE 인증 신청 완료 (완료 목표: 2024-03-15)\n- 3개월 차: CE 인증 증빙 자료 확보 (완료 목표: 2024-03-30)\n\n**의존성:**\n- `2` ← `1`\n- `3` ← `1`, `2`\n\n**병렬 수행 가능:**\n- `1`, `2`\n- `3`\n\n**크리티컬 패스:** `1` → `2` → `3`\n\n**근거 출처:**\n- [리튬 배터리에 대한 CE 인증 요구 사항 이해 - Large Battery](https://www.large-battery.com/ko/blog/ce-certification-requirements-lithium-batteries/) — 제조업체는 CE 인증을 획득함으로써 품질과 안전에 대한 의지를 입증합니다.\n\n\n---\n\n## 6. 리스크 평가\n\n### 6.1 전체 리스크 평가\n\n**전체 리스크 점수:** 8.2/10\n\n**리스크 수준:** 매우 높음\n\n### 6.2 고위험 규제 (상위 5개)\n\n#### PSE 마크 인증\n\n**리스크 점수:** 9.0/10\n\n**처벌 유형:** 과태료\n\n**사업 영향:** 영업정지 6개월\n\n**근거 출처:**\n- [국가별 리튬 배터리 안전 인증 기준 - RHY Battery](https://www.rhybattery.com/ko/news/lithium-battery-safety-certification-standards-across-different-countries.html) — 리튬 배터리는 과충전, 단락 방지, 열 관리에 대한 엄격한 테스트를 포함하는 제품 안전 전기제품 및 재료(PSE) 법을 통과해야 합니다.\n\n#### IEC 62133 인증\n\n**리스크 점수:** 8.0/10\n\n**처벌 유형:** 과태료\n\n**사업 영향:** 영업정지 6개월\n\n**근거 출처:**\n- [Large Power 리튬 이온 배터리를 안전하게 만드는 방법](https://www.large-battery.com/ko/blog/making-lithium-ion-safe-protection-standards-best-practices/) — 제품에 사용되는 리튬 이온 배터리의 안전을 보장하려면 국제적으로 인정된 안전 표준을 준수해야 합니다.\n\n#### KC 인증\n\n**리스크 점수:** 9.0/10\n\n**처벌 유형:** 과태료\n\n**사업 영향:** 인허가 취소\n\n**근거 출처:**\n- [KC 인증이 뭐길래... 인증이 없이 수입도 없다! - 배터리 종류별 인증이 ...](https://m.blog.naver.com/aboutcustoms/221691090040) — 리튬이온배터리라 하더라도 충전 유무에 따라 KC 인증 종류가 다르다는 사실!\n\n#### CE 인증\n\n**리스크 점수:** 7.0/10\n\n**처벌 유형:** 과태료\n\n**사업 영향:** 없으면 \n\n**근거 출처:**\n- [리튬 배터리에 대한 CE 인증 요구 사항 이해 - Large Battery](https://www.large-battery.com/ko/blog/ce-certification-requirements-lithium-batteries/) — 제조업체는 CE 인증을 획득함으로써 품질과 안전에 대한 의지를 입증합니다.\n\n\n---\n\n## 7. 경영진 요약\n\n### 핵심 인사이트\n- 총 4개의 규제가 있으며, 그 중 3개는 HIGH 리스크 수준으로 분류됨.\n- 리스크 점수는 8.2/10으로, 상당히 높은 위험도를 나타냄.\n- 고위험 규제는 총 4개로, 추가적인 관리와 대응이 필요함.\n\n### 의사결정 포인트\n- [ ] 규제 대응 전략 수립\n- [ ] 리스크 관리 팀 구성\n- [ ] 규제 준수 교육 프로그램 개발\n\n### 권장 조치 (우선순위 순)\n1. **즉시:** 고위험 규제에 대한 포괄적인 리스크 평가 실시\n2. **1개월 내:** 규제 대응 전략 초안 작성 및 검토\n3. **3개월 내:** 규제 준수 교육 프로그램 실행 및 평가\n\n---\n\n## 8. 다음 단계\n\n- **1단계 (즉시):** HIGH 우선순위 3개 규제 착수\n- **2단계 (1주일 내):** 담당 부서 및 책임자 지정\n- **3단계 (2주일 내):** 상세 실행 일정 확정 및 예산 승인\n- **4단계 (1개월):** 월 단위 진행 상황 모니터링 체계 구축\n- **5단계 (분기별):** 전문가 검토 및 보완\n\n---\n\n## 9. 근거 출처 모음\n\n1. [국가별 리튬 배터리 안전 인증 기준 - RHY Battery](https://www.rhybattery.com/ko/news/lithium-battery-safety-certification-standards-across-different-countries.html) — 리튬 배터리는 과충전, 단락 방지, 열 관리에 대한 엄격한 테스트를 포함하는 제품 안전 전기제품 및 재료(PSE) 법을 통과해야 합니다.\n2. [Large Power 리튬 이온 배터리를 안전하게 만드는 방법](https://www.large-battery.com/ko/blog/making-lithium-ion-safe-protection-standards-best-practices/) — 제품에 사용되는 리튬 이온 배터리의 안전을 보장하려면 국제적으로 인정된 안전 표준을 준수해야 합니다.\n3. [KC 인증이 뭐길래... 인증이 없이 수입도 없다! - 배터리 종류별 인증이 ...](https://m.blog.naver.com/aboutcustoms/221691090040) — 리튬이온배터리라 하더라도 충전 유무에 따라 KC 인증 종류가 다르다는 사실!\n4. [리튬 배터리에 대한 CE 인증 요구 사항 이해 - Large Battery](https://www.large-battery.com/ko/blog/ce-certification-requirements-lithium-batteries/) — 제조업체는 CE 인증을 획득함으로써 품질과 안전에 대한 의지를 입증합니다.\n\n---\n\n## 면책 조항\n\n> 본 보고서는 AI 기반 분석 도구로 생성된 참고 자료입니다. 실제 규제 준수 여부는 반드시 전문가의 검토를 받으시기 바랍니다. 본 보고서 내용으로 인한 법적 책임은 사용자에게 있습니다.\n",
     "report_pdf_path": "report/regulation_report_reason.pdf",
     "citations": [
       {
-        "source_id": "SRC-002",
+        "source_id": "SRC-001",
         "title": "국가별 리튬 배터리 안전 인증 기준 - RHY Battery",
         "url": "https://www.rhybattery.com/ko/news/lithium-battery-safety-certification-standards-across-different-countries.html",
         "snippet": "리튬 배터리는 과충전, 단락 방지, 열 관리에 대한 엄격한 테스트를 포함하는 제품 안전 전기제품 및 재료(PSE) 법을 통과해야 합니다."
       },
       {
-        "source_id": "SRC-003",
-        "title": "리튬 배터리 CB 인증 및 글로벌 영향 - Large Battery",
-        "url": "https://www.large-battery.com/ko/blog/cb-certification-for-lithium-batteries-global-market-access/",
-        "snippet": "리튬 배터리 CB 인증은 IECEE CB 제도에 따라 국제적으로 인정받는 시스템입니다."
+        "source_id": "SRC-002",
+        "title": "Large Power 리튬 이온 배터리를 안전하게 만드는 방법",
+        "url": "https://www.large-battery.com/ko/blog/making-lithium-ion-safe-protection-standards-best-practices/",
+        "snippet": "제품에 사용되는 리튬 이온 배터리의 안전을 보장하려면 국제적으로 인정된 안전 표준을 준수해야 합니다."
       },
       {
         "source_id": "SRC-004",
-        "title": "[PDF] 리튬 이온 배터리 부품 제조를 위한 계측 솔루션 - Emerson",
-        "url": "https://www.emerson.com/documents/automation/ebook-measurement-instrumentation-for-lithium-ion-battery-component-manufacturing-ko-kr-11362096.pdf",
-        "snippet": "많은 배치 공정에는 장비를 손상시키고 작업자를 위협할 수 있는 고온과 압력으로부터 작업자를 보호하기 위한 안전 시스템이 필요합니다."
+        "title": "KC 인증이 뭐길래... 인증이 없이 수입도 없다! - 배터리 종류별 인증이 ...",
+        "url": "https://m.blog.naver.com/aboutcustoms/221691090040",
+        "snippet": "리튬이온배터리라 하더라도 충전 유무에 따라 KC 인증 종류가 다르다는 사실!"
       },
       {
         "source_id": "SRC-005",
-        "title": "리튬 배터리 제조 공정에서 수분의 영향",
-        "url": "https://ko.tobmachine.com/the-influence-of-moisture-in-the-lithium-battery-manufacturing-process_n726",
-        "snippet": "생산 작업장의 습도를 엄격하게 관리합니다."
+        "title": "리튬 배터리에 대한 CE 인증 요구 사항 이해 - Large Battery",
+        "url": "https://www.large-battery.com/ko/blog/ce-certification-requirements-lithium-batteries/",
+        "snippet": "제조업체는 CE 인증을 획득함으로써 품질과 안전에 대한 의지를 입증합니다."
       }
     ]
   }

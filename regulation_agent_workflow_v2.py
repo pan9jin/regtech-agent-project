@@ -19,6 +19,7 @@ START → Analyzer → Searcher → Classifier → Prioritizer
 """
 
 import os
+import sys
 import json
 from typing import List, Optional, Dict, Any
 from typing_extensions import TypedDict
@@ -1774,16 +1775,29 @@ def main():
         "sales_channels": ["B2B", "수출"],
         "export_countries": ["미국", "유럽"]
     }
+    
+    # 다른 샘플 사업 정보 (전자제품 제조)
+    sample_business_info2: BusinessInfo = {
+    "industry": "전자제품 제조",
+    "product_name": "스마트 LED 전구 (Wi-Fi)",
+    "raw_materials": "ABS 수지, PCB, 구리, LED 칩, 주석-은 납땜 합금",
+    "processes": ["사출 성형", "SMT(표면실장)", "납땜 리플로우", "펌웨어 플래싱", "최종 조립", "기능/안전 시험"],
+    "employee_count": 80,
+    "sales_channels": ["B2C", "온라인", "오프라인 리테일", "수출"],
+    "export_countries": ["미국", "유럽연합(EU)", "일본"]
+    }
 
+    select = sys.argv[1] if len(sys.argv) > 1 else "1"
+    
     print("📝 입력된 사업 정보:")
-    print(json.dumps(sample_business_info, indent=2, ensure_ascii=False))
+    print(json.dumps(sample_business_info if select == "1" else sample_business_info2, indent=2, ensure_ascii=False))
     print()
     print("-" * 60)
     print()
 
     # Workflow 실행
     try:
-        result = run_regulation_agent(sample_business_info)
+        result = run_regulation_agent(sample_business_info if select == "1" else sample_business_info2)
     except Exception as exc:
         print(f"[ERROR] 분석 파이프라인이 실패했습니다: {exc}")
         raise

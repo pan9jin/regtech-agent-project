@@ -1,6 +1,6 @@
 # 규제 준수 분석 통합 보고서
 
-> 생성일: 2025년 10월 21일
+> 생성일: 2025년 10월 22일
 
 ---
 
@@ -20,20 +20,19 @@
 ## 2. 분석 요약
 
 ### 2.1 규제 현황
-- **총 규제 개수**: 4개
+- **총 규제 개수**: 5개
 - **우선순위 분포**:
-  - 🔴 HIGH: 3개 (즉시 조치 필요)
+  - 🔴 HIGH: 4개 (즉시 조치 필요)
   - 🟡 MEDIUM: 1개 (1-3개월 내 조치)
   - 🟢 LOW: 0개 (6개월 내 조치)
 - **카테고리 분포**:
+  - 안전/환경: 3개
   - 제품 인증: 2개
-  - 안전/환경: 1개
-  - 공장 운영: 1개
 
 ### 2.2 리스크 평가
 - **전체 리스크 점수**: 8.0/10
-- **고위험 규제**: 4개
-- **즉시 조치 필요**: 3개
+- **고위험 규제**: 5개
+- **즉시 조치 필요**: 4개
 
 ---
 
@@ -41,255 +40,342 @@
 
 ### 3.1 안전/환경
 
-#### 3.1.1 🔴 공정 안전 규제
+#### 3.1.1 🔴 사용후 배터리법
 
 **우선순위:** HIGH
-**관할 기관:** 규제 기관 및 보험사
-**적용 이유:** 리튬이온 배터리 제조 과정에서 고온과 압력으로부터 작업자를 보호하기 위한 안전 시스템이 필요합니다.
+**관할 기관:** 환경부
+**적용 이유:** 리튬이온 배터리 제조 과정에서 발생하는 사용후 배터리의 관리 및 재활용을 위한 법적 요구사항이 적용됩니다.
 
 **주요 요구사항:**
-- 안전 인증을 받은 계기를 사용하여 작업자를 보호해야 합니다.
-- 고온과 압력으로부터 작업 환경을 안전하게 유지해야 합니다.
+- 사용후 배터리의 체계적 관리 및 활용을 위한 인프라 구축
+- 사용후 배터리의 재자원화 촉진
 
 **근거 출처:**
-- [[PDF] 리튬 이온 배터리 부품 제조를 위한 계측 솔루션 - Emerson](https://www.emerson.com/documents/automation/ebook-measurement-instrumentation-for-lithium-ion-battery-component-manufacturing-ko-kr-11362096.pdf) — 많은 배치 공정에는 장비를 손상시키고 작업자를 위협할 수 있는 고온과 압력으로부터 작업자를 보호하기 위한 안전 시스템이 필요합니다.
+
+**[산업 공급망 내재화를 위한 - 핵심광물 재자원화 활성화 추진 ...]** https://www.korea.kr/common/download.do?fileId=198098089&tblKey=GMN
+향후 발생량 급증이 예상되는 사용후 배터리의 체계적 관리 및 활용을 위해 사용후 배터리법 및 제도·인프라 등 도입 추진.
+
+#### 3.1.2 🔴 화학물질 관리법
+
+**우선순위:** HIGH
+**관할 기관:** 환경부
+**적용 이유:** 리튬, 코발트, 니켈 등 화학물질을 사용하는 배터리 제조 과정에서 해당 법의 적용을 받습니다.
+
+**주요 요구사항:**
+- 화학물질의 안전한 사용 및 관리
+- 위험물질의 배출 최소화
+
+**근거 출처:**
+
+**[조세특례제한법 시행규칙]** https://www.law.go.kr/LSW/nwRvsLsInfoR.do?lsNm=&cptOfi=&searchType=&lsKndCd=&p_spubdt=&p_epubdt=&p_spubno=&p_epubno=&pageIndex=1&chrIdx=0&sortIdx=0&lsiSeq=192615
+이 규칙은 공포한 날부터 시행한다.
+
+#### 3.1.3 🔴 산업안전보건법
+
+**우선순위:** HIGH
+**관할 기관:** 고용노동부
+**적용 이유:** 배터리 제조 공정에서 직원의 안전과 건강을 보호하기 위한 법적 요구사항이 적용됩니다.
+
+**주요 요구사항:**
+- 작업장 안전 및 건강 관리 계획 수립
+- 직원 교육 및 안전 장비 제공
+
+**근거 출처:**
+
+**[조세특례제한법 시행규칙]** https://www.law.go.kr/LSW/nwRvsLsInfoR.do?lsNm=&cptOfi=&searchType=&lsKndCd=&p_spubdt=&p_epubdt=&p_spubno=&p_epubno=&pageIndex=1&chrIdx=0&sortIdx=0&lsiSeq=192615
+이 규칙은 공포한 날부터 시행한다.
 
 
-### 3.2 공장 운영
+### 3.2 제품 인증
 
-#### 3.2.1 🟡 습도 관리 규제
+#### 3.2.1 🔴 녹색기술 인증
+
+**우선순위:** HIGH
+**관할 기관:** 산업통상자원부
+**적용 이유:** 리튬이온 배터리 제조에 필요한 기술이 녹색기술 인증을 받을 수 있는 범위에 포함됩니다.
+
+**주요 요구사항:**
+- 신재생에너지 관련 기술 수준 평가
+- 녹색기술 인증을 위한 기술수준 기준 충족
+
+**근거 출처:**
+
+**[https://www.law.go.kr/LSW/flDownload.do?flSeq=4934...]** https://www.law.go.kr/LSW/flDownload.do?flSeq=4934208&flNm=%5B%EB%B3%84%ED%91%9C+4%5D+%EB%85%B9%EC%83%89%EA%B8%B0%EC%88%A0+%EC%9D%B8%EC%A6%9D%EC%9D%84+%EC%9C%84%ED%95%9C+%EA%B8%B0%EC%88%A0%EC%88%98%EC%A4%80
+[별표 4] 녹색기술 인증을 위한 기술수준 01. 신재생에너지 중분류소분류핵심(요소)기술기술수준01.
+
+#### 3.2.2 🟡 전기용품 및 생활용품 안전관리법
 
 **우선순위:** MEDIUM
-**관할 기관:** 내부 품질 관리 팀
-**적용 이유:** 리튬이온 배터리 제조 과정에서 습도 관리는 제품 품질에 중요한 영향을 미칩니다.
+**관할 기관:** 산업통상자원부
+**적용 이유:** 리튬이온 배터리가 전기용품으로 분류되어 안전 기준을 충족해야 합니다.
 
 **주요 요구사항:**
-- 슬러리 혼합을 위한 전극 생산 작업장은 상대 습도를 10% 이하로 유지해야 합니다.
-- 전해액 주입 및 밀봉 공정은 이슬점 습도가 -45℃ DP 이하이어야 합니다.
+- 전기용품의 안전성 검사 및 인증
+- 소비자 안전을 위한 정보 제공
 
 **근거 출처:**
-- [리튬 배터리 제조 공정에서 수분의 영향](https://ko.tobmachine.com/the-influence-of-moisture-in-the-lithium-battery-manufacturing-process_n726) — 생산 작업장의 습도를 엄격하게 관리합니다.
 
-
-### 3.3 제품 인증
-
-#### 3.3.1 🔴 리튬 배터리 안전 인증
-
-**우선순위:** HIGH
-**관할 기관:** 국가별 인증 기관
-**적용 이유:** 리튬이온 배터리 제조업체는 제품의 안전성을 보장하기 위해 다양한 인증을 받아야 합니다.
-
-**주요 요구사항:**
-- 리튬 배터리는 과충전, 단락 방지, 열 관리에 대한 엄격한 테스트를 통과해야 합니다.
-- 국내 및 국제 안전 표준을 모두 준수해야 합니다.
-
-**근거 출처:**
-- [국가별 리튬 배터리 안전 인증 기준 - RHY Battery](https://www.rhybattery.com/ko/news/lithium-battery-safety-certification-standards-across-different-countries.html) — 리튬 배터리는 과충전, 단락 방지, 열 관리에 대한 엄격한 테스트를 포함하는 제품 안전 전기제품 및 재료(PSE) 법을 통과해야 합니다.
-
-#### 3.3.2 🔴 CB 인증
-
-**우선순위:** HIGH
-**관할 기관:** IECEE
-**적용 이유:** 리튬이온 배터리는 국제 시장에 진출하기 위해 CB 인증을 받아야 합니다.
-
-**주요 요구사항:**
-- 리튬 배터리 제품은 IEC 표준에 따라 포괄적인 시험 및 평가를 받아야 합니다.
-- 전기 안전, 신뢰성 및 규정 준수에 대한 국제적인 요구 사항을 충족해야 합니다.
-
-**근거 출처:**
-- [리튬 배터리 CB 인증 및 글로벌 영향 - Large Battery](https://www.large-battery.com/ko/blog/cb-certification-for-lithium-batteries-global-market-access/) — 리튬 배터리 CB 인증은 IECEE CB 제도에 따라 국제적으로 인정받는 시스템입니다.
+**[녹색투자 현황 및 활성화 방안]** https://www.korea.kr/common/download.do?fileId=197609&tblKey=EDN
+전기차용 배터리. 리튬이온전지.
 
 
 ---
 
 ## 4. 실행 체크리스트
 
-### 4.1 🔴 리튬 배터리 안전 인증
+### 4.1 🔴 사용후 배터리법
 
-- [ ] **리튬 배터리 과충전 테스트 수행**
-  - 담당: 품질 관리팀
-  - 마감: 2024-01-15
-  - 예상 비용: 500만원
+- [ ] **사용후 배터리 관리 시스템 구축**
+  - 담당: 환경부
+  - 마감: 2026-01-22
 
-    • 근거: [국가별 리튬 배터리 안전 인증 기준 - RHY Battery](https://www.rhybattery.com/ko/news/lithium-battery-safety-certification-standards-across-different-countries.html) — 리튬 배터리는 과충전, 단락 방지, 열 관리에 대한 엄격한 테스트를 포함하는 제품 안전 전기제품 및 재료(PSE) 법을 통과해야 합니다.
+  **근거 출처:**
 
-- [ ] **단락 방지 테스트 계획 수립**
-  - 담당: 연구개발팀
-  - 마감: 2024-01-30
-  - 예상 비용: 300만원
+  **[산업 공급망 내재화를 위한 - 핵심광물 재자원화 활성화 추진 ...]** https://www.korea.kr/common/download.do?fileId=198098089&tblKey=GMN
+  사용후 배터리의 체계적 관리 및 활용을 위해 사용후 배터리법 및 제도·인프라 등 도입 추진.
 
-    • 근거: [국가별 리튬 배터리 안전 인증 기준 - RHY Battery](https://www.rhybattery.com/ko/news/lithium-battery-safety-certification-standards-across-different-countries.html) — 리튬 배터리는 과충전, 단락 방지, 열 관리에 대한 엄격한 테스트를 포함하는 제품 안전 전기제품 및 재료(PSE) 법을 통과해야 합니다.
+- [ ] **재자원화 프로그램 개발**
+  - 담당: 환경부
+  - 마감: 2026-01-22
 
-- [ ] **열 관리 시스템 검토 및 개선**
-  - 담당: 기술팀
-  - 마감: 2024-02-15
-  - 예상 비용: 400만원
+  **근거 출처:**
 
-    • 근거: [국가별 리튬 배터리 안전 인증 기준 - RHY Battery](https://www.rhybattery.com/ko/news/lithium-battery-safety-certification-standards-across-different-countries.html) — 리튬 배터리는 과충전, 단락 방지, 열 관리에 대한 엄격한 테스트를 포함하는 제품 안전 전기제품 및 재료(PSE) 법을 통과해야 합니다.
+  **[산업 공급망 내재화를 위한 - 핵심광물 재자원화 활성화 추진 ...]** https://www.korea.kr/common/download.do?fileId=198098089&tblKey=GMN
+  향후 발생량 급증이 예상되는 사용후 배터리의 재자원화 촉진을 위한 방안 필요.
 
-- [ ] **국내 및 국제 안전 표준 준수 확인**
-  - 담당: 법무팀
-  - 마감: 2024-03-01
-  - 예상 비용: 150만원
+- [ ] **사용후 배터리 관련 교육 프로그램 운영**
+  - 담당: 환경부
+  - 마감: 2026-01-22
 
-    • 근거: [국가별 리튬 배터리 안전 인증 기준 - RHY Battery](https://www.rhybattery.com/ko/news/lithium-battery-safety-certification-standards-across-different-countries.html) — 리튬 배터리는 과충전, 단락 방지, 열 관리에 대한 엄격한 테스트를 포함하는 제품 안전 전기제품 및 재료(PSE) 법을 통과해야 합니다.
+  **근거 출처:**
 
-- [ ] **테스트 결과 및 인증 기록 확보**
-  - 담당: 품질 관리팀
-  - 마감: 2024-03-15
-  - 예상 비용: 100만원
+  **[산업 공급망 내재화를 위한 - 핵심광물 재자원화 활성화 추진 ...]** https://www.korea.kr/common/download.do?fileId=198098089&tblKey=GMN
+  사용후 배터리의 관리 및 재활용을 위한 법적 요구사항에 대한 교육 필요성.
 
-    • 근거: [국가별 리튬 배터리 안전 인증 기준 - RHY Battery](https://www.rhybattery.com/ko/news/lithium-battery-safety-certification-standards-across-different-countries.html) — 리튬 배터리는 과충전, 단락 방지, 열 관리에 대한 엄격한 테스트를 포함하는 제품 안전 전기제품 및 재료(PSE) 법을 통과해야 합니다.
+- [ ] **사용후 배터리 관리 기록 확보**
+  - 담당: 환경부
+  - 마감: 2026-01-22
 
-### 4.2 🔴 CB 인증
+  **근거 출처:**
 
-- [ ] **IEC 표준에 따른 시험 및 평가 계획 수립**
-  - 담당: 품질 관리 부서
-  - 마감: 2024-01-15
-  - 예상 비용: 5,000,000 KRW
+  **[산업 공급망 내재화를 위한 - 핵심광물 재자원화 활성화 추진 ...]** https://www.korea.kr/common/download.do?fileId=198098089&tblKey=GMN
+  사용후 배터리의 체계적 관리 및 활용을 위한 데이터 기록 필요.
 
-    • 근거: [리튬 배터리 CB 인증 및 글로벌 영향 - Large Battery](https://www.large-battery.com/ko/blog/cb-certification-for-lithium-batteries-global-market-access/) — 리튬 배터리 CB 인증은 IECEE CB 제도에 따라 국제적으로 인정받는 시스템입니다.
+### 4.2 🔴 녹색기술 인증
 
-- [ ] **전기 안전 및 신뢰성 요구사항 점검**
-  - 담당: 안전 관리 부서
-  - 마감: 2024-01-30
-  - 예상 비용: 3,000,000 KRW
+- [ ] **신재생에너지 기술 수준 평가 실시**
+  - 담당: 기술개발부
+  - 마감: 2025-12-22
 
-    • 근거: [리튬 배터리 CB 인증 및 글로벌 영향 - Large Battery](https://www.large-battery.com/ko/blog/cb-certification-for-lithium-batteries-global-market-access/) — 리튬 배터리 제품은 IEC 표준에 따라 포괄적인 시험 및 평가를 받아야 합니다.
+  **근거 출처:**
 
-- [ ] **CB 인증 신청서 및 서류 준비**
-  - 담당: 인증 관리 부서
-  - 마감: 2024-02-05
-  - 예상 비용: 1,000,000 KRW
+  **[https://www.law.go.kr/LSW/flDownload.do?flSeq=4934...]** https://www.law.go.kr/LSW/flDownload.do?flSeq=4934208&flNm=%5B%EB%B3%84%ED%91%9C+4%5D+%EB%85%B9%EC%83%89%EA%B8%B0%EC%88%A0+%EC%9D%B8%EC%A6%9D%EC%9D%84+%EC%9C%84%ED%95%9C+%EA%B8%B0%EC%88%A0%EC%88%98%EC%A4%80
+  신재생에너지 관련 기술 수준 평가 지표는 [별표 4] 녹색기술 인증을 위한 기술수준에 명시되어 있습니다.
 
-    • 근거: [리튬 배터리 CB 인증 및 글로벌 영향 - Large Battery](https://www.large-battery.com/ko/blog/cb-certification-for-lithium-batteries-global-market-access/) — 리튬 배터리 CB 인증은 IECEE CB 제도에 따라 국제적으로 인정받는 시스템입니다.
+- [ ] **녹색기술 인증 기준 충족을 위한 기술 개발 계획 수립**
+  - 담당: 연구개발부
+  - 마감: 2026-01-22
 
-- [ ] **CB 인증 진행 상황 모니터링**
-  - 담당: 프로젝트 관리 부서
-  - 마감: 2024-03-01
-  - 예상 비용: 500,000 KRW
+  **근거 출처:**
 
-    • 근거: [리튬 배터리 CB 인증 및 글로벌 영향 - Large Battery](https://www.large-battery.com/ko/blog/cb-certification-for-lithium-batteries-global-market-access/) — 리튬 배터리 제품은 IEC 표준에 따라 포괄적인 시험 및 평가를 받아야 합니다.
+  **[https://www.law.go.kr/LSW/flDownload.do?flSeq=4934...]** https://www.law.go.kr/LSW/flDownload.do?flSeq=4934208&flNm=%5B%EB%B3%84%ED%91%9C+4%5D+%EB%85%B9%EC%83%89%EA%B8%B0%EC%88%A0+%EC%9D%B8%EC%A6%9D%EC%9D%84+%EC%9C%84%ED%95%9C+%EA%B8%B0%EC%88%A0%EC%88%98%EC%A4%80
+  녹색기술 인증을 위한 기술수준 기준 충족을 위한 계획 수립이 필요합니다.
 
-- [ ] **CB 인증 증빙 및 기록 확보**
-  - 담당: 문서 관리 부서
-  - 마감: 2024-03-10
-  - 예상 비용: 200,000 KRW
+- [ ] **녹색기술 인증 신청서 제출 준비**
+  - 담당: 품질관리부
+  - 마감: 2026-02-22
 
-    • 근거: [리튬 배터리 CB 인증 및 글로벌 영향 - Large Battery](https://www.large-battery.com/ko/blog/cb-certification-for-lithium-batteries-global-market-access/) — 리튬 배터리 CB 인증은 IECEE CB 제도에 따라 국제적으로 인정받는 시스템입니다.
+  **근거 출처:**
 
-### 4.3 🔴 공정 안전 규제
+  **[https://www.law.go.kr/LSW/flDownload.do?flSeq=4934...]** https://www.law.go.kr/LSW/flDownload.do?flSeq=4934208&flNm=%5B%EB%B3%84%ED%91%9C+4%5D+%EB%85%B9%EC%83%89%EA%B8%B0%EC%88%A0+%EC%9D%B8%EC%A6%9D%EC%9D%84+%EC%9C%84%ED%95%9C+%EA%B8%B0%EC%88%A0%EC%88%98%EC%A4%80
+  녹색기술 인증을 위한 신청서 제출 절차는 관련 문서에 명시되어 있습니다.
 
-- [ ] **안전 인증 계기 확보**
-  - 담당: 구매팀
-  - 마감: 2023-12-01
-  - 예상 비용: 5,000,000원
+- [ ] **증빙 자료 및 기록 확보**
+  - 담당: 문서관리부
+  - 마감: 2026-03-22
 
-    • 근거: [[PDF] 리튬 이온 배터리 부품 제조를 위한 계측 솔루션 - Emerson](https://www.emerson.com/documents/automation/ebook-measurement-instrumentation-for-lithium-ion-battery-component-manufacturing-ko-kr-11362096.pdf) — 안전 시스템이 필요합니다.
+  **근거 출처:**
 
-- [ ] **고온 및 압력 모니터링 시스템 구축**
-  - 담당: 설비팀
-  - 마감: 2024-01-15
-  - 예상 비용: 10,000,000원
+  **[https://www.law.go.kr/LSW/flDownload.do?flSeq=4934...]** https://www.law.go.kr/LSW/flDownload.do?flSeq=4934208&flNm=%5B%EB%B3%84%ED%91%9C+4%5D+%EB%85%B9%EC%83%89%EA%B8%B0%EC%88%A0+%EC%9D%B8%EC%A6%9D%EC%9D%84+%EC%9C%84%ED%95%9C+%EA%B8%B0%EC%88%A0%EC%88%98%EC%A4%80
+  모든 관련 문서 및 기록은 향후 감사 및 검토를 위해 필수적입니다.
 
-    • 근거: [[PDF] 리튬 이온 배터리 부품 제조를 위한 계측 솔루션 - Emerson](https://www.emerson.com/documents/automation/ebook-measurement-instrumentation-for-lithium-ion-battery-component-manufacturing-ko-kr-11362096.pdf) — 고온과 압력으로부터 작업자를 보호하기 위한 안전 시스템이 필요합니다.
+### 4.3 🔴 화학물질 관리법
 
-- [ ] **안전 교육 및 훈련 실시**
-  - 담당: 인사팀
-  - 마감: 2024-01-30
-  - 예상 비용: 2,000,000원
+- [ ] **화학물질 안전 관리 방안 수립**
+  - 담당: 안전관리팀
+  - 마감: 2026-01-22
 
-    • 근거: [[PDF] 리튬 이온 배터리 부품 제조를 위한 계측 솔루션 - Emerson](https://www.emerson.com/documents/automation/ebook-measurement-instrumentation-for-lithium-ion-battery-component-manufacturing-ko-kr-11362096.pdf) — 작업자를 보호하기 위한 안전 시스템이 필요합니다.
+  **근거 출처:**
 
-- [ ] **안전 기록 및 증빙 확보**
+  **[조세특례제한법 시행규칙]** https://www.law.go.kr/LSW/nwRvsLsInfoR.do?lsNm=&cptOfi=&searchType=&lsKndCd=&p_spubdt=&p_epubdt=&p_spubno=&p_epubno=&pageIndex=1&chrIdx=0&sortIdx=0&lsiSeq=192615
+  이 규칙은 공포한 날부터 시행한다.
+
+- [ ] **위험물질 배출 최소화 계획 수립**
+  - 담당: 환경관리팀
+  - 마감: 2026-01-22
+
+  **근거 출처:**
+
+  **[조세특례제한법 시행규칙]** https://www.law.go.kr/LSW/nwRvsLsInfoR.do?lsNm=&cptOfi=&searchType=&lsKndCd=&p_spubdt=&p_epubdt=&p_spubno=&p_epubno=&pageIndex=1&chrIdx=0&sortIdx=0&lsiSeq=192615
+  이 규칙은 공포한 날부터 시행한다.
+
+- [ ] **화학물질 사용 모니터링 시스템 구축**
+  - 담당: IT팀
+  - 마감: 2026-01-22
+
+  **근거 출처:**
+
+  **[조세특례제한법 시행규칙]** https://www.law.go.kr/LSW/nwRvsLsInfoR.do?lsNm=&cptOfi=&searchType=&lsKndCd=&p_spubdt=&p_epubdt=&p_spubno=&p_epubno=&pageIndex=1&chrIdx=0&sortIdx=0&lsiSeq=192615
+  이 규칙은 공포한 날부터 시행한다.
+
+### 4.4 🔴 산업안전보건법
+
+- [ ] **작업장 안전 관리 계획 수립**
+  - 담당: 안전관리부
+  - 마감: 2026-01-22
+
+  **근거 출처:**
+
+  **[조세특례제한법 시행규칙]** https://www.law.go.kr/LSW/nwRvsLsInfoR.do?lsNm=&cptOfi=&searchType=&lsKndCd=&p_spubdt=&p_epubdt=&p_spubno=&p_epubno=&pageIndex=1&chrIdx=0&sortIdx=0&lsiSeq=192615
+  이 규칙은 공포한 날부터 시행한다.
+
+- [ ] **직원 안전 교육 프로그램 개발**
+  - 담당: 인사부
+  - 마감: 2026-01-22
+
+  **근거 출처:**
+
+  **[조세특례제한법 시행규칙]** https://www.law.go.kr/LSW/nwRvsLsInfoR.do?lsNm=&cptOfi=&searchType=&lsKndCd=&p_spubdt=&p_epubdt=&p_spubno=&p_epubno=&pageIndex=1&chrIdx=0&sortIdx=0&lsiSeq=192615
+  이 규칙은 공포한 날부터 시행한다.
+
+- [ ] **안전 장비 구매 및 배포**
+  - 담당: 구매부
+  - 마감: 2026-01-22
+
+  **근거 출처:**
+
+  **[조세특례제한법 시행규칙]** https://www.law.go.kr/LSW/nwRvsLsInfoR.do?lsNm=&cptOfi=&searchType=&lsKndCd=&p_spubdt=&p_epubdt=&p_spubno=&p_epubno=&pageIndex=1&chrIdx=0&sortIdx=0&lsiSeq=192615
+  이 규칙은 공포한 날부터 시행한다.
+
+- [ ] **안전 관리 기록 및 증빙 확보**
+  - 담당: 안전관리부
+  - 마감: 2026-01-22
+
+  **근거 출처:**
+
+  **[조세특례제한법 시행규칙]** https://www.law.go.kr/LSW/nwRvsLsInfoR.do?lsNm=&cptOfi=&searchType=&lsKndCd=&p_spubdt=&p_epubdt=&p_spubno=&p_epubno=&pageIndex=1&chrIdx=0&sortIdx=0&lsiSeq=192615
+  이 규칙은 공포한 날부터 시행한다.
+
+### 4.5 🟡 전기용품 및 생활용품 안전관리법
+
+- [ ] **전기용품 안전성 검사 실시**
   - 담당: 품질관리팀
-  - 마감: 2024-02-15
-  - 예상 비용: 1,000,000원
+  - 마감: 2026-04-22
 
-    • 근거: [[PDF] 리튬 이온 배터리 부품 제조를 위한 계측 솔루션 - Emerson](https://www.emerson.com/documents/automation/ebook-measurement-instrumentation-for-lithium-ion-battery-component-manufacturing-ko-kr-11362096.pdf) — 작업자를 보호하기 위한 안전 시스템이 필요합니다.
+  **근거 출처:**
+
+  **[녹색투자 현황 및 활성화 방안]** https://www.korea.kr/common/download.do?fileId=197609&tblKey=EDN
+  전기차용 배터리. 리튬이온전지.
+
+- [ ] **소비자 안전 정보 제공 계획 수립**
+  - 담당: 마케팅팀
+  - 마감: 2026-04-22
+
+  **근거 출처:**
+
+  **[녹색투자 현황 및 활성화 방안]** https://www.korea.kr/common/download.do?fileId=197609&tblKey=EDN
+  전기차용 배터리. 리튬이온전지.
+
+- [ ] **전기용품 및 생활용품 안전관리법 준수 기록 확보**
+  - 담당: 법무팀
+  - 마감: 2026-04-22
+
+  **근거 출처:**
+
+  **[녹색투자 현황 및 활성화 방안]** https://www.korea.kr/common/download.do?fileId=197609&tblKey=EDN
+  전기차용 배터리. 리튬이온전지.
 
 
 ---
 
 ## 5. 실행 계획 및 타임라인
 
-### 5.1 🔴 리튬 배터리 안전 인증
+### 5.1 🔴 사용후 배터리법
 
 **타임라인:** 3개월  
 **시작 예정:** 즉시  
 
 **주요 마일스톤:**
-- 1개월 차: 리튬 배터리 과충전 테스트 완료 (완료 목표: 2024-01-15)
-- 1개월 차: 단락 방지 테스트 계획 수립 완료 (완료 목표: 2024-01-30)
-- 2개월 차: 열 관리 시스템 검토 및 개선 완료 (완료 목표: 2024-02-15)
-- 2개월 차: 국내 및 국제 안전 표준 준수 확인 완료 (완료 목표: 2024-03-01)
-- 3개월 차: 테스트 결과 및 인증 기록 확보 완료 (완료 목표: 2024-03-15)
-
-**의존성:**
-- `2` ← `1`
-- `3` ← `1`, `2`
-- `4` ← `3`
-- `5` ← `4`
-
-**병렬 수행 가능:**
-- `1`, `2`
-- `3`, `4`
-
-**크리티컬 패스:** `1` → `2` → `3` → `4` → `5`
+- 1개월 차: 서류 준비 완료 (완료 목표: 2026-01-22)
+- 2개월 차: 교육 프로그램 운영 완료 (완료 목표: 2026-01-22)
+- 3개월 차: 관리 기록 확보 완료 (완료 목표: 2026-01-22)
 
 **근거 출처:**
-- [국가별 리튬 배터리 안전 인증 기준 - RHY Battery](https://www.rhybattery.com/ko/news/lithium-battery-safety-certification-standards-across-different-countries.html) — 리튬 배터리는 과충전, 단락 방지, 열 관리에 대한 엄격한 테스트를 포함하는 제품 안전 전기제품 및 재료(PSE) 법을 통과해야 합니다.
 
-### 5.2 🔴 CB 인증
+**[산업 공급망 내재화를 위한 - 핵심광물 재자원화 활성화 추진 ...]** https://www.korea.kr/common/download.do?fileId=198098089&tblKey=GMN
+향후 발생량 급증이 예상되는 사용후 배터리의 체계적 관리 및 활용을 위해 사용후 배터리법 및 제도·인프라 등 도입 추진.
+
+### 5.2 🔴 녹색기술 인증
 
 **타임라인:** 3개월  
 **시작 예정:** 즉시  
 
 **주요 마일스톤:**
-- 1개월 차: 서류 준비 완료 (완료 목표: 2024-01-30)
-- 2개월 차: CB 인증 신청서 제출 (완료 목표: 2024-02-05)
-- 2개월 차: 인증 진행 상황 모니터링 (완료 목표: 2024-03-01)
-- 3개월 차: 인증 증빙 확보 (완료 목표: 2024-03-10)
-
-**의존성:**
-- `2` ← `1`
-- `3` ← `1`, `2`
-- `4` ← `3`
-- `5` ← `4`
-
-**병렬 수행 가능:**
-- `1`, `2`
-- `3`, `4`
-
-**크리티컬 패스:** `1` → `2` → `3` → `4` → `5`
+- 신재생에너지 기술 수준 평가 완료 (완료 목표: 2025-12-22)
+- 기술 개발 계획 수립 완료 (완료 목표: 2026-01-22)
+- 인증 신청서 제출 준비 완료 (완료 목표: 2026-02-22)
+- 증빙 자료 및 기록 확보 완료 (완료 목표: 2026-03-22)
 
 **근거 출처:**
-- [리튬 배터리 CB 인증 및 글로벌 영향 - Large Battery](https://www.large-battery.com/ko/blog/cb-certification-for-lithium-batteries-global-market-access/) — 리튬 배터리 CB 인증은 IECEE CB 제도에 따라 국제적으로 인정받는 시스템입니다.
 
-### 5.3 🔴 공정 안전 규제
+**[https://www.law.go.kr/LSW/flDownload.do?flSeq=4934...]** https://www.law.go.kr/LSW/flDownload.do?flSeq=4934208&flNm=%5B%EB%B3%84%ED%91%9C+4%5D+%EB%85%B9%EC%83%89%EA%B8%B0%EC%88%A0+%EC%9D%B8%EC%A6%9D%EC%9D%84+%EC%9C%84%ED%95%9C+%EA%B8%B0%EC%88%A0%EC%88%98%EC%A4%80
+[별표 4] 녹색기술 인증을 위한 기술수준 01. 신재생에너지 중분류소분류핵심(요소)기술기술수준01.
+
+### 5.3 🔴 화학물질 관리법
 
 **타임라인:** 3개월  
 **시작 예정:** 즉시  
 
 **주요 마일스톤:**
-- 1개월 차: 안전 인증 계기 확보 (완료 목표: 2023-12-01)
-- 2개월 차: 고온 및 압력 모니터링 시스템 구축 완료 (완료 목표: 2024-01-15)
-- 2개월 차: 안전 교육 및 훈련 실시 (완료 목표: 2024-01-30)
-- 3개월 차: 안전 기록 및 증빙 확보 (완료 목표: 2024-02-15)
-
-**의존성:**
-- `2` ← `1`
-- `3` ← `1`, `2`
-- `4` ← `3`
-
-**병렬 수행 가능:**
-- `1`
-- `2`, `3`
-
-**크리티컬 패스:** `1` → `2` → `3` → `4`
+- 1개월 차: 화학물질 안전 관리 방안 수립 완료 (완료 목표: 2026-01-22)
+- 2주 차: 위험물질 배출 최소화 계획 수립 완료 (완료 목표: 2026-01-22)
+- 1개월 차: 화학물질 사용 모니터링 시스템 구축 완료 (완료 목표: 2026-01-22)
 
 **근거 출처:**
-- [[PDF] 리튬 이온 배터리 부품 제조를 위한 계측 솔루션 - Emerson](https://www.emerson.com/documents/automation/ebook-measurement-instrumentation-for-lithium-ion-battery-component-manufacturing-ko-kr-11362096.pdf) — 안전 시스템이 필요합니다.
+
+**[조세특례제한법 시행규칙]** https://www.law.go.kr/LSW/nwRvsLsInfoR.do?lsNm=&cptOfi=&searchType=&lsKndCd=&p_spubdt=&p_epubdt=&p_spubno=&p_epubno=&pageIndex=1&chrIdx=0&sortIdx=0&lsiSeq=192615
+이 규칙은 공포한 날부터 시행한다.
+
+### 5.4 🔴 산업안전보건법
+
+**타임라인:** 3개월  
+**시작 예정:** 즉시  
+
+**주요 마일스톤:**
+- 1개월 차: 서류 준비 완료 (완료 목표: 2026-01-22)
+- 2개월 차: 안전 장비 구매 완료 (완료 목표: 2026-01-22)
+- 3개월 차: 안전 관리 기록 확보 (완료 목표: 2026-01-22)
+
+**근거 출처:**
+
+**[조세특례제한법 시행규칙]** https://www.law.go.kr/LSW/nwRvsLsInfoR.do?lsNm=&cptOfi=&searchType=&lsKndCd=&p_spubdt=&p_epubdt=&p_spubno=&p_epubno=&pageIndex=1&chrIdx=0&sortIdx=0&lsiSeq=192615
+이 규칙은 공포한 날부터 시행한다.
+
+### 5.5 🟡 전기용품 및 생활용품 안전관리법
+
+**타임라인:** 3개월  
+**시작 예정:** 즉시  
+
+**주요 마일스톤:**
+- 1개월 차: 서류 준비 완료 (완료 목표: 2026-01-22)
+- 2개월 차: 안전성 검사 완료 (완료 목표: 2026-02-22)
+- 3개월 차: 소비자 안전 정보 제공 계획 완료 (완료 목표: 2026-03-22)
+- 3개월 차: 준수 기록 확보 완료 (완료 목표: 2026-04-22)
+
+**근거 출처:**
+
+**[녹색투자 현황 및 활성화 방안]** https://www.korea.kr/common/download.do?fileId=197609&tblKey=EDN
+전기차용 배터리. 리튬이온전지.
 
 
 ---
@@ -304,49 +390,70 @@
 
 ### 6.2 고위험 규제 (상위 5개)
 
-#### 리튬 배터리 안전 인증
+#### 사용후 배터리법
+
+**리스크 점수:** 8.0/10
+
+**처벌 유형:** 과태료
+
+**사업 영향:** 인허가 취소
+
+**근거 출처:**
+
+**[산업 공급망 내재화를 위한 - 핵심광물 재자원화 활성화 추진 ...]** https://www.korea.kr/common/download.do?fileId=198098089&tblKey=GMN
+향후 발생량 급증이 예상되는 사용후 배터리의 체계적 관리 및 활용을 위해 사용후 배터리법 및 제도·인프라 등 도입 추진.
+
+#### 녹색기술 인증
 
 **리스크 점수:** 9.0/10
 
 **처벌 유형:** 과태료
 
-**사업 영향:** 영업정지 6개월
+**사업 영향:** 인허가 취소
 
 **근거 출처:**
-- [국가별 리튬 배터리 안전 인증 기준 - RHY Battery](https://www.rhybattery.com/ko/news/lithium-battery-safety-certification-standards-across-different-countries.html) — 리튬 배터리는 과충전, 단락 방지, 열 관리에 대한 엄격한 테스트를 포함하는 제품 안전 전기제품 및 재료(PSE) 법을 통과해야 합니다.
 
-#### CB 인증
+**[https://www.law.go.kr/LSW/flDownload.do?flSeq=4934...]** https://www.law.go.kr/LSW/flDownload.do?flSeq=4934208&flNm=%5B%EB%B3%84%ED%91%9C+4%5D+%EB%85%B9%EC%83%89%EA%B8%B0%EC%88%A0+%EC%9D%B8%EC%A6%9D%EC%9D%84+%EC%9C%84%ED%95%9C+%EA%B8%B0%EC%88%A0%EC%88%98%EC%A4%80
+녹색기술 인증을 받지 않을 경우 인허가 취소 등의 중대한 처벌이 있을 수 있습니다.
+
+#### 화학물질 관리법
 
 **리스크 점수:** 8.0/10
 
-**처벌 유형:** 과태료
+**처벌 유형:** 형사처벌
 
-**사업 영향:** 없으면 ""
+**사업 영향:** 인허가 취소
 
 **근거 출처:**
-- [리튬 배터리 CB 인증 및 글로벌 영향 - Large Battery](https://www.large-battery.com/ko/blog/cb-certification-for-lithium-batteries-global-market-access/) — 리튬 배터리 CB 인증은 IECEE CB 제도에 따라 국제적으로 인정받는 시스템입니다.
 
-#### 공정 안전 규제
+**[조세특례제한법 시행규칙]** https://www.law.go.kr/LSW/nwRvsLsInfoR.do?lsNm=&cptOfi=&searchType=&lsKndCd=&p_spubdt=&p_epubdt=&p_spubno=&p_epubno=&pageIndex=1&chrIdx=0&sortIdx=0&lsiSeq=192615
+이 규칙은 공포한 날부터 시행한다.
+
+#### 산업안전보건법
 
 **리스크 점수:** 8.0/10
 
-**처벌 유형:** 과태료
+**처벌 유형:** 형사처벌
 
 **사업 영향:** 영업정지 6개월
 
 **근거 출처:**
-- [[PDF] 리튬 이온 배터리 부품 제조를 위한 계측 솔루션 - Emerson](https://www.emerson.com/documents/automation/ebook-measurement-instrumentation-for-lithium-ion-battery-component-manufacturing-ko-kr-11362096.pdf) — 많은 배치 공정에는 장비를 손상시키고 작업자를 위협할 수 있는 고온과 압력으로부터 작업자를 보호하기 위한 안전 시스템이 필요합니다.
 
-#### 습도 관리 규제
+**[조세특례제한법 시행규칙]** https://www.law.go.kr/LSW/nwRvsLsInfoR.do?lsNm=&cptOfi=&searchType=&lsKndCd=&p_spubdt=&p_epubdt=&p_spubno=&p_epubno=&pageIndex=1&chrIdx=0&sortIdx=0&lsiSeq=192615
+이 규칙은 공포한 날부터 시행한다.
+
+#### 전기용품 및 생활용품 안전관리법
 
 **리스크 점수:** 7.0/10
 
 **처벌 유형:** 과태료
 
-**사업 영향:** 없으면
+**사업 영향:** 영업정지 6개월
 
 **근거 출처:**
-- [리튬 배터리 제조 공정에서 수분의 영향](https://ko.tobmachine.com/the-influence-of-moisture-in-the-lithium-battery-manufacturing-process_n726) — 생산 작업장의 습도를 엄격하게 관리합니다.
+
+**[녹색투자 현황 및 활성화 방안]** https://www.korea.kr/common/download.do?fileId=197609&tblKey=EDN
+리튬이온전지는 전기용품으로 안전 기준을 충족해야 한다.
 
 
 ---
@@ -354,25 +461,25 @@
 ## 7. 경영진 요약
 
 ### 핵심 인사이트
-- 총 4개의 규제가 있으며, 이 중 3개는 HIGH 리스크로 분류되었습니다.
-- 전체 리스크 점수는 8.0/10으로, 상당히 높은 수준입니다.
-- 모든 고위험 규제는 4개로, 즉각적인 대응이 필요합니다.
+- 총 5개의 규제가 존재하며, 이 중 4개가 HIGH 리스크로 분류되었습니다.
+- 리스크 점수는 8.0/10으로, 규제 리스크가 매우 높은 상황입니다.
+- 모든 고위험 규제가 5개로, 즉각적인 대응이 필요합니다.
 
 ### 의사결정 포인트
-- [ ] 고위험 규제에 대한 우선 대응 방안 마련
-- [ ] 리스크 관리 체계 강화 방안 검토
-- [ ] 규제 준수 모니터링 시스템 구축 계획 수립
+- [ ] 고위험 규제에 대한 즉각적인 리스크 관리 방안 마련
+- [ ] 규제 준수 교육 프로그램 개발 및 실행
+- [ ] 리스크 점수 감소를 위한 장기 전략 수립
 
 ### 권장 조치 (우선순위 순)
-1. **즉시:** 고위험 규제에 대한 리스크 평가 및 대응 전략 수립
-2. **1개월 내:** 리스크 관리 체계 개선을 위한 내부 감사 실시
-3. **3개월 내:** 규제 준수 모니터링 시스템 구축 및 운영 계획 수립
+1. **즉시:** 고위험 규제에 대한 상세 분석 및 대응 계획 수립
+2. **1개월 내:** 전사적 규제 준수 교육 실시
+3. **3개월 내:** 규제 리스크 모니터링 시스템 구축 및 운영 시작
 
 ---
 
 ## 8. 다음 단계
 
-- **1단계 (즉시):** HIGH 우선순위 3개 규제 착수
+- **1단계 (즉시):** HIGH 우선순위 4개 규제 착수
 - **2단계 (1주일 내):** 담당 부서 및 책임자 지정
 - **3단계 (2주일 내):** 상세 실행 일정 확정 및 예산 승인
 - **4단계 (1개월):** 월 단위 진행 상황 모니터링 체계 구축
@@ -382,10 +489,17 @@
 
 ## 9. 근거 출처 모음
 
-1. [국가별 리튬 배터리 안전 인증 기준 - RHY Battery](https://www.rhybattery.com/ko/news/lithium-battery-safety-certification-standards-across-different-countries.html) — 리튬 배터리는 과충전, 단락 방지, 열 관리에 대한 엄격한 테스트를 포함하는 제품 안전 전기제품 및 재료(PSE) 법을 통과해야 합니다.
-2. [리튬 배터리 CB 인증 및 글로벌 영향 - Large Battery](https://www.large-battery.com/ko/blog/cb-certification-for-lithium-batteries-global-market-access/) — 리튬 배터리 CB 인증은 IECEE CB 제도에 따라 국제적으로 인정받는 시스템입니다.
-3. [[PDF] 리튬 이온 배터리 부품 제조를 위한 계측 솔루션 - Emerson](https://www.emerson.com/documents/automation/ebook-measurement-instrumentation-for-lithium-ion-battery-component-manufacturing-ko-kr-11362096.pdf) — 많은 배치 공정에는 장비를 손상시키고 작업자를 위협할 수 있는 고온과 압력으로부터 작업자를 보호하기 위한 안전 시스템이 필요합니다.
-4. [리튬 배터리 제조 공정에서 수분의 영향](https://ko.tobmachine.com/the-influence-of-moisture-in-the-lithium-battery-manufacturing-process_n726) — 생산 작업장의 습도를 엄격하게 관리합니다.
+1. **[산업 공급망 내재화를 위한 - 핵심광물 재자원화 활성화 추진 ...]** https://www.korea.kr/common/download.do?fileId=198098089&tblKey=GMN
+향후 발생량 급증이 예상되는 사용후 배터리의 체계적 관리 및 활용을 위해 사용후 배터리법 및 제도·인프라 등 도입 추진.
+
+2. **[https://www.law.go.kr/LSW/flDownload.do?flSeq=4934...]** https://www.law.go.kr/LSW/flDownload.do?flSeq=4934208&flNm=%5B%EB%B3%84%ED%91%9C+4%5D+%EB%85%B9%EC%83%89%EA%B8%B0%EC%88%A0+%EC%9D%B8%EC%A6%9D%EC%9D%84+%EC%9C%84%ED%95%9C+%EA%B8%B0%EC%88%A0%EC%88%98%EC%A4%80
+[별표 4] 녹색기술 인증을 위한 기술수준 01. 신재생에너지 중분류소분류핵심(요소)기술기술수준01.
+
+3. **[조세특례제한법 시행규칙]** https://www.law.go.kr/LSW/nwRvsLsInfoR.do?lsNm=&cptOfi=&searchType=&lsKndCd=&p_spubdt=&p_epubdt=&p_spubno=&p_epubno=&pageIndex=1&chrIdx=0&sortIdx=0&lsiSeq=192615
+이 규칙은 공포한 날부터 시행한다.
+
+4. **[녹색투자 현황 및 활성화 방안]** https://www.korea.kr/common/download.do?fileId=197609&tblKey=EDN
+전기차용 배터리. 리튬이온전지.
 
 ---
 

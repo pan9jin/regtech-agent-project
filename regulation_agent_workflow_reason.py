@@ -830,8 +830,6 @@ def generate_checklists(regulations: List[Regulation]) -> Dict[str, Any]:
     current_date = datetime.now().strftime("%Y-%m-%d")
 
     for reg in regulations:
-        print(f"   {reg['name']} - 체크리스트 생성 중...")
-
         source_summary = "\n".join([
             f"{src.get('source_id','-')} | {src.get('title','제목 없음')}\nURL: {src.get('url','')}\n발췌: {src.get('snippet','')}"
             for src in reg.get('sources', [])
@@ -848,7 +846,7 @@ def generate_checklists(regulations: List[Regulation]) -> Dict[str, Any]:
 우선순위: {reg['priority']}
 적용 이유: {reg['why_applicable']}
 주요 요구사항:
-{chr(10).join(f'- {req}' for req in reg['key_requirements'])}
+{chr(10).join('  - ' + req for req in reg['key_requirements'])}
 
 [사용 가능한 출처]
 {source_summary}
@@ -986,8 +984,6 @@ def plan_execution(
 
         if not reg_checklists:
             continue
-
-        print(f"   {reg_name} - 실행 계획 생성 중...")
 
         task_ids = [str(i + 1) for i in range(len(reg_checklists))]
 
@@ -1155,8 +1151,6 @@ def assess_risks(
     risk_items = []
 
     for reg in regulations:
-        print(f"   {reg['name']} - 리스크 분석 중...")
-
         source_summary = "\n".join([
             f"{src.get('source_id','-')} | {src.get('title','제목 없음')}\nURL: {src.get('url','')}\n발췌: {src.get('snippet','')}"
             for src in reg.get('sources', [])
@@ -1409,23 +1403,33 @@ def generate_final_report(
 **적용 이유:** {reg['why_applicable']}
 
 **주요 요구사항:**
-{chr(10).join(f'- {req}' for req in reg.get('key_requirements', []))}
 
 """
+            # 주요 요구사항을 list 형식으로 출력 (각 항목 사이에 빈 줄 추가)
+            key_reqs = reg.get('key_requirements', [])
+            for idx, req in enumerate(key_reqs):
+                full_markdown += f"- {req}"
+                # 마지막 항목이 아니면 줄바꿈 추가
+                if idx < len(key_reqs) - 1:
+                    full_markdown += "\n\n"
+                else:
+                    full_markdown += "\n"
+            full_markdown += "\n"
             if reg.get('penalty'):
                 full_markdown += f"**벌칙:** {reg['penalty']}\n\n"
 
             if reg.get('sources'):
                 full_markdown += "**근거 출처:**\n\n"
                 for idx, src in enumerate(reg['sources']):
-                    link_title = src.get('title') or src.get('url', '')
+                    link_title = src.get('title') or src.get('url', '').split('/')[2]
                     url = src.get('url', '')
                     # justification 우선 사용 (LLM 요약), 없으면 snippet 사용
                     summary = src.get('justification') or (src.get('snippet') or "").replace('\n', ' ')
+                    full_markdown += "  - "
                     if url:
-                        full_markdown += f"**[{link_title}]** {url}\n{summary}"
+                        full_markdown += f"**[<a href=\"{url}\">{link_title}</a>]**\t{summary}"
                     else:
-                        full_markdown += f"**[{link_title}]**\n{summary}"
+                        full_markdown += f"**[{link_title}]**\t{summary}"
                     # 마지막 항목이 아니면 줄바꿈 추가
                     if idx < len(reg['sources']) - 1:
                         full_markdown += "\n\n"
@@ -1450,15 +1454,15 @@ def generate_final_report(
                 if item.get('evidence'):
                     full_markdown += "  **근거 출처:**\n\n"
                     for idx, ev in enumerate(item['evidence']):
-                        link_title = ev.get('title') or ev.get('url', '')
+                        link_title = ev.get('title') or ev.get('url', '').split('/')[2]
                         url = ev.get('url', '')
                         # justification 우선 사용 (LLM 요약), 없으면 snippet 사용
                         summary = ev.get('justification') or (ev.get('snippet') or "").replace('\n', ' ')
-                        full_markdown += f"  "
+                        full_markdown += "  - "
                         if url:
-                            full_markdown += f"**[{link_title}]** {url}\n  {summary}"
+                            full_markdown += f"**[<a href=\"{url}\">{link_title}</a>]**\t{summary}"
                         else:
-                            full_markdown += f"**[{link_title}]**\n  {summary}"
+                            full_markdown += f"**[{link_title}]**\t{summary}"
                         # 마지막 항목이 아니면 줄바꿈 추가
                         if idx < len(item['evidence']) - 1:
                             full_markdown += "\n\n  "
@@ -1480,22 +1484,29 @@ def generate_final_report(
 
         # 마일스톤
         if plan.get('milestones'):
-            full_markdown += "**주요 마일스톤:**\n"
-            for milestone in plan['milestones']:
-                full_markdown += f"- {milestone['name']} (완료 목표: {milestone['deadline']})\n"
+            full_markdown += "**주요 마일스톤:**\n\n"
+            milestones = plan['milestones']
+            for idx, milestone in enumerate(milestones):
+                full_markdown += f"- {milestone['name']} (완료 목표: {milestone['deadline']})"
+                # 마지막 항목이 아니면 줄바꿈 추가
+                if idx < len(milestones) - 1:
+                    full_markdown += "\n\n"
+                else:
+                    full_markdown += "\n"
             full_markdown += "\n"
 
         if plan.get('evidence'):
             full_markdown += "**근거 출처:**\n\n"
             for idx, ev in enumerate(plan['evidence']):
-                link_title = ev.get('title') or ev.get('url', '')
+                link_title = ev.get('title') or ev.get('url', '').split('/')[2]
                 url = ev.get('url', '')
                 # justification 우선 사용 (LLM 요약), 없으면 snippet 사용
                 summary = ev.get('justification') or (ev.get('snippet') or "").replace('\n', ' ')
+                full_markdown += "  - "
                 if url:
-                    full_markdown += f"**[{link_title}]** {url}\n{summary}"
+                    full_markdown += f"**[<a href=\"{url}\">{link_title}</a>]**\t{summary}"
                 else:
-                    full_markdown += f"**[{link_title}]**\n{summary}"
+                    full_markdown += f"**[{link_title}]**\t{summary}"
                 # 마지막 항목이 아니면 줄바꿈 추가
                 if idx < len(plan['evidence']) - 1:
                     full_markdown += "\n\n"
@@ -1525,14 +1536,15 @@ def generate_final_report(
             if item.get('evidence'):
                 full_markdown += "**근거 출처:**\n\n"
                 for idx, ev in enumerate(item['evidence']):
-                    link_title = ev.get('title') or ev.get('url', '')
+                    link_title = ev.get('title') or ev.get('url', '').split('/')[2]
                     url = ev.get('url', '')
                     # justification 우선 사용 (LLM 요약), 없으면 snippet 사용
                     summary = ev.get('justification') or (ev.get('snippet') or "").replace('\n', ' ')
+                    full_markdown += "  - "
                     if url:
-                        full_markdown += f"**[{link_title}]** {url}\n{summary}"
+                        full_markdown += f"**[<a href=\"{url}\">{link_title}</a>]**\t{summary}"
                     else:
-                        full_markdown += f"**[{link_title}]**\n{summary}"
+                        full_markdown += f"**[{link_title}]**\t{summary}"
                     # 마지막 항목이 아니면 줄바꿈 추가
                     if idx < len(item['evidence']) - 1:
                         full_markdown += "\n\n"
@@ -1594,14 +1606,15 @@ def generate_final_report(
     if all_citations:
         full_markdown += "\n---\n\n## 9. 근거 출처 모음\n\n"
         for idx, citation in enumerate(all_citations, 1):
-            link_title = citation.get('title') or citation.get('url', '')
+            link_title = citation.get('title') or citation.get('url', '').split('/')[2]
             url = citation.get('url', '')
             # justification 우선 사용 (LLM 요약), 없으면 snippet 사용
             summary = citation.get('justification') or (citation.get('snippet') or "").replace('\n', ' ')
+            full_markdown += "  - "
             if url:
-                full_markdown += f"{idx}. **[{link_title}]** {url}\n{summary}"
+                full_markdown += f"**[<a href=\"{url}\">{link_title}</a>]**\t{summary}"
             else:
-                full_markdown += f"{idx}. **[{link_title}]**\n{summary}"
+                full_markdown += f"**[{link_title}]**\t{summary}"
             # 마지막 항목이 아니면 줄바꿈 추가
             if idx < len(all_citations):
                 full_markdown += "\n\n"

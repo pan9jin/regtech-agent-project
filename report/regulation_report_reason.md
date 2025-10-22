@@ -20,362 +20,233 @@
 ## 2. 분석 요약
 
 ### 2.1 규제 현황
-- **총 규제 개수**: 5개
+- **총 규제 개수**: 3개
 - **우선순위 분포**:
-  - 🔴 HIGH: 4개 (즉시 조치 필요)
+  - 🔴 HIGH: 2개 (즉시 조치 필요)
   - 🟡 MEDIUM: 1개 (1-3개월 내 조치)
   - 🟢 LOW: 0개 (6개월 내 조치)
 - **카테고리 분포**:
-  - 안전/환경: 3개
-  - 제품 인증: 2개
+  - 안전/환경: 2개
+  - 제품 인증: 1개
 
 ### 2.2 리스크 평가
 - **전체 리스크 점수**: 8.0/10
-- **고위험 규제**: 5개
-- **즉시 조치 필요**: 4개
+- **고위험 규제**: 3개
+- **즉시 조치 필요**: 2개
 
 ---
 
 ## 3. 규제 목록 및 분류
 
-### 3.1 안전/환경
+### 3.1 제품 인증
 
-#### 3.1.1 🔴 사용후 배터리법
-
-**우선순위:** HIGH
-**관할 기관:** 환경부
-**적용 이유:** 리튬이온 배터리 제조 과정에서 발생하는 사용후 배터리의 관리 및 재활용을 위한 법적 요구사항이 적용됩니다.
-
-**주요 요구사항:**
-- 사용후 배터리의 체계적 관리 및 활용을 위한 인프라 구축
-- 사용후 배터리의 재자원화 촉진
-
-**근거 출처:**
-
-**[산업 공급망 내재화를 위한 - 핵심광물 재자원화 활성화 추진 ...]** https://www.korea.kr/common/download.do?fileId=198098089&tblKey=GMN
-향후 발생량 급증이 예상되는 사용후 배터리의 체계적 관리 및 활용을 위해 사용후 배터리법 및 제도·인프라 등 도입 추진.
-
-#### 3.1.2 🔴 화학물질 관리법
-
-**우선순위:** HIGH
-**관할 기관:** 환경부
-**적용 이유:** 리튬, 코발트, 니켈 등 화학물질을 사용하는 배터리 제조 과정에서 해당 법의 적용을 받습니다.
-
-**주요 요구사항:**
-- 화학물질의 안전한 사용 및 관리
-- 위험물질의 배출 최소화
-
-**근거 출처:**
-
-**[조세특례제한법 시행규칙]** https://www.law.go.kr/LSW/nwRvsLsInfoR.do?lsNm=&cptOfi=&searchType=&lsKndCd=&p_spubdt=&p_epubdt=&p_spubno=&p_epubno=&pageIndex=1&chrIdx=0&sortIdx=0&lsiSeq=192615
-이 규칙은 공포한 날부터 시행한다.
-
-#### 3.1.3 🔴 산업안전보건법
-
-**우선순위:** HIGH
-**관할 기관:** 고용노동부
-**적용 이유:** 배터리 제조 공정에서 직원의 안전과 건강을 보호하기 위한 법적 요구사항이 적용됩니다.
-
-**주요 요구사항:**
-- 작업장 안전 및 건강 관리 계획 수립
-- 직원 교육 및 안전 장비 제공
-
-**근거 출처:**
-
-**[조세특례제한법 시행규칙]** https://www.law.go.kr/LSW/nwRvsLsInfoR.do?lsNm=&cptOfi=&searchType=&lsKndCd=&p_spubdt=&p_epubdt=&p_spubno=&p_epubno=&pageIndex=1&chrIdx=0&sortIdx=0&lsiSeq=192615
-이 규칙은 공포한 날부터 시행한다.
-
-
-### 3.2 제품 인증
-
-#### 3.2.1 🔴 녹색기술 인증
-
-**우선순위:** HIGH
-**관할 기관:** 산업통상자원부
-**적용 이유:** 리튬이온 배터리 제조에 필요한 기술이 녹색기술 인증을 받을 수 있는 범위에 포함됩니다.
-
-**주요 요구사항:**
-- 신재생에너지 관련 기술 수준 평가
-- 녹색기술 인증을 위한 기술수준 기준 충족
-
-**근거 출처:**
-
-**[https://www.law.go.kr/LSW/flDownload.do?flSeq=4934...]** https://www.law.go.kr/LSW/flDownload.do?flSeq=4934208&flNm=%5B%EB%B3%84%ED%91%9C+4%5D+%EB%85%B9%EC%83%89%EA%B8%B0%EC%88%A0+%EC%9D%B8%EC%A6%9D%EC%9D%84+%EC%9C%84%ED%95%9C+%EA%B8%B0%EC%88%A0%EC%88%98%EC%A4%80
-[별표 4] 녹색기술 인증을 위한 기술수준 01. 신재생에너지 중분류소분류핵심(요소)기술기술수준01.
-
-#### 3.2.2 🟡 전기용품 및 생활용품 안전관리법
+#### 3.1.1 🟡 고효율 인증기자재 규정
 
 **우선순위:** MEDIUM
 **관할 기관:** 산업통상자원부
-**적용 이유:** 리튬이온 배터리가 전기용품으로 분류되어 안전 기준을 충족해야 합니다.
+**적용 이유:** 리튬이온 배터리 제조에 있어 고효율 인증이 필요할 수 있음.
 
 **주요 요구사항:**
-- 전기용품의 안전성 검사 및 인증
-- 소비자 안전을 위한 정보 제공
+
+- 에너지이용 합리화법에 따라 고효율 인증을 받아야 함.
+
+- 산업통상자원부장관이 인증한 기자재를 사용해야 함.
 
 **근거 출처:**
 
-**[녹색투자 현황 및 활성화 방안]** https://www.korea.kr/common/download.do?fileId=197609&tblKey=EDN
-전기차용 배터리. 리튬이온전지.
+  - **[<a href="https://www.law.go.kr/LSW/nwRvsLsInfoR.do?lsNm=&cptOfi=&searchType=&lsKndCd=&p_spubdt=&p_epubdt=&p_spubno=&p_epubno=&pageIndex=1&chrIdx=0&sortIdx=0&lsiSeq=192615">조세특례제한법 시행규칙</a>]**	전지 등의 리튬이온 이차전지로 주로 전기자동차 또는 ...
+
+
+### 3.2 안전/환경
+
+#### 3.2.1 🔴 리튬전지 저장 및 취급 관리 규정
+
+**우선순위:** HIGH
+**관할 기관:** 산업통상자원부
+**적용 이유:** 리튬이온 배터리를 제조하는 사업체로서 화재 위험성을 고려해야 함.
+
+**주요 요구사항:**
+
+- 리튬전지 제품은 '특수가연물'로 지정되어 저장 및 취급 시 안전 관리 기준을 준수해야 함.
+
+- 내화구조 및 방연재료 사용 등 관리기준을 마련해야 함.
+
+**근거 출처:**
+
+  - **[<a href="https://www.korea.kr/news/policyNewsView.do?newsId=148933752">Korea 리튬전지 등 ‘특수가연물’로 지정…저장·취급 및 관리 강화 - 정책뉴스 | 뉴스 | 대한민국 정책브리핑</a>]**	정부가 화재 위험성이 높은 리튬 전지 제품의 저장·취급 및 관리를 강화하고자 리튬전지 등을 ‘특수가연물’로 지정한다.
+
+#### 3.2.2 🔴 유해물질 제조 및 사용 규정
+
+**우선순위:** HIGH
+**관할 기관:** 환경부
+**적용 이유:** 리튬, 코발트, 니켈 등 원자재가 유해물질로 분류될 수 있어 관련 규정을 준수해야 함.
+
+**주요 요구사항:**
+
+- 허가대상 유해물질을 제조하거나 사용하는 장소는 다른 작업장소와 격리해야 함.
+
+- 작업장소의 바닥과 벽은 불침투성의 재료로 하여 물청소가 가능해야 함.
+
+**근거 출처:**
+
+  - **[<a href="https://www.law.go.kr/LSW/lumLsLinkPop.do?lspttninfSeq=154679&chrClsCd=010202">Supreme Court of Korea 연계정보</a>]**	사업주는 허가대상 유해물질을 제조하거나 사용하는 경우에 다음 각 호의 사항을 준수하여야 한다.
 
 
 ---
 
 ## 4. 실행 체크리스트
 
-### 4.1 🔴 사용후 배터리법
+### 4.1 🔴 리튬전지 저장 및 취급 관리 규정
 
-- [ ] **사용후 배터리 관리 시스템 구축**
-  - 담당: 환경부
-  - 마감: 2026-01-22
-
-  **근거 출처:**
-
-  **[산업 공급망 내재화를 위한 - 핵심광물 재자원화 활성화 추진 ...]** https://www.korea.kr/common/download.do?fileId=198098089&tblKey=GMN
-  사용후 배터리의 체계적 관리 및 활용을 위해 사용후 배터리법 및 제도·인프라 등 도입 추진.
-
-- [ ] **재자원화 프로그램 개발**
-  - 담당: 환경부
-  - 마감: 2026-01-22
-
-  **근거 출처:**
-
-  **[산업 공급망 내재화를 위한 - 핵심광물 재자원화 활성화 추진 ...]** https://www.korea.kr/common/download.do?fileId=198098089&tblKey=GMN
-  향후 발생량 급증이 예상되는 사용후 배터리의 재자원화 촉진을 위한 방안 필요.
-
-- [ ] **사용후 배터리 관련 교육 프로그램 운영**
-  - 담당: 환경부
-  - 마감: 2026-01-22
-
-  **근거 출처:**
-
-  **[산업 공급망 내재화를 위한 - 핵심광물 재자원화 활성화 추진 ...]** https://www.korea.kr/common/download.do?fileId=198098089&tblKey=GMN
-  사용후 배터리의 관리 및 재활용을 위한 법적 요구사항에 대한 교육 필요성.
-
-- [ ] **사용후 배터리 관리 기록 확보**
-  - 담당: 환경부
-  - 마감: 2026-01-22
-
-  **근거 출처:**
-
-  **[산업 공급망 내재화를 위한 - 핵심광물 재자원화 활성화 추진 ...]** https://www.korea.kr/common/download.do?fileId=198098089&tblKey=GMN
-  사용후 배터리의 체계적 관리 및 활용을 위한 데이터 기록 필요.
-
-### 4.2 🔴 녹색기술 인증
-
-- [ ] **신재생에너지 기술 수준 평가 실시**
-  - 담당: 기술개발부
-  - 마감: 2025-12-22
-
-  **근거 출처:**
-
-  **[https://www.law.go.kr/LSW/flDownload.do?flSeq=4934...]** https://www.law.go.kr/LSW/flDownload.do?flSeq=4934208&flNm=%5B%EB%B3%84%ED%91%9C+4%5D+%EB%85%B9%EC%83%89%EA%B8%B0%EC%88%A0+%EC%9D%B8%EC%A6%9D%EC%9D%84+%EC%9C%84%ED%95%9C+%EA%B8%B0%EC%88%A0%EC%88%98%EC%A4%80
-  신재생에너지 관련 기술 수준 평가 지표는 [별표 4] 녹색기술 인증을 위한 기술수준에 명시되어 있습니다.
-
-- [ ] **녹색기술 인증 기준 충족을 위한 기술 개발 계획 수립**
-  - 담당: 연구개발부
-  - 마감: 2026-01-22
-
-  **근거 출처:**
-
-  **[https://www.law.go.kr/LSW/flDownload.do?flSeq=4934...]** https://www.law.go.kr/LSW/flDownload.do?flSeq=4934208&flNm=%5B%EB%B3%84%ED%91%9C+4%5D+%EB%85%B9%EC%83%89%EA%B8%B0%EC%88%A0+%EC%9D%B8%EC%A6%9D%EC%9D%84+%EC%9C%84%ED%95%9C+%EA%B8%B0%EC%88%A0%EC%88%98%EC%A4%80
-  녹색기술 인증을 위한 기술수준 기준 충족을 위한 계획 수립이 필요합니다.
-
-- [ ] **녹색기술 인증 신청서 제출 준비**
-  - 담당: 품질관리부
-  - 마감: 2026-02-22
-
-  **근거 출처:**
-
-  **[https://www.law.go.kr/LSW/flDownload.do?flSeq=4934...]** https://www.law.go.kr/LSW/flDownload.do?flSeq=4934208&flNm=%5B%EB%B3%84%ED%91%9C+4%5D+%EB%85%B9%EC%83%89%EA%B8%B0%EC%88%A0+%EC%9D%B8%EC%A6%9D%EC%9D%84+%EC%9C%84%ED%95%9C+%EA%B8%B0%EC%88%A0%EC%88%98%EC%A4%80
-  녹색기술 인증을 위한 신청서 제출 절차는 관련 문서에 명시되어 있습니다.
-
-- [ ] **증빙 자료 및 기록 확보**
-  - 담당: 문서관리부
-  - 마감: 2026-03-22
-
-  **근거 출처:**
-
-  **[https://www.law.go.kr/LSW/flDownload.do?flSeq=4934...]** https://www.law.go.kr/LSW/flDownload.do?flSeq=4934208&flNm=%5B%EB%B3%84%ED%91%9C+4%5D+%EB%85%B9%EC%83%89%EA%B8%B0%EC%88%A0+%EC%9D%B8%EC%A6%9D%EC%9D%84+%EC%9C%84%ED%95%9C+%EA%B8%B0%EC%88%A0%EC%88%98%EC%A4%80
-  모든 관련 문서 및 기록은 향후 감사 및 검토를 위해 필수적입니다.
-
-### 4.3 🔴 화학물질 관리법
-
-- [ ] **화학물질 안전 관리 방안 수립**
+- [ ] **리튬전지 제품의 안전 관리 기준 수립**
   - 담당: 안전관리팀
   - 마감: 2026-01-22
 
   **근거 출처:**
 
-  **[조세특례제한법 시행규칙]** https://www.law.go.kr/LSW/nwRvsLsInfoR.do?lsNm=&cptOfi=&searchType=&lsKndCd=&p_spubdt=&p_epubdt=&p_spubno=&p_epubno=&pageIndex=1&chrIdx=0&sortIdx=0&lsiSeq=192615
-  이 규칙은 공포한 날부터 시행한다.
+  - **[<a href="https://www.korea.kr/news/policyNewsView.do?newsId=148933752">Korea 리튬전지 등 ‘특수가연물’로 지정…저장·취급 및 관리 강화 - 정책뉴스 | 뉴스 | 대한민국 정책브리핑</a>]**	정부가 화재 위험성이 높은 리튬 전지 제품의 저장·취급 및 관리를 강화하고자 리튬전지 등을 ‘특수가연물’로 지정한다.
 
-- [ ] **위험물질 배출 최소화 계획 수립**
-  - 담당: 환경관리팀
+- [ ] **내화구조 및 방연재료 사용 계획 수립**
+  - 담당: 시설관리팀
   - 마감: 2026-01-22
 
   **근거 출처:**
 
-  **[조세특례제한법 시행규칙]** https://www.law.go.kr/LSW/nwRvsLsInfoR.do?lsNm=&cptOfi=&searchType=&lsKndCd=&p_spubdt=&p_epubdt=&p_spubno=&p_epubno=&pageIndex=1&chrIdx=0&sortIdx=0&lsiSeq=192615
-  이 규칙은 공포한 날부터 시행한다.
+  - **[<a href="https://www.korea.kr/news/policyNewsView.do?newsId=148933752">Korea 리튬전지 등 ‘특수가연물’로 지정…저장·취급 및 관리 강화 - 정책뉴스 | 뉴스 | 대한민국 정책브리핑</a>]**	리튬전지 등을 ‘특수가연물’로 지정하여 저장·취급 및 관리를 강화하고자 한다.
 
-- [ ] **화학물질 사용 모니터링 시스템 구축**
-  - 담당: IT팀
+- [ ] **직원 교육 및 훈련 프로그램 개발**
+  - 담당: 인사팀
   - 마감: 2026-01-22
 
   **근거 출처:**
 
-  **[조세특례제한법 시행규칙]** https://www.law.go.kr/LSW/nwRvsLsInfoR.do?lsNm=&cptOfi=&searchType=&lsKndCd=&p_spubdt=&p_epubdt=&p_spubno=&p_epubno=&pageIndex=1&chrIdx=0&sortIdx=0&lsiSeq=192615
-  이 규칙은 공포한 날부터 시행한다.
+  - **[<a href="https://www.korea.kr/news/policyNewsView.do?newsId=148933752">Korea 리튬전지 등 ‘특수가연물’로 지정…저장·취급 및 관리 강화 - 정책뉴스 | 뉴스 | 대한민국 정책브리핑</a>]**	리튬 전지 제품의 저장·취급 및 관리를 강화하고자 한다.
 
-### 4.4 🔴 산업안전보건법
-
-- [ ] **작업장 안전 관리 계획 수립**
-  - 담당: 안전관리부
-  - 마감: 2026-01-22
-
-  **근거 출처:**
-
-  **[조세특례제한법 시행규칙]** https://www.law.go.kr/LSW/nwRvsLsInfoR.do?lsNm=&cptOfi=&searchType=&lsKndCd=&p_spubdt=&p_epubdt=&p_spubno=&p_epubno=&pageIndex=1&chrIdx=0&sortIdx=0&lsiSeq=192615
-  이 규칙은 공포한 날부터 시행한다.
-
-- [ ] **직원 안전 교육 프로그램 개발**
-  - 담당: 인사부
-  - 마감: 2026-01-22
-
-  **근거 출처:**
-
-  **[조세특례제한법 시행규칙]** https://www.law.go.kr/LSW/nwRvsLsInfoR.do?lsNm=&cptOfi=&searchType=&lsKndCd=&p_spubdt=&p_epubdt=&p_spubno=&p_epubno=&pageIndex=1&chrIdx=0&sortIdx=0&lsiSeq=192615
-  이 규칙은 공포한 날부터 시행한다.
-
-- [ ] **안전 장비 구매 및 배포**
-  - 담당: 구매부
-  - 마감: 2026-01-22
-
-  **근거 출처:**
-
-  **[조세특례제한법 시행규칙]** https://www.law.go.kr/LSW/nwRvsLsInfoR.do?lsNm=&cptOfi=&searchType=&lsKndCd=&p_spubdt=&p_epubdt=&p_spubno=&p_epubno=&pageIndex=1&chrIdx=0&sortIdx=0&lsiSeq=192615
-  이 규칙은 공포한 날부터 시행한다.
-
-- [ ] **안전 관리 기록 및 증빙 확보**
-  - 담당: 안전관리부
-  - 마감: 2026-01-22
-
-  **근거 출처:**
-
-  **[조세특례제한법 시행규칙]** https://www.law.go.kr/LSW/nwRvsLsInfoR.do?lsNm=&cptOfi=&searchType=&lsKndCd=&p_spubdt=&p_epubdt=&p_spubno=&p_epubno=&pageIndex=1&chrIdx=0&sortIdx=0&lsiSeq=192615
-  이 규칙은 공포한 날부터 시행한다.
-
-### 4.5 🟡 전기용품 및 생활용품 안전관리법
-
-- [ ] **전기용품 안전성 검사 실시**
-  - 담당: 품질관리팀
-  - 마감: 2026-04-22
-
-  **근거 출처:**
-
-  **[녹색투자 현황 및 활성화 방안]** https://www.korea.kr/common/download.do?fileId=197609&tblKey=EDN
-  전기차용 배터리. 리튬이온전지.
-
-- [ ] **소비자 안전 정보 제공 계획 수립**
-  - 담당: 마케팅팀
-  - 마감: 2026-04-22
-
-  **근거 출처:**
-
-  **[녹색투자 현황 및 활성화 방안]** https://www.korea.kr/common/download.do?fileId=197609&tblKey=EDN
-  전기차용 배터리. 리튬이온전지.
-
-- [ ] **전기용품 및 생활용품 안전관리법 준수 기록 확보**
+- [ ] **법적 준수 확인 및 기록 보관**
   - 담당: 법무팀
+  - 마감: 2026-01-22
+
+  **근거 출처:**
+
+  - **[<a href="https://www.korea.kr/news/policyNewsView.do?newsId=148933752">Korea 리튬전지 등 ‘특수가연물’로 지정…저장·취급 및 관리 강화 - 정책뉴스 | 뉴스 | 대한민국 정책브리핑</a>]**	리튬 전지 제품의 저장·취급 및 관리를 강화하고자 리튬전지 등을 ‘특수가연물’로 지정한다.
+
+### 4.2 🔴 유해물질 제조 및 사용 규정
+
+- [ ] **유해물질 제조 및 사용 장소 격리**
+  - 담당: 안전 관리 부서
+  - 마감: 2026-01-22
+
+  **근거 출처:**
+
+  - **[<a href="https://www.law.go.kr/LSW/lumLsLinkPop.do?lspttninfSeq=154679&chrClsCd=010202">Supreme Court of Korea 연계정보</a>]**	사업주는 허가대상 유해물질을 제조하거나 사용하는 경우에 다음 각 호의 사항을 준수하여야 한다.
+
+- [ ] **작업장소 바닥 및 벽 재료 점검**
+  - 담당: 시설 관리 부서
+  - 마감: 2026-01-22
+
+  **근거 출처:**
+
+  - **[<a href="https://www.law.go.kr/LSW/lumLsLinkPop.do?lspttninfSeq=154679&chrClsCd=010202">Supreme Court of Korea 연계정보</a>]**	사업주는 허가대상 유해물질을 제조하거나 사용하는 경우에 다음 각 호의 사항을 준수하여야 한다.
+
+- [ ] **유해물질 관리 매뉴얼 작성**
+  - 담당: 안전 관리 부서
+  - 마감: 2026-01-22
+
+  **근거 출처:**
+
+  - **[<a href="https://www.law.go.kr/LSW/lumLsLinkPop.do?lspttninfSeq=154679&chrClsCd=010202">Supreme Court of Korea 연계정보</a>]**	사업주는 허가대상 유해물질을 제조하거나 사용하는 경우에 다음 각 호의 사항을 준수하여야 한다.
+
+- [ ] **유해물질 관련 기록 및 증빙 확보**
+  - 담당: 안전 관리 부서
+  - 마감: 2026-01-22
+
+  **근거 출처:**
+
+  - **[<a href="https://www.law.go.kr/LSW/lumLsLinkPop.do?lspttninfSeq=154679&chrClsCd=010202">Supreme Court of Korea 연계정보</a>]**	사업주는 허가대상 유해물질을 제조하거나 사용하는 경우에 다음 각 호의 사항을 준수하여야 한다.
+
+### 4.3 🟡 고효율 인증기자재 규정
+
+- [ ] **고효율 인증 신청**
+  - 담당: 인증 관리 팀
   - 마감: 2026-04-22
 
   **근거 출처:**
 
-  **[녹색투자 현황 및 활성화 방안]** https://www.korea.kr/common/download.do?fileId=197609&tblKey=EDN
-  전기차용 배터리. 리튬이온전지.
+  - **[<a href="https://www.law.go.kr/LSW/nwRvsLsInfoR.do?lsNm=&cptOfi=&searchType=&lsKndCd=&p_spubdt=&p_epubdt=&p_spubno=&p_epubno=&pageIndex=1&chrIdx=0&sortIdx=0&lsiSeq=192615">조세특례제한법 시행규칙</a>]**	전지 등의 리튬이온 이차전지로 주로 전기자동차 또는 ...
+
+- [ ] **인증된 기자재 목록 확보**
+  - 담당: 구매 부서
+  - 마감: 2026-04-22
+
+  **근거 출처:**
+
+  - **[<a href="https://www.law.go.kr/LSW/nwRvsLsInfoR.do?lsNm=&cptOfi=&searchType=&lsKndCd=&p_spubdt=&p_epubdt=&p_spubno=&p_epubno=&pageIndex=1&chrIdx=0&sortIdx=0&lsiSeq=192615">조세특례제한법 시행규칙</a>]**	전지 등의 리튬이온 이차전지로 주로 전기자동차 또는 ...
+
+- [ ] **고효율 인증 관련 교육 실시**
+  - 담당: 인사 교육 부서
+  - 마감: 2026-04-22
+
+  **근거 출처:**
+
+  - **[<a href="https://www.law.go.kr/LSW/nwRvsLsInfoR.do?lsNm=&cptOfi=&searchType=&lsKndCd=&p_spubdt=&p_epubdt=&p_spubno=&p_epubno=&pageIndex=1&chrIdx=0&sortIdx=0&lsiSeq=192615">조세특례제한법 시행규칙</a>]**	전지 등의 리튬이온 이차전지로 주로 전기자동차 또는 ...
+
+- [ ] **증빙 자료 및 기록 확보**
+  - 담당: 문서 관리 팀
+  - 마감: 2026-04-22
+
+  **근거 출처:**
+
+  - **[<a href="https://www.law.go.kr/LSW/nwRvsLsInfoR.do?lsNm=&cptOfi=&searchType=&lsKndCd=&p_spubdt=&p_epubdt=&p_spubno=&p_epubno=&pageIndex=1&chrIdx=0&sortIdx=0&lsiSeq=192615">조세특례제한법 시행규칙</a>]**	전지 등의 리튬이온 이차전지로 주로 전기자동차 또는 ...
 
 
 ---
 
 ## 5. 실행 계획 및 타임라인
 
-### 5.1 🔴 사용후 배터리법
+### 5.1 🔴 리튬전지 저장 및 취급 관리 규정
 
 **타임라인:** 3개월  
 **시작 예정:** 즉시  
 
 **주요 마일스톤:**
+
 - 1개월 차: 서류 준비 완료 (완료 목표: 2026-01-22)
-- 2개월 차: 교육 프로그램 운영 완료 (완료 목표: 2026-01-22)
-- 3개월 차: 관리 기록 확보 완료 (완료 목표: 2026-01-22)
+
+- 2주 차: 직원 교육 프로그램 개발 완료 (완료 목표: 2026-01-22)
 
 **근거 출처:**
 
-**[산업 공급망 내재화를 위한 - 핵심광물 재자원화 활성화 추진 ...]** https://www.korea.kr/common/download.do?fileId=198098089&tblKey=GMN
-향후 발생량 급증이 예상되는 사용후 배터리의 체계적 관리 및 활용을 위해 사용후 배터리법 및 제도·인프라 등 도입 추진.
+  - **[<a href="https://www.korea.kr/news/policyNewsView.do?newsId=148933752">Korea 리튬전지 등 ‘특수가연물’로 지정…저장·취급 및 관리 강화 - 정책뉴스 | 뉴스 | 대한민국 정책브리핑</a>]**	정부가 화재 위험성이 높은 리튬 전지 제품의 저장·취급 및 관리를 강화하고자 리튬전지 등을 ‘특수가연물’로 지정한다.
 
-### 5.2 🔴 녹색기술 인증
+### 5.2 🔴 유해물질 제조 및 사용 규정
 
 **타임라인:** 3개월  
 **시작 예정:** 즉시  
 
 **주요 마일스톤:**
-- 신재생에너지 기술 수준 평가 완료 (완료 목표: 2025-12-22)
-- 기술 개발 계획 수립 완료 (완료 목표: 2026-01-22)
-- 인증 신청서 제출 준비 완료 (완료 목표: 2026-02-22)
-- 증빙 자료 및 기록 확보 완료 (완료 목표: 2026-03-22)
 
-**근거 출처:**
-
-**[https://www.law.go.kr/LSW/flDownload.do?flSeq=4934...]** https://www.law.go.kr/LSW/flDownload.do?flSeq=4934208&flNm=%5B%EB%B3%84%ED%91%9C+4%5D+%EB%85%B9%EC%83%89%EA%B8%B0%EC%88%A0+%EC%9D%B8%EC%A6%9D%EC%9D%84+%EC%9C%84%ED%95%9C+%EA%B8%B0%EC%88%A0%EC%88%98%EC%A4%80
-[별표 4] 녹색기술 인증을 위한 기술수준 01. 신재생에너지 중분류소분류핵심(요소)기술기술수준01.
-
-### 5.3 🔴 화학물질 관리법
-
-**타임라인:** 3개월  
-**시작 예정:** 즉시  
-
-**주요 마일스톤:**
-- 1개월 차: 화학물질 안전 관리 방안 수립 완료 (완료 목표: 2026-01-22)
-- 2주 차: 위험물질 배출 최소화 계획 수립 완료 (완료 목표: 2026-01-22)
-- 1개월 차: 화학물질 사용 모니터링 시스템 구축 완료 (완료 목표: 2026-01-22)
-
-**근거 출처:**
-
-**[조세특례제한법 시행규칙]** https://www.law.go.kr/LSW/nwRvsLsInfoR.do?lsNm=&cptOfi=&searchType=&lsKndCd=&p_spubdt=&p_epubdt=&p_spubno=&p_epubno=&pageIndex=1&chrIdx=0&sortIdx=0&lsiSeq=192615
-이 규칙은 공포한 날부터 시행한다.
-
-### 5.4 🔴 산업안전보건법
-
-**타임라인:** 3개월  
-**시작 예정:** 즉시  
-
-**주요 마일스톤:**
 - 1개월 차: 서류 준비 완료 (완료 목표: 2026-01-22)
-- 2개월 차: 안전 장비 구매 완료 (완료 목표: 2026-01-22)
-- 3개월 차: 안전 관리 기록 확보 (완료 목표: 2026-01-22)
+
+- 3주 차: 장소 격리 및 점검 완료 (완료 목표: 2026-01-22)
 
 **근거 출처:**
 
-**[조세특례제한법 시행규칙]** https://www.law.go.kr/LSW/nwRvsLsInfoR.do?lsNm=&cptOfi=&searchType=&lsKndCd=&p_spubdt=&p_epubdt=&p_spubno=&p_epubno=&pageIndex=1&chrIdx=0&sortIdx=0&lsiSeq=192615
-이 규칙은 공포한 날부터 시행한다.
+  - **[<a href="https://www.law.go.kr/LSW/lumLsLinkPop.do?lspttninfSeq=154679&chrClsCd=010202">Supreme Court of Korea 연계정보</a>]**	사업주는 허가대상 유해물질을 제조하거나 사용하는 경우에 다음 각 호의 사항을 준수하여야 한다.
 
-### 5.5 🟡 전기용품 및 생활용품 안전관리법
+### 5.3 🟡 고효율 인증기자재 규정
 
 **타임라인:** 3개월  
 **시작 예정:** 즉시  
 
 **주요 마일스톤:**
-- 1개월 차: 서류 준비 완료 (완료 목표: 2026-01-22)
-- 2개월 차: 안전성 검사 완료 (완료 목표: 2026-02-22)
-- 3개월 차: 소비자 안전 정보 제공 계획 완료 (완료 목표: 2026-03-22)
-- 3개월 차: 준수 기록 확보 완료 (완료 목표: 2026-04-22)
+
+- 1개월 차: 서류 준비 완료 (완료 목표: 2026-04-22)
+
+- 2개월 차: 교육 및 증빙 자료 확보 완료 (완료 목표: 2026-04-22)
 
 **근거 출처:**
 
-**[녹색투자 현황 및 활성화 방안]** https://www.korea.kr/common/download.do?fileId=197609&tblKey=EDN
-전기차용 배터리. 리튬이온전지.
+  - **[<a href="https://www.law.go.kr/LSW/nwRvsLsInfoR.do?lsNm=&cptOfi=&searchType=&lsKndCd=&p_spubdt=&p_epubdt=&p_spubno=&p_epubno=&pageIndex=1&chrIdx=0&sortIdx=0&lsiSeq=192615">조세특례제한법 시행규칙</a>]**	전지 등의 리튬이온 이차전지로 주로 전기자동차 또는 ...
 
 
 ---
@@ -390,70 +261,41 @@
 
 ### 6.2 고위험 규제 (상위 5개)
 
-#### 사용후 배터리법
+#### 리튬전지 저장 및 취급 관리 규정
 
 **리스크 점수:** 8.0/10
 
 **처벌 유형:** 과태료
-
-**사업 영향:** 인허가 취소
-
-**근거 출처:**
-
-**[산업 공급망 내재화를 위한 - 핵심광물 재자원화 활성화 추진 ...]** https://www.korea.kr/common/download.do?fileId=198098089&tblKey=GMN
-향후 발생량 급증이 예상되는 사용후 배터리의 체계적 관리 및 활용을 위해 사용후 배터리법 및 제도·인프라 등 도입 추진.
-
-#### 녹색기술 인증
-
-**리스크 점수:** 9.0/10
-
-**처벌 유형:** 과태료
-
-**사업 영향:** 인허가 취소
-
-**근거 출처:**
-
-**[https://www.law.go.kr/LSW/flDownload.do?flSeq=4934...]** https://www.law.go.kr/LSW/flDownload.do?flSeq=4934208&flNm=%5B%EB%B3%84%ED%91%9C+4%5D+%EB%85%B9%EC%83%89%EA%B8%B0%EC%88%A0+%EC%9D%B8%EC%A6%9D%EC%9D%84+%EC%9C%84%ED%95%9C+%EA%B8%B0%EC%88%A0%EC%88%98%EC%A4%80
-녹색기술 인증을 받지 않을 경우 인허가 취소 등의 중대한 처벌이 있을 수 있습니다.
-
-#### 화학물질 관리법
-
-**리스크 점수:** 8.0/10
-
-**처벌 유형:** 형사처벌
-
-**사업 영향:** 인허가 취소
-
-**근거 출처:**
-
-**[조세특례제한법 시행규칙]** https://www.law.go.kr/LSW/nwRvsLsInfoR.do?lsNm=&cptOfi=&searchType=&lsKndCd=&p_spubdt=&p_epubdt=&p_spubno=&p_epubno=&pageIndex=1&chrIdx=0&sortIdx=0&lsiSeq=192615
-이 규칙은 공포한 날부터 시행한다.
-
-#### 산업안전보건법
-
-**리스크 점수:** 8.0/10
-
-**처벌 유형:** 형사처벌
 
 **사업 영향:** 영업정지 6개월
 
 **근거 출처:**
 
-**[조세특례제한법 시행규칙]** https://www.law.go.kr/LSW/nwRvsLsInfoR.do?lsNm=&cptOfi=&searchType=&lsKndCd=&p_spubdt=&p_epubdt=&p_spubno=&p_epubno=&pageIndex=1&chrIdx=0&sortIdx=0&lsiSeq=192615
-이 규칙은 공포한 날부터 시행한다.
+  - **[<a href="https://www.korea.kr/news/policyNewsView.do?newsId=148933752">Korea 리튬전지 등 ‘특수가연물’로 지정…저장·취급 및 관리 강화 - 정책뉴스 | 뉴스 | 대한민국 정책브리핑</a>]**	정부가 화재 위험성이 높은 리튬 전지 제품의 저장·취급 및 관리를 강화하고자 리튬전지 등을 ‘특수가연물’로 지정한다.
 
-#### 전기용품 및 생활용품 안전관리법
+#### 유해물질 제조 및 사용 규정
+
+**리스크 점수:** 9.0/10
+
+**처벌 유형:** 형사처벌
+
+**사업 영향:** 인허가 취소
+
+**근거 출처:**
+
+  - **[<a href="https://www.law.go.kr/LSW/lumLsLinkPop.do?lspttninfSeq=154679&chrClsCd=010202">Supreme Court of Korea 연계정보</a>]**	사업주는 허가대상 유해물질을 제조하거나 사용하는 경우에 다음 각 호의 사항을 준수하여야 한다.
+
+#### 고효율 인증기자재 규정
 
 **리스크 점수:** 7.0/10
 
 **처벌 유형:** 과태료
 
-**사업 영향:** 영업정지 6개월
+**사업 영향:** 인허가 취소
 
 **근거 출처:**
 
-**[녹색투자 현황 및 활성화 방안]** https://www.korea.kr/common/download.do?fileId=197609&tblKey=EDN
-리튬이온전지는 전기용품으로 안전 기준을 충족해야 한다.
+  - **[<a href="https://www.law.go.kr/LSW/nwRvsLsInfoR.do?lsNm=&cptOfi=&searchType=&lsKndCd=&p_spubdt=&p_epubdt=&p_spubno=&p_epubno=&pageIndex=1&chrIdx=0&sortIdx=0&lsiSeq=192615">조세특례제한법 시행규칙</a>]**	전지 등의 리튬이온 이차전지로 주로 전기자동차 또는 ...
 
 
 ---
@@ -461,25 +303,25 @@
 ## 7. 경영진 요약
 
 ### 핵심 인사이트
-- 총 5개의 규제가 존재하며, 이 중 4개가 HIGH 리스크로 분류되었습니다.
-- 리스크 점수는 8.0/10으로, 규제 리스크가 매우 높은 상황입니다.
-- 모든 고위험 규제가 5개로, 즉각적인 대응이 필요합니다.
+- 현재 총 3개의 규제가 존재하며, 이 중 2개는 HIGH 리스크에 해당합니다.
+- 리스크 점수는 8.0/10으로, 상당히 높은 수준입니다.
+- 모든 고위험 규제는 3개로, 즉각적인 대응이 필요합니다.
 
 ### 의사결정 포인트
-- [ ] 고위험 규제에 대한 즉각적인 리스크 관리 방안 마련
-- [ ] 규제 준수 교육 프로그램 개발 및 실행
-- [ ] 리스크 점수 감소를 위한 장기 전략 수립
+- [ ] 고위험 규제에 대한 즉각적인 대응 전략 수립
+- [ ] 리스크 점수 감소를 위한 방안 논의
+- [ ] 규제 준수 모니터링 시스템 강화
 
 ### 권장 조치 (우선순위 순)
-1. **즉시:** 고위험 규제에 대한 상세 분석 및 대응 계획 수립
-2. **1개월 내:** 전사적 규제 준수 교육 실시
-3. **3개월 내:** 규제 리스크 모니터링 시스템 구축 및 운영 시작
+1. **즉시:** 고위험 규제에 대한 긴급 대응 팀 구성 및 조치 계획 수립
+2. **1개월 내:** 리스크 관리 방안에 대한 전사 교육 실시
+3. **3개월 내:** 규제 준수 현황 점검 및 개선안을 마련하여 보고
 
 ---
 
 ## 8. 다음 단계
 
-- **1단계 (즉시):** HIGH 우선순위 4개 규제 착수
+- **1단계 (즉시):** HIGH 우선순위 2개 규제 착수
 - **2단계 (1주일 내):** 담당 부서 및 책임자 지정
 - **3단계 (2주일 내):** 상세 실행 일정 확정 및 예산 승인
 - **4단계 (1개월):** 월 단위 진행 상황 모니터링 체계 구축
@@ -489,17 +331,11 @@
 
 ## 9. 근거 출처 모음
 
-1. **[산업 공급망 내재화를 위한 - 핵심광물 재자원화 활성화 추진 ...]** https://www.korea.kr/common/download.do?fileId=198098089&tblKey=GMN
-향후 발생량 급증이 예상되는 사용후 배터리의 체계적 관리 및 활용을 위해 사용후 배터리법 및 제도·인프라 등 도입 추진.
+  - **[<a href="https://www.korea.kr/news/policyNewsView.do?newsId=148933752">Korea 리튬전지 등 ‘특수가연물’로 지정…저장·취급 및 관리 강화 - 정책뉴스 | 뉴스 | 대한민국 정책브리핑</a>]**	정부가 화재 위험성이 높은 리튬 전지 제품의 저장·취급 및 관리를 강화하고자 리튬전지 등을 ‘특수가연물’로 지정한다.
 
-2. **[https://www.law.go.kr/LSW/flDownload.do?flSeq=4934...]** https://www.law.go.kr/LSW/flDownload.do?flSeq=4934208&flNm=%5B%EB%B3%84%ED%91%9C+4%5D+%EB%85%B9%EC%83%89%EA%B8%B0%EC%88%A0+%EC%9D%B8%EC%A6%9D%EC%9D%84+%EC%9C%84%ED%95%9C+%EA%B8%B0%EC%88%A0%EC%88%98%EC%A4%80
-[별표 4] 녹색기술 인증을 위한 기술수준 01. 신재생에너지 중분류소분류핵심(요소)기술기술수준01.
+  - **[<a href="https://www.law.go.kr/LSW/lumLsLinkPop.do?lspttninfSeq=154679&chrClsCd=010202">Supreme Court of Korea 연계정보</a>]**	사업주는 허가대상 유해물질을 제조하거나 사용하는 경우에 다음 각 호의 사항을 준수하여야 한다.
 
-3. **[조세특례제한법 시행규칙]** https://www.law.go.kr/LSW/nwRvsLsInfoR.do?lsNm=&cptOfi=&searchType=&lsKndCd=&p_spubdt=&p_epubdt=&p_spubno=&p_epubno=&pageIndex=1&chrIdx=0&sortIdx=0&lsiSeq=192615
-이 규칙은 공포한 날부터 시행한다.
-
-4. **[녹색투자 현황 및 활성화 방안]** https://www.korea.kr/common/download.do?fileId=197609&tblKey=EDN
-전기차용 배터리. 리튬이온전지.
+  - **[<a href="https://www.law.go.kr/LSW/nwRvsLsInfoR.do?lsNm=&cptOfi=&searchType=&lsKndCd=&p_spubdt=&p_epubdt=&p_spubno=&p_epubno=&pageIndex=1&chrIdx=0&sortIdx=0&lsiSeq=192615">조세특례제한법 시행규칙</a>]**	전지 등의 리튬이온 이차전지로 주로 전기자동차 또는 ...
 
 ---
 

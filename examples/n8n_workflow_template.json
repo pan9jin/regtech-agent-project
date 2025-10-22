@@ -1,0 +1,154 @@
+{
+  "name": "규제 준수 체크리스트 자동 발송",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "regulation-completed",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [250, 300],
+      "webhookId": "your-webhook-id"
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:8000/api/regulation/{{$json[\"regulation_id\"]}}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {}
+      },
+      "name": "규제 데이터 조회",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [470, 300]
+    },
+    {
+      "parameters": {
+        "functionCode": "// 담당자별로 체크리스트 그룹핑\nconst checklists = $input.item.json.checklists || [];\nconst distribution = {};\n\nchecklists.forEach(checklist => {\n  const items = checklist.items || [];\n  const regulationName = checklist.regulation_name;\n  \n  items.forEach(item => {\n    const assignee = item.responsible_dept || '미지정';\n    \n    if (!distribution[assignee]) {\n      distribution[assignee] = {\n        assignee: assignee,\n        email: getAssigneeEmail(assignee),\n        tasks: [],\n        regulation_name: regulationName\n      };\n    }\n    \n    distribution[assignee].tasks.push(item);\n  });\n});\n\n// 담당자 이메일 매핑 함수\nfunction getAssigneeEmail(assignee) {\n  const emailMap = {\n    '안전관리팀': 'safety@company.com',\n    '환경관리팀': 'environment@company.com',\n    '규제준수팀': 'compliance@company.com'\n  };\n  return emailMap[assignee] || 'default@company.com';\n}\n\n// 각 담당자별로 아이템 생성\nreturn Object.values(distribution).map(item => ({\n  json: item\n}));"
+      },
+      "name": "담당자별 그룹핑",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [690, 300]
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:8000/api/webhook/make/send-checklist",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "regulation_name",
+              "value": "={{$json[\"regulation_name\"]}}"
+            },
+            {
+              "name": "assignee_email",
+              "value": "={{$json[\"email\"]}}"
+            },
+            {
+              "name": "assignee_name",
+              "value": "={{$json[\"assignee\"]}}"
+            },
+            {
+              "name": "checklist_items",
+              "value": "={{$json[\"tasks\"]}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "name": "이메일 발송 API 호출",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [910, 300]
+    },
+    {
+      "parameters": {
+        "channel": "#규제준수",
+        "text": "=:white_check_mark: 규제 분석 완료 및 체크리스트 발송\n\n*규제:* {{$json[\"regulation_name\"]}}\n*담당자:* {{$json[\"assignee\"]}}\n*작업 수:* {{$json[\"tasks\"].length}}개",
+        "otherOptions": {}
+      },
+      "name": "Slack 알림",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 1,
+      "position": [1130, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"status\": \"success\", \"message\": \"Checklist sent to all assignees\" } }}"
+      },
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1350, 300]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "규제 데이터 조회",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "규제 데이터 조회": {
+      "main": [
+        [
+          {
+            "node": "담당자별 그룹핑",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "담당자별 그룹핑": {
+      "main": [
+        [
+          {
+            "node": "이메일 발송 API 호출",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "이메일 발송 API 호출": {
+      "main": [
+        [
+          {
+            "node": "Slack 알림",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Slack 알림": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {},
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2025-10-21T00:00:00.000Z",
+  "versionId": "1"
+}

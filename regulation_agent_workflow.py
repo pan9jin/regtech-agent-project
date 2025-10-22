@@ -1,15 +1,14 @@
 """
 규제 AI Agent 서비스 - LangGraph Multi-Agent Workflow
-7개의 Agent로 구성된 규제 분석 시스템
+8개의 Agent로 구성된 규제 분석 시스템
 - Analyzer Agent: 사업 정보 분석 및 키워드 추출
 - Search Agent: Tavily API를 통한 규제 정보 검색
 - Classifier Agent: 검색된 규제 분류 및 적용성 판단
 - Prioritizer Agent: 규제 우선순위 결정 (HIGH/MEDIUM/LOW)
 - Checklist Generator Agent: 규제별 실행 가능한 체크리스트 생성
-- [제거] Cost Estimator Agent: 총 준수 비용 산출 및 지출 계획 수립
-- [추가] Planning Agent: 체크리스트에서 실행 방법 도출 및 담당자가 수행해야 할 세부적인 계획 수립
+- Planning Agent: 체크리스트별 구체적인 실행 계획 수립
 - Risk Assessment Agent: 미준수 시 리스크 평가 및 완화 방안 제시
-- [추가] Report Generation Agent: 최종 보고서 작성 및 요약
+- Report Generation Agent: 최종 보고서 작성 및 요약
 """
 
 import os
@@ -79,26 +78,11 @@ class ChecklistItem(TypedDict):
     responsible_dept: str       # 담당 부서
     deadline: str               # 마감 기한
     method: List[str]           # 실행 방법 (단계별)
-    estimated_cost: str         # 예상 비용
+    action_plan: List[str]      # 구체적인 실행 계획
     estimated_time: str         # 소요 시간
     priority: str               # 우선순위 (상위 규제와 동일)
     status: str                 # 상태 (pending/in_progress/completed)
 
-
-class CostBreakdown(TypedDict):
-    """비용 분류 데이터 구조"""
-    by_priority: Dict[str, int]     # HIGH/MEDIUM/LOW별 비용
-    by_category: Dict[str, int]     # 카테고리별 비용
-    by_timeline: Dict[str, int]     # 시기별 비용 (즉시/단기/중기)
-
-
-class CostAnalysis(TypedDict):
-    """비용 분석 결과 데이터 구조"""
-    total_cost: int                         # 총 비용 (원)
-    total_cost_formatted: str               # 포맷된 문자열
-    breakdown: CostBreakdown                # 세부 분류
-    subsidies: List[Dict[str, str]]         # 정부 지원금 정보
-    payment_plan: List[Dict[str, Any]]      # 단계별 지출 계획
 
 
 class RiskItem(TypedDict):
@@ -132,7 +116,6 @@ class AgentState(TypedDict, total=False):
 
     # 추가 필드 (3개 새로운 Agent)
     checklists: List[ChecklistItem]     # 체크리스트 목록
-    cost_analysis: CostAnalysis         # 비용 분석 결과
     risk_assessment: RiskAssessment     # 리스크 평가 결과
 
 
@@ -172,46 +155,6 @@ def _truncate(text: str, limit: int = 300) -> str:
         return text
     return text[: limit - 3] + "..."
 
-
-def _format_currency(amount: int) -> str:
-    """금액을 한국 통화 형식으로 포맷팅합니다.
-
-    Args:
-        amount: 금액 (원)
-
-    Returns:
-        포맷된 문자열 (예: "15,000,000원")
-    """
-    return f"{amount:,}원"
-
-
-def _parse_cost_from_text(text: str) -> int:
-    """텍스트에서 숫자를 추출하여 정수로 변환합니다.
-
-    Args:
-        text: 비용이 포함된 텍스트 (예: "약 30만원", "500만원")
-
-    Returns:
-        추출된 금액 (원 단위)
-    """
-    import re
-
-    # "만원" 패턴 추출
-    match_man = re.search(r'(\d+(?:,\d+)?)\s*만원', text)
-    if match_man:
-        return int(match_man.group(1).replace(',', '')) * 10000
-
-    # "원" 패턴 추출
-    match_won = re.search(r'(\d+(?:,\d+)?)\s*원', text)
-    if match_won:
-        return int(match_won.group(1).replace(',', ''))
-
-    # 숫자만 있는 경우
-    match_num = re.search(r'(\d+(?:,\d+)?)', text)
-    if match_num:
-        return int(match_num.group(1).replace(',', ''))
-
-    return 0
 
 
 # ============================================
@@ -537,7 +480,6 @@ def generate_checklists(regulations: List[Regulation]) -> Dict[str, Any]:
         "2. 두 번째 단계",
         "3. 세 번째 단계"
     ],
-    "estimated_cost": "예상 비용 (예: 30만원, 100만원, 무료)",
     "estimated_time": "소요 시간 (예: 20일, 1개월, 3일)"
 }}
 
@@ -565,7 +507,7 @@ def generate_checklists(regulations: List[Regulation]) -> Dict[str, Any]:
                     "responsible_dept": item.get("responsible_dept", "담당 부서"),
                     "deadline": item.get("deadline", "미정"),
                     "method": item.get("method", []),
-                    "estimated_cost": item.get("estimated_cost", "미정"),
+                    "action_plan": [],
                     "estimated_time": item.get("estimated_time", "미정"),
                     "priority": reg['priority'],
                     "status": "pending"
@@ -581,147 +523,51 @@ def generate_checklists(regulations: List[Regulation]) -> Dict[str, Any]:
 
 
 @tool
-def estimate_costs(
-    regulations: List[Regulation],
-    checklists: List[ChecklistItem],
-    business_info: BusinessInfo
-) -> Dict[str, Any]:
-    """규제 준수에 필요한 총 비용을 산출합니다.
+def create_action_plan(checklist_item: ChecklistItem) -> Dict[str, Any]:
+    """체크리스트 항목을 실행하기 위한 구체적인 행동 계획을 생성합니다.
 
     Args:
-        regulations: 규제 목록
-        checklists: 체크리스트 목록
-        business_info: 사업 정보
+        checklist_item: 계획을 수립할 체크리스트 항목
 
     Returns:
-        비용 분석 결과
+        행동 계획이 포함된 딕셔너리
     """
-    print("💰 [Cost Estimator Agent] 비용 분석 중...")
+    print(f"📝 [Planning Agent] '{checklist_item['task_name']}'에 대한 실행 계획 수립 중...")
 
     llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.3)
 
-    # 체크리스트별 비용 추출
-    total_cost = 0
-    cost_by_priority = {"HIGH": 0, "MEDIUM": 0, "LOW": 0}
-    cost_by_category = {}
-
-    for item in checklists:
-        cost = _parse_cost_from_text(item['estimated_cost'])
-        total_cost += cost
-
-        # 우선순위별 집계
-        priority = item.get('priority', 'MEDIUM')
-        cost_by_priority[priority] = cost_by_priority.get(priority, 0) + cost
-
-        # 카테고리별 집계 (regulations에서 찾기)
-        for reg in regulations:
-            if reg['id'] == item['regulation_id']:
-                category = reg['category']
-                cost_by_category[category] = cost_by_category.get(category, 0) + cost
-                break
-
-    # GPT로 추가 분석 및 정부 지원금 정보 생성
-    regulations_summary = "\n".join([
-        f"- {r['name']} ({r['category']}, {r['priority']})"
-        for r in regulations
-    ])
-
     prompt = f"""
-다음 사업의 규제 준수를 위한 비용 분석을 수행하세요.
+다음 체크리스트 항목을 이행하기 위한 구체적이고 실행 가능한 단계별 계획을 3~5단계로 작성하세요.
 
-[사업 정보]
-업종: {business_info['industry']}
-제품: {business_info['product_name']}
-직원 수: {business_info.get('employee_count', 0)}명
+[체크리스트 항목]
+- 작업명: {checklist_item['task_name']}
+- 담당 부서: {checklist_item['responsible_dept']}
+- 마감 기한: {checklist_item['deadline']}
+- 규제명: {checklist_item['regulation_name']}
 
-[적용 규제]
-{regulations_summary}
+[실행 방법 개요]
+{chr(10).join(f'- {m}' for m in checklist_item['method'])}
 
-[현재 예상 비용]
-총 비용: {_format_currency(total_cost)}
+[출력 형식]
+각 단계를 명확하고 간결한 문장으로 작성하세요. 각 단계는 실행 가능한 행동이어야 합니다.
 
-다음 정보를 JSON 형식으로 제공하세요:
-{{
-    "subsidies": [
-        {{
-            "name": "정부 지원금 프로그램명",
-            "amount": "지원 금액 (예: 최대 500만원)",
-            "agency": "주관 기관"
-        }}
-    ],
-    "payment_plan": [
-        {{
-            "period": "즉시 (0-3개월)",
-            "amount": 예상 금액 (숫자만),
-            "items": ["항목1", "항목2"]
-        }},
-        {{
-            "period": "단기 (3-6개월)",
-            "amount": 예상 금액 (숫자만),
-            "items": ["항목1", "항목2"]
-        }},
-        {{
-            "period": "중기 (6-12개월)",
-            "amount": 예상 금액 (숫자만),
-            "items": ["항목1", "항목2"]
-        }}
-    ]
-}}
+예시:
+- 1단계: 관련 법규 및 최신 개정안 확인 (국가법령정보센터 활용)
+- 2단계: 내부 규정 및 절차서 현행화
+- 3단계: 변경 사항에 대한 전 직원 대상 교육 실시
+- 4단계: 교육 이수 현황 및 효과성 점검
+- 5단계: 관련 기록 및 문서 보관
 
-출력은 JSON 형식으로만 작성하세요.
+출력은 단계별 계획 목록만 포함해야 합니다. (JSON 형식이 아님)
 """
 
     response = llm.invoke(prompt)
+    plan = [p.strip() for p in response.content.strip().split('\n') if p.strip()]
 
-    try:
-        content = response.content.strip()
-        if content.startswith("```"):
-            content = content.split("```")[1]
-            if content.startswith("json"):
-                content = content[4:]
+    print(f"   ✓ 실행 계획 수립 완료: {len(plan)} 단계")
 
-        analysis_data = json.loads(content.strip())
+    return {"action_plan": plan}
 
-        # 시기별 비용 계산
-        cost_by_timeline = {}
-        for plan in analysis_data.get('payment_plan', []):
-            cost_by_timeline[plan['period']] = plan.get('amount', 0)
-
-        cost_analysis: CostAnalysis = {
-            "total_cost": total_cost,
-            "total_cost_formatted": _format_currency(total_cost),
-            "breakdown": {
-                "by_priority": cost_by_priority,
-                "by_category": cost_by_category,
-                "by_timeline": cost_by_timeline
-            },
-            "subsidies": analysis_data.get('subsidies', []),
-            "payment_plan": analysis_data.get('payment_plan', [])
-        }
-
-        print(f"   ✓ 비용 분석 완료: 총 {_format_currency(total_cost)}")
-        print(f"      - HIGH: {_format_currency(cost_by_priority['HIGH'])}")
-        print(f"      - MEDIUM: {_format_currency(cost_by_priority['MEDIUM'])}")
-        print(f"      - LOW: {_format_currency(cost_by_priority['LOW'])}\n")
-
-        return {"cost_analysis": cost_analysis}
-
-    except json.JSONDecodeError as e:
-        print(f"   ⚠️  JSON 파싱 오류: {e}")
-        # 기본 분석 결과 반환
-        return {
-            "cost_analysis": {
-                "total_cost": total_cost,
-                "total_cost_formatted": _format_currency(total_cost),
-                "breakdown": {
-                    "by_priority": cost_by_priority,
-                    "by_category": cost_by_category,
-                    "by_timeline": {}
-                },
-                "subsidies": [],
-                "payment_plan": []
-            }
-        }
 
 
 @tool
@@ -896,19 +742,51 @@ def prioritizer_node(state: AgentState) -> Dict[str, Any]:
 
 
 def checklist_generator_node(state: AgentState) -> Dict[str, Any]:
+
+
     """체크리스트 생성 노드: 규제별 실행 체크리스트를 생성합니다."""
+
+
     result = generate_checklists.invoke({"regulations": state["regulations"]})
+
+
     return {"checklists": result["checklists"]}
 
 
-def cost_estimator_node(state: AgentState) -> Dict[str, Any]:
-    """비용 추정 노드: 총 준수 비용을 산출합니다."""
-    result = estimate_costs.invoke({
-        "regulations": state["regulations"],
-        "checklists": state["checklists"],
-        "business_info": state["business_info"]
-    })
-    return {"cost_analysis": result["cost_analysis"]}
+
+
+
+
+
+
+def planning_node(state: AgentState) -> Dict[str, Any]:
+
+
+    """계획 노드: 각 체크리스트 항목에 대한 실행 계획을 수립합니다."""
+
+
+    updated_checklists = []
+
+
+    for item in state["checklists"]:
+
+
+        result = create_action_plan.invoke({"checklist_item": item})
+
+
+        item["action_plan"] = result["action_plan"]
+
+
+        updated_checklists.append(item)
+
+
+    return {"checklists": updated_checklists}
+
+
+
+
+
+
 
 
 def risk_assessor_node(state: AgentState) -> Dict[str, Any]:
@@ -933,20 +811,18 @@ def build_workflow() -> StateGraph:
     3. classifier: 규제 분류
     4. prioritizer: 우선순위 결정
     5. checklist_generator: 규제별 체크리스트 생성
-    6. cost_estimator: 총 비용 산출
+    6. planner: 체크리스트별 실행 계획 수립
     7. risk_assessor: 리스크 평가
     """
     graph = StateGraph(AgentState)
 
-    # 기존 4개 노드
+    # 노드 추가
     graph.add_node("analyzer", analyzer_node)
     graph.add_node("searcher", search_node)
     graph.add_node("classifier", classifier_node)
     graph.add_node("prioritizer", prioritizer_node)
-
-    # 새로운 3개 노드
     graph.add_node("checklist_generator", checklist_generator_node)
-    graph.add_node("cost_estimator", cost_estimator_node)
+    graph.add_node("planner", planning_node)
     graph.add_node("risk_assessor", risk_assessor_node)
 
     # 엣지 추가: 순차 실행
@@ -954,11 +830,9 @@ def build_workflow() -> StateGraph:
     graph.add_edge("analyzer", "searcher")
     graph.add_edge("searcher", "classifier")
     graph.add_edge("classifier", "prioritizer")
-
-    # 새로운 엣지 추가
     graph.add_edge("prioritizer", "checklist_generator")
-    graph.add_edge("checklist_generator", "cost_estimator")
-    graph.add_edge("cost_estimator", "risk_assessor")
+    graph.add_edge("checklist_generator", "planner")
+    graph.add_edge("planner", "risk_assessor")
     graph.add_edge("risk_assessor", END)
 
     return graph
@@ -986,13 +860,6 @@ def run_regulation_agent(business_info: BusinessInfo) -> AgentState:
         "final_output": {},
         # 새로운 필드 초기화
         "checklists": [],
-        "cost_analysis": {
-            "total_cost": 0,
-            "total_cost_formatted": "0원",
-            "breakdown": {"by_priority": {}, "by_category": {}, "by_timeline": {}},
-            "subsidies": [],
-            "payment_plan": []
-        },
         "risk_assessment": {
             "total_risk_score": 0.0,
             "high_risk_items": [],
@@ -1039,69 +906,18 @@ def print_checklists(checklists: List[ChecklistItem]):
             print(f"\n   {idx}. {item['task_name']}")
             print(f"      담당: {item['responsible_dept']}")
             print(f"      마감: {item['deadline']}")
-            print(f"      비용: {item['estimated_cost']}")
             print(f"      기간: {item['estimated_time']}")
-            if item['method']:
+            if item.get('action_plan'):
+                print(f"      실행 계획:")
+                for step in item['action_plan']:
+                    print(f"         - {step}")
+            elif item['method']:
                 print(f"      실행 방법:")
                 for method in item['method'][:3]:  # 최대 3단계만 표시
                     print(f"         {method}")
 
         print()
 
-
-def print_cost_analysis(cost_analysis: CostAnalysis):
-    """비용 분석 결과를 보기 좋게 출력합니다."""
-    print("💰 총 비용 분석")
-    print("=" * 60)
-    print()
-
-    print(f"💵 총 소요 비용: {cost_analysis['total_cost_formatted']}\n")
-
-    # 우선순위별 비용
-    breakdown = cost_analysis['breakdown']
-    by_priority = breakdown.get('by_priority', {})
-
-    if by_priority:
-        print("📊 우선순위별 비용:")
-        total = cost_analysis['total_cost']
-        if total > 0:
-            for priority in ['HIGH', 'MEDIUM', 'LOW']:
-                amount = by_priority.get(priority, 0)
-                percentage = (amount / total * 100) if total > 0 else 0
-                print(f"   {priority:7s}: {_format_currency(amount):>15s} ({percentage:5.1f}%)")
-        print()
-
-    # 카테고리별 비용
-    by_category = breakdown.get('by_category', {})
-    if by_category:
-        print("📂 카테고리별 비용:")
-        for category, amount in by_category.items():
-            print(f"   {category:12s}: {_format_currency(amount)}")
-        print()
-
-    # 시기별 지출 계획
-    payment_plan = cost_analysis.get('payment_plan', [])
-    if payment_plan:
-        print("📅 시기별 지출 계획:")
-        for plan in payment_plan:
-            period = plan.get('period', '')
-            amount = plan.get('amount', 0)
-            items = plan.get('items', [])
-            print(f"   {period:20s}: {_format_currency(amount)}")
-            if items:
-                for item in items[:2]:  # 최대 2개만 표시
-                    print(f"      - {item}")
-        print()
-
-    # 정부 지원금
-    subsidies = cost_analysis.get('subsidies', [])
-    if subsidies:
-        print("🎁 정부 지원금 정보:")
-        for subsidy in subsidies:
-            print(f"   • {subsidy.get('name', '')}")
-            print(f"     금액: {subsidy.get('amount', '')}")
-            print(f"     기관: {subsidy.get('agency', '')}")
-        print()
 
 
 def print_risk_assessment(risk_assessment: RiskAssessment):
@@ -1227,11 +1043,8 @@ def main():
 
     print()
 
-    # 새로운 3개 섹션 출력
+    # 새로운 2개 섹션 출력
     print_checklists(result.get('checklists', []))
-    print()
-
-    print_cost_analysis(result.get('cost_analysis', {}))
     print()
 
     print_risk_assessment(result.get('risk_assessment', {}))
@@ -1243,12 +1056,10 @@ def main():
             "total_regulations": final_output.get('total_count', 0),
             "priority_distribution": priority_dist,
             "total_checklist_items": len(result.get('checklists', [])),
-            "total_cost": result.get('cost_analysis', {}).get('total_cost_formatted', '0원'),
             "risk_score": result.get('risk_assessment', {}).get('total_risk_score', 0.0)
         },
         "regulations": regulations,
         "checklists": result.get('checklists', []),
-        "cost_analysis": result.get('cost_analysis', {}),
         "risk_assessment": result.get('risk_assessment', {})
     }
 

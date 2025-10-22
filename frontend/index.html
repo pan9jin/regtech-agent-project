@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>규제 준수 자동화 시스템</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- 헤더 -->
+        <header class="header">
+            <h1>🤖 규제 준수 자동화 시스템</h1>
+            <p class="subtitle">AI 기반 규제 분석 및 워크플로우 자동화</p>
+        </header>
+
+        <!-- 네비게이션 탭 -->
+        <nav class="tabs">
+            <button class="tab-btn active" data-tab="analyze">규제 분석</button>
+            <button class="tab-btn" data-tab="results">분석 결과</button>
+            <button class="tab-btn" data-tab="dashboard">대시보드</button>
+        </nav>
+
+        <!-- 탭 컨텐츠 -->
+        <div class="tab-content">
+            <!-- 규제 분석 탭 -->
+            <div id="analyze-tab" class="tab-pane active">
+                <div class="card">
+                    <h2>사업 정보 입력</h2>
+                    <form id="analysis-form">
+                        <div class="form-group">
+                            <label for="industry">업종 *</label>
+                            <input type="text" id="industry" name="industry"
+                                   placeholder="예: 배터리 제조" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="product_name">제품명 *</label>
+                            <input type="text" id="product_name" name="product_name"
+                                   placeholder="예: 리튬이온 배터리" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="raw_materials">주요 원자재 *</label>
+                            <input type="text" id="raw_materials" name="raw_materials"
+                                   placeholder="예: 리튬, 코발트, 니켈" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="processes">주요 공정 (쉼표로 구분) *</label>
+                            <input type="text" id="processes" name="processes"
+                                   placeholder="예: 화학 처리, 고온 가공, 조립" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="employee_count">직원 수 *</label>
+                            <input type="number" id="employee_count" name="employee_count"
+                                   placeholder="예: 45" required min="1">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="sales_channels">판매 채널 (쉼표로 구분) *</label>
+                            <input type="text" id="sales_channels" name="sales_channels"
+                                   placeholder="예: B2B, 수출" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="export_countries">수출 국가 (쉼표로 구분)</label>
+                            <input type="text" id="export_countries" name="export_countries"
+                                   placeholder="예: 미국, 유럽, 일본">
+                        </div>
+
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="send_emails" name="send_emails">
+                                분석 완료 후 담당자에게 이메일 자동 발송
+                            </label>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" id="submit-btn">
+                            <span class="btn-text">분석 시작</span>
+                            <span class="btn-loader" style="display:none;">분석 중...</span>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- 진행 상황 -->
+                <div id="progress-section" class="card" style="display:none;">
+                    <h3>분석 진행 중</h3>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-fill"></div>
+                    </div>
+                    <p id="progress-text">규제 검색 중...</p>
+                </div>
+            </div>
+
+            <!-- 분석 결과 탭 -->
+            <div id="results-tab" class="tab-pane">
+                <div class="card">
+                    <h2>분석 결과</h2>
+                    <div id="results-container">
+                        <p class="empty-state">분석을 먼저 실행해주세요.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 대시보드 탭 -->
+            <div id="dashboard-tab" class="tab-pane">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value" id="total-analyses">0</div>
+                        <div class="stat-label">총 분석 수</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="total-regulations">0</div>
+                        <div class="stat-label">발견된 규제</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="total-checklists">0</div>
+                        <div class="stat-label">생성된 체크리스트</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">88%</div>
+                        <div class="stat-label">자동화율</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>시스템 상태</h3>
+                    <div id="system-status">
+                        <div class="status-item">
+                            <span class="status-indicator status-ok"></span>
+                            <span>규제 분석 엔진</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-indicator status-ok"></span>
+                            <span>이메일 자동화</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-indicator status-ok"></span>
+                            <span>담당자 배정 AI</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-indicator status-ok"></span>
+                            <span>Webhook API</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 모달 -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close">&times;</span>
+            <div id="modal-body"></div>
+        </div>
+    </div>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>

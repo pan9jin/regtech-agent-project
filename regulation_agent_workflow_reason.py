@@ -1,6 +1,6 @@
 """
 규제 AI Agent 서비스 - LangGraph Multi-Agent Workflow (병렬 처리 최적화)
-8개의 Agent로 구성된 규제 분석 시스템
+9개의 Agent로 구성된 규제 분석 시스템
 
 1. Analyzer Agent: 사업 정보 분석 및 키워드 추출
 2. Search Agent: Tavily API를 통한 규제 정보 검색
@@ -10,16 +10,22 @@
 6. Risk Assessment Agent: 미준수 시 리스크 평가 및 완화 방안 제시 [병렬]
 7. Planning Agent: 체크리스트 → 실행 계획 변환 (의존성, 타임라인, 마일스톤)
 8. Report Generation Agent: 최종 통합 보고서 생성 (경영진/실무진/법무팀용)
+9. Email Notification Agent: 최종 보고서를 지정된 수신자에게 이메일 발송
 """
 
+import os
 import re
 import sys
 import json
 import time
-from typing import List, Optional, Dict, Any, Iterable, Union
+import smtplib
+from typing import List, Optional, Dict, Any, Iterable, Union, Tuple
 from typing_extensions import TypedDict
 from datetime import datetime
 from dotenv import load_dotenv
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from email.mime.application import MIMEApplication
 from enum import Enum
 from markdown import markdown
 from pathlib import Path
@@ -173,6 +179,8 @@ class AgentState(TypedDict, total=False):
     execution_plans: List[ExecutionPlan]  # 실행 계획 (Planning Agent)
     risk_assessment: RiskAssessment     # 리스크 평가 결과
     final_report: FinalReport           # 최종 보고서 (Report Generation Agent)
+    email_status: Dict[str, Any]        # 이메일 발송 결과 (Email Agent)
+    email_recipient: Optional[str]      # 보고서 수신 이메일
 
 
 # ============================================
@@ -422,6 +430,93 @@ def _normalize_parallel_tasks(
     return normalized
 
 
+def _prepare_email_recipient(
+    provided_email: Optional[str],
+    default_email: str = "compliance-team@example.com"
+) -> Tuple[str, Optional[str]]:
+    """이메일 입력값을 정규화하고 유효성 검사 결과를 반환합니다."""
+    if provided_email is None:
+        return default_email, None
+
+    trimmed = provided_email.strip()
+    if not trimmed:
+        return default_email, None
+
+    email_pattern = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
+    if not email_pattern.match(trimmed):
+        return trimmed, "유효하지 않은 이메일 형식입니다. 예: user@example.com"
+
+    return trimmed, None
+
+
+class EmailSender:
+    """SMTP 기반 이메일 발송 유틸리티."""
+
+    def __init__(
+        self,
+        smtp_server: str = "smtp.gmail.com",
+        smtp_port: int = 587,
+        username: Optional[str] = None,
+        password: Optional[str] = None
+    ):
+        self.smtp_server = smtp_server
+        self.smtp_port = smtp_port
+        self.username = username or os.getenv("GMAIL_SENDER_EMAIL")
+        self.password = password or os.getenv("GMAIL_APP_PASSWORD")
+
+    def send_email(
+        self,
+        to_email: str,
+        subject: str,
+        html_content: str,
+        text_content: Optional[str] = None,
+        attachment_paths: Optional[List[str]] = None
+    ) -> bool:
+        """HTML 본문과 선택적 첨부파일을 포함한 이메일을 발송합니다."""
+        if not self.username or not self.password:
+            print("⚠️  이메일 계정 정보가 설정되지 않았습니다. GMAIL_SENDER_EMAIL/GMAIL_APP_PASSWORD 확인하세요.")
+            return False
+
+        try:
+            msg = MIMEMultipart("alternative")
+            msg["From"] = self.username
+            msg["To"] = to_email
+            msg["Subject"] = subject
+
+            if text_content:
+                msg.attach(MIMEText(text_content, "plain", "utf-8"))
+
+            msg.attach(MIMEText(html_content, "html", "utf-8"))
+
+            if attachment_paths:
+                for file_path in attachment_paths:
+                    if not file_path:
+                        continue
+                    path_obj = Path(file_path)
+                    if not path_obj.exists():
+                        continue
+                    with path_obj.open("rb") as f:
+                        attachment = MIMEApplication(f.read())
+                        attachment.add_header(
+                            "Content-Disposition",
+                            "attachment",
+                            filename=path_obj.name
+                        )
+                        msg.attach(attachment)
+
+            with smtplib.SMTP(self.smtp_server, self.smtp_port) as server:
+                server.starttls()
+                server.login(self.username, self.password)
+                server.send_message(msg)
+
+            print(f"✅ 이메일 발송 성공: {to_email}")
+            return True
+
+        except Exception as exc:
+            print(f"❌ 이메일 발송 실패: {exc}")
+            return False
+
+
 def save_report_pdf(markdown_text: str, output_dir: Path) -> Path:
     """Markdown 보고서를 HTML+CSS로 변환하여 PDF로 저장하고,
     원본 markdown도 .md 파일로 함께 저장합니다.
@@ -539,11 +634,12 @@ def analyze_business(business_info: BusinessInfo) -> Dict[str, Any]:
 
 
 @tool
-def search_regulations(keywords: List[str]) -> Dict[str, Any]:
+def search_regulations(keywords: List[str], user_query: str='') -> Dict[str, Any]:
     """Tavily API를 사용하여 관련 규제 정보를 웹에서 검색합니다.
 
     Args:
         keywords: 검색 키워드 목록
+        user_query: 사용자 지정 검색 쿼리 (선택 사항)
 
     Returns:
         검색된 규제 정보 목록
@@ -555,7 +651,10 @@ def search_regulations(keywords: List[str]) -> Dict[str, Any]:
     tavily_tool = _build_tavily_tool(max_results=10, search_depth="advanced")
 
     # 검색 쿼리 생성
-    query = f"{' '.join(keywords)} 제조업 규제 법률 안전 인증 한국"
+    if user_query:
+        query = f"{' '.join(keywords)} {user_query}"
+    else:
+        query = f"{' '.join(keywords)} 제조업 규제 법률 안전 인증 한국"
 
     # Tavily 검색 실행
     raw = tavily_tool.invoke({"query": query})
@@ -1176,9 +1275,9 @@ def assess_risks(
 
 [출력 스키마]
 {{
-  "penalty_amount": "벌금액 (예: 최대 1억원, 300만원 이하, 없으면 \"\")",
+  "penalty_amount": "벌금액 (예: 최대 1억원, 300만원 이하, 없음 \"\")",
   "penalty_type": "벌칙 유형 (형사처벌|과태료|행정처분|\"\" )",
-  "business_impact": "사업 영향 (예: 영업정지 6개월, 인허가 취소, 없으면 \"\")",
+  "business_impact": "사업 영향 (예: 영업정지 6개월, 인허가 취소, 없음 \"\")",
   "risk_score": 0-10 사이 숫자,
   "past_cases": [
     "과거 처벌 사례 1 (연도, 기업, 처벌 내용)"
@@ -1682,6 +1781,125 @@ def generate_final_report(
     return {"final_report": final_report}
 
 
+@tool
+def send_final_report_email(
+    final_report: FinalReport,
+    checklists: List[ChecklistItem],
+    execution_plans: List[ExecutionPlan],
+    recipient_email: Optional[str] = None
+) -> Dict[str, Any]:
+    """생성된 최종 보고서를 지정된 이메일로 발송합니다."""
+    target_email, validation_error = _prepare_email_recipient(recipient_email)
+    recipient_name = "규제준수팀"
+    subject = "[RegTech Agent] 규제 준수 분석 보고서"
+
+    checklist_count = len(checklists)
+    plan_count = len(execution_plans)
+    insight_items = final_report.get("key_insights", [])[:5]
+    next_steps = final_report.get("next_steps", [])[:5]
+
+    insights_html = "".join(f"<li>{item}</li>" for item in insight_items) or "<li>등록된 인사이트가 없습니다.</li>"
+    next_steps_html = "".join(f"<li>{item}</li>" for item in next_steps) or "<li>다음 단계 제안이 없습니다.</li>"
+
+    executive_summary_md = final_report.get("executive_summary", "")
+    executive_summary_html = markdown(executive_summary_md) if executive_summary_md else "<p>요약 정보가 없습니다.</p>"
+
+    html_content = f"""
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <style>
+            body {{ font-family: Arial, sans-serif; line-height: 1.6; color: #333; }}
+            .container {{ max-width: 720px; margin: 0 auto; padding: 20px; }}
+            .header {{ background-color: #1f5ca6; color: white; padding: 18px 22px; border-radius: 6px; }}
+            .section {{ margin-top: 24px; padding: 18px 22px; background-color: #f7f9fc; border-radius: 6px; }}
+            h1 {{ margin: 0 0 6px 0; font-size: 22px; }}
+            h2 {{ margin-top: 0; color: #1f5ca6; }}
+            ul {{ padding-left: 20px; }}
+            .footer {{ margin-top: 32px; font-size: 12px; color: #6b7280; text-align: center; }}
+            .badge {{ display: inline-block; background-color: #2563eb; color: #fff; padding: 4px 10px; border-radius: 12px; font-size: 12px; margin-right: 8px; }}
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <h1>규제 준수 분석 결과</h1>
+                <p>{datetime.now().strftime('%Y-%m-%d %H:%M')}</p>
+            </div>
+
+            <div class="section">
+                <h2>요약</h2>
+                <span class="badge">체크리스트 {checklist_count}건</span>
+                <span class="badge">실행 계획 {plan_count}건</span>
+                <div style="margin-top: 16px;">
+                    {executive_summary_html}
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>핵심 인사이트</h2>
+                <ul>
+                    {insights_html}
+                </ul>
+            </div>
+
+            <div class="section">
+                <h2>다음 단계 제안</h2>
+                <ul>
+                    {next_steps_html}
+                </ul>
+            </div>
+
+            <div class="footer">
+                <p>이 메일은 RegTech Agent가 자동으로 발송했습니다.</p>
+                <p>첨부된 PDF 보고서를 참고해주세요.</p>
+            </div>
+        </div>
+    </body>
+    </html>
+    """
+
+    attachment_paths: List[str] = []
+    pdf_path = final_report.get("report_pdf_path")
+    if pdf_path and Path(pdf_path).exists():
+        attachment_paths.append(pdf_path)
+
+    status_payload = {
+        "recipient": target_email,
+        "recipient_name": recipient_name,
+        "success": False,
+        "attachments": attachment_paths,
+        "error": None
+    }
+
+    if validation_error:
+        print(f"⚠️  입력된 이메일 주소가 올바르지 않습니다: {target_email}")
+        status_payload["error"] = validation_error
+        return {"email_status": status_payload}
+
+    email_sender = EmailSender()
+
+    if not email_sender.username or not email_sender.password:
+        msg = "이메일 계정 정보(GMAIL_SENDER_EMAIL/GMAIL_APP_PASSWORD)가 설정되지 않았습니다."
+        print(f"⚠️  {msg}")
+        status_payload["error"] = msg
+        return {"email_status": status_payload}
+
+    success = email_sender.send_email(
+        to_email=target_email,
+        subject=subject,
+        html_content=html_content,
+        attachment_paths=attachment_paths or None
+    )
+
+    status_payload["success"] = success
+    if not success and status_payload["error"] is None:
+        status_payload["error"] = "SMTP 전송에 실패했습니다. 서버 로그를 확인하세요."
+
+    return {"email_status": status_payload}
+
+
 # ============================================
 # LangGraph 노드 - 각 Tool을 호출하고 상태를 업데이트
 # ============================================
@@ -1755,6 +1973,21 @@ def report_generator_node(state: AgentState) -> Dict[str, Any]:
     return {"final_report": result["final_report"]}
 
 
+def email_notifier_node(state: AgentState) -> Dict[str, Any]:
+    """이메일 발송 노드: 최종 보고서를 지정된 이메일로 전송합니다."""
+    payload = {
+        "final_report": state["final_report"],
+        "checklists": state["checklists"],
+        "execution_plans": state["execution_plans"]
+    }
+    recipient_email = state.get("email_recipient")
+    if recipient_email:
+        payload["recipient_email"] = recipient_email
+
+    result = send_final_report_email.invoke(payload)
+    return {"email_status": result["email_status"]}
+
+
 # ============================================
 # 그래프 빌드 및 실행
 # ============================================
@@ -1772,6 +2005,7 @@ def build_workflow() -> StateGraph:
          - risk_assessor: 리스크 평가
     7. planning_agent: 실행 계획 수립 (checklist_generator 완료 후)
     8. report_generator: 최종 보고서 생성 (planning_agent + risk_assessor 완료 후)
+    9. email_notifier: 보고서 이메일 발송
 
     병렬화 이점: Risk Assessment Agent가 Checklist Generator/Planning Agent와
                 동시 실행되어 전체 소요 시간 약 30초~1분 단축
@@ -1789,6 +2023,7 @@ def build_workflow() -> StateGraph:
     # 신규 Agent 노드
     graph.add_node("planning_agent", planning_agent_node)
     graph.add_node("report_generator", report_generator_node)
+    graph.add_node("email_notifier", email_notifier_node)
 
     # 엣지 추가: 순차 실행 (Prioritizer까지)
     graph.add_edge(START, "analyzer")
@@ -1807,12 +2042,16 @@ def build_workflow() -> StateGraph:
     graph.add_edge("planning_agent", "report_generator")
     graph.add_edge("risk_assessor", "report_generator")
 
-    graph.add_edge("report_generator", END)
+    graph.add_edge("report_generator", "email_notifier")
+    graph.add_edge("email_notifier", END)
 
     return graph
 
 
-def run_regulation_agent(business_info: BusinessInfo) -> AgentState:
+def run_regulation_agent(
+    business_info: BusinessInfo,
+    email_recipient: Optional[str] = None
+) -> AgentState:
     """규제 AI Agent를 실행합니다.
 
     Args:
@@ -1826,6 +2065,8 @@ def run_regulation_agent(business_info: BusinessInfo) -> AgentState:
     app = workflow.compile(checkpointer=MemorySaver())
 
     # 초기 상태 설정
+    initial_recipient = (email_recipient or "").strip()
+
     initial_state: AgentState = {
         "business_info": business_info,
         "keywords": [],
@@ -1852,7 +2093,15 @@ def run_regulation_agent(business_info: BusinessInfo) -> AgentState:
             "full_markdown": "",
             "report_pdf_path": "",
             "citations": []
-        }
+        },
+        "email_status": {
+            "success": False,
+            "recipient": initial_recipient,
+            "recipient_name": "",
+            "attachments": [],
+            "error": "이메일 발송 전"
+        },
+        "email_recipient": email_recipient
     }
 
     # 워크플로우 실행
@@ -2102,17 +2351,30 @@ def main():
     "export_countries": ["미국", "유럽연합(EU)", "일본"]
 }
 
-    select = sys.argv[1] if len(sys.argv) > 1 else "1"
+    select = "1"
+    email_recipient: Optional[str] = None
+
+    if len(sys.argv) > 1:
+        select = sys.argv[1]
+    if len(sys.argv) > 2:
+        email_recipient = sys.argv[2]
+        if email_recipient == "-":
+            email_recipient = None
     
+    active_business = sample_business_info if select == "1" else sample_business_info2
+
     print("📝 입력된 사업 정보:")
-    print(json.dumps(sample_business_info if select == "1" else sample_business_info2, indent=2, ensure_ascii=False))
+    print(json.dumps(active_business, indent=2, ensure_ascii=False))
     print()
+    if email_recipient:
+        print(f"📧 보고서 수신 이메일: {email_recipient}")
+        print()
     print("-" * 60)
     print()
 
     # Workflow 실행
     try:
-        result = run_regulation_agent(sample_business_info if select == "1" else sample_business_info2)
+        result = run_regulation_agent(active_business, email_recipient=email_recipient)
     except Exception as exc:
         print(f"[ERROR] 분석 파이프라인이 실패했습니다: {exc}")
         raise
@@ -2183,6 +2445,23 @@ def main():
     print()
 
     print_final_report(result.get('final_report', {}))
+    print()
+
+    email_status = result.get('email_status', {})
+    if email_status:
+        status_icon = "✅" if email_status.get('success') else "⚠️"
+        recipient = (email_status.get('recipient') or "").strip() or "미지정"
+        print(f"📧 이메일 발송 결과: {status_icon}")
+        print(f"   수신자: {recipient}")
+        result_text = "발송 성공" if email_status.get('success') else "발송 실패"
+        print(f"   상태: {result_text}")
+        if email_status.get('error'):
+            print(f"   오류: {email_status.get('error')}")
+        attachments = email_status.get('attachments') or []
+        if attachments:
+            print(f"   첨부파일: {', '.join(attachments)}")
+        print()
+
     end_time = time.time()
     print(f"⏱️ 총 처리 시간: {end_time - start_time:.2f}초")
 

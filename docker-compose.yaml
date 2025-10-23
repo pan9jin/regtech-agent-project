@@ -1,0 +1,34 @@
+name: regtech-agent
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    image: regtech-backend
+    container_name: regtech-backend
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+    networks:
+      - regtech-net
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    image: regtech-frontend
+    container_name: regtech-frontend
+    depends_on:
+      - backend
+    ports:
+      - "8080:80"
+    restart: unless-stopped
+    networks:
+      - regtech-net
+
+networks:
+  regtech-net:
+    driver: bridge

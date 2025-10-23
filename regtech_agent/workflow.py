@@ -2,7 +2,7 @@
 LangGraph Workflow 빌드 및 실행
 """
 
-from typing import Optional
+from typing import Optional, Sequence, Union
 
 from langgraph.graph import StateGraph, START, END
 from langgraph.checkpoint.memory import MemorySaver
@@ -77,12 +77,13 @@ def build_workflow() -> StateGraph:
 
 def run_regulation_agent(
     business_info: BusinessInfo,
-    email_recipient: Optional[str] = None,
+    email_recipient: Optional[Union[str, Sequence[str]]] = None,
 ) -> AgentState:
     """규제 AI Agent를 실행합니다.
 
     Args:
         business_info: 사업 정보
+        email_recipient: 이메일 수신자 목록 (문자열 또는 쉼표 구분 문자열)
 
     Returns:
         최종 상태 객체 (분석 결과 포함)
@@ -90,7 +91,21 @@ def run_regulation_agent(
     workflow = build_workflow()
     app = workflow.compile(checkpointer=MemorySaver())
 
-    initial_recipient = (email_recipient or "").strip()
+    def normalize_recipients(value: Optional[Union[str, Sequence[str]]]) -> list[str]:
+        recipients: list[str] = []
+        if value is None:
+            return recipients
+        if isinstance(value, str):
+            recipients.extend([token.strip() for token in value.split(",") if token.strip()])
+            return recipients
+        for entry in value:
+            if entry is None:
+                continue
+            text = str(entry)
+            recipients.extend([token.strip() for token in text.split(",") if token.strip()])
+        return recipients
+
+    normalized_recipients = normalize_recipients(email_recipient)
 
     initial_state: AgentState = {
         "business_info": business_info,
@@ -119,12 +134,14 @@ def run_regulation_agent(
         },
         "email_status": {
             "success": False,
-            "recipient": initial_recipient,
-            "error": "이메일 발송 전",
+            "recipients": normalized_recipients,
+            "details": [],
+            "errors": [],
             "attachments": [],
             "attempted": False,
         },
-        "email_recipient": email_recipient,
+        "email_recipient": normalized_recipients[0] if normalized_recipients else None,
+        "email_recipients": normalized_recipients,
     }
 
     print("🚀 [RegTech Agent] Workflow 시작...\n")

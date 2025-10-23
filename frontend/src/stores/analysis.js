@@ -1,6 +1,3 @@
-/**
- * 분석 상태 관리 Store (Pinia)
- */
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 
@@ -10,25 +7,38 @@ export const useAnalysisStore = defineStore('analysis', () => {
   const isLoading = ref(false)
   const progress = ref(0)
   const progressText = ref('')
+  const currentAgent = ref('')
   const error = ref(null)
 
-  // Getters
+  // Computed: Analysis 데이터 접근
+  const analysisId = computed(() => currentAnalysis.value?.analysis_id || null)
   const regulations = computed(() => currentAnalysis.value?.regulations || [])
   const checklists = computed(() => currentAnalysis.value?.checklists || [])
   const executionPlans = computed(() => currentAnalysis.value?.execution_plans || [])
   const riskAssessment = computed(() => currentAnalysis.value?.risk_assessment || {})
   const finalReport = computed(() => currentAnalysis.value?.final_report || {})
+  const businessInfo = computed(() => currentAnalysis.value?.business_info || {})
+  const emailStatus = computed(() => currentAnalysis.value?.email_status || {})
+
+  // Computed: Summary 데이터 (API 응답 구조에 따라)
   const summary = computed(() => currentAnalysis.value?.summary || {})
 
-  const analysisId = computed(() => currentAnalysis.value?.analysis_id || null)
+  // Computed: 결과 존재 여부
+  const hasResults = computed(() => {
+    return currentAnalysis.value !== null && regulations.value.length > 0
+  })
 
-  const hasResults = computed(() => currentAnalysis.value !== null)
-
+  // Computed: 개수
   const regulationCount = computed(() => regulations.value.length)
   const checklistCount = computed(() => checklists.value.length)
-  const riskScore = computed(() => riskAssessment.value?.total_risk_score || 0)
 
-  // Priority distribution
+  // Computed: 리스크 점수
+  const riskScore = computed(() => {
+    const score = riskAssessment.value?.total_risk_score || 0
+    return typeof score === 'number' ? score.toFixed(1) : '0.0'
+  })
+
+  // Computed: 우선순위 분포
   const priorityDistribution = computed(() => {
     const distribution = { HIGH: 0, MEDIUM: 0, LOW: 0 }
     regulations.value.forEach((reg) => {
@@ -42,39 +52,43 @@ export const useAnalysisStore = defineStore('analysis', () => {
 
   // Actions
   function setAnalysis(analysis) {
+    console.log('Setting analysis in store:', analysis)
     currentAnalysis.value = analysis
     error.value = null
   }
 
-  function updateProgress(percent, text) {
-    progress.value = Math.min(100, Math.max(0, percent))
+  function updateProgress(percent, text, agent = '') {
+    progress.value = percent
     progressText.value = text
+    currentAgent.value = agent
   }
 
   function startLoading() {
     isLoading.value = true
     progress.value = 0
-    progressText.value = '분석 시작...'
+    progressText.value = '분석을 시작합니다...'
+    currentAgent.value = ''
     error.value = null
   }
 
   function stopLoading() {
     isLoading.value = false
     progress.value = 100
-    progressText.value = '완료!'
+    progressText.value = '분석 완료!'
   }
 
   function setError(errorMessage) {
     error.value = errorMessage
     isLoading.value = false
+    progress.value = 0
+    progressText.value = ''
   }
 
   function clearAnalysis() {
     currentAnalysis.value = null
-    isLoading.value = false
+    error.value = null
     progress.value = 0
     progressText.value = ''
-    error.value = null
   }
 
   return {
@@ -83,16 +97,19 @@ export const useAnalysisStore = defineStore('analysis', () => {
     isLoading,
     progress,
     progressText,
+    currentAgent,
     error,
 
-    // Getters
+    // Computed
+    analysisId,
     regulations,
     checklists,
     executionPlans,
     riskAssessment,
     finalReport,
+    businessInfo,
+    emailStatus,
     summary,
-    analysisId,
     hasResults,
     regulationCount,
     checklistCount,

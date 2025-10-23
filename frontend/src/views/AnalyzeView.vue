@@ -13,10 +13,8 @@ import ProgressBar from '@/components/ProgressBar.vue'
 const router = useRouter()
 
 const handleAnalysisComplete = (result) => {
-  // 분석 완료 후 결과 탭으로 자동 전환
-  setTimeout(() => {
-    router.push('/results')
-  }, 1000)
+  // 분석 완료 후 결과 탭으로 자동 전환 (AnalysisForm에서 이미 0.5초 대기)
+  router.push('/results')
 }
 </script>
 

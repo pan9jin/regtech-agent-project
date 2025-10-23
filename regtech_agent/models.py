@@ -139,4 +139,5 @@ class AgentState(TypedDict, total=False):
     risk_assessment: RiskAssessment     # 리스크 평가 결과
     final_report: FinalReport           # 최종 보고서 (Report Generation Agent)
     email_status: Dict[str, Any]        # 이메일 전송 결과
-    email_recipient: Optional[str]      # 보고서 수신 이메일
+    email_recipient: Optional[str]      # (호환성용) 단일 수신 이메일
+    email_recipients: Optional[List[str]]  # 보고서 수신 이메일 목록

@@ -110,7 +110,7 @@
 <script setup>
 import { ref } from 'vue'
 import { useAnalysisStore } from '@/stores/analysis'
-import { analyzeRegulations } from '@/api/endpoints'
+import { analyzeRegulations, getAnalysis } from '@/api/endpoints'
 
 const analysisStore = useAnalysisStore()
 
@@ -130,6 +130,39 @@ const isLoading = ref(false)
 
 const emit = defineEmits(['analysisComplete'])
 
+// Agent 단계별 진행률 시뮬레이션
+const simulateAgentProgress = () => {
+  const agentSteps = [
+    { progress: 10, text: '사업 정보 분석 중', agent: 'Analyzer Agent', duration: 3000 },
+    { progress: 20, text: '규제 검색 중', agent: 'Search Agent', duration: 8000 },
+    { progress: 35, text: '규제 분류 중', agent: 'Classifier Agent', duration: 10000 },
+    { progress: 45, text: '우선순위 결정 중', agent: 'Prioritizer Agent', duration: 5000 },
+    { progress: 65, text: '체크리스트 및 리스크 평가 중', agent: 'Checklist & Risk Agent', duration: 15000 },
+    { progress: 75, text: '실행 계획 수립 중', agent: 'Planning Agent', duration: 10000 },
+    { progress: 90, text: 'PDF 보고서 생성 중', agent: 'Report Generator Agent', duration: 15000 },
+    { progress: 95, text: '이메일 발송 중', agent: 'Email Notifier Agent', duration: 5000 },
+  ]
+
+  let currentStep = 0
+  let totalElapsed = 0
+
+  const updateStep = () => {
+    if (currentStep < agentSteps.length && analysisStore.isLoading) {
+      const step = agentSteps[currentStep]
+      analysisStore.updateProgress(step.progress, step.text, step.agent)
+
+      totalElapsed += step.duration
+      currentStep++
+
+      if (currentStep < agentSteps.length) {
+        setTimeout(updateStep, step.duration)
+      }
+    }
+  }
+
+  updateStep()
+}
+
 const handleSubmit = async () => {
   // 이메일 발송 체크 시 이메일 주소 검증
   if (sendEmails.value && !emailAddresses.value.trim()) {
@@ -139,6 +172,9 @@ const handleSubmit = async () => {
 
   isLoading.value = true
   analysisStore.startLoading()
+
+  // Agent 진행 상황 시뮬레이션 시작
+  simulateAgentProgress()
 
   try {
     // 데이터 변환
@@ -154,19 +190,49 @@ const handleSubmit = async () => {
         : [],
     }
 
-    // 이메일 주소 준비 (쉼표로 구분된 전체 문자열 전송)
-    const emailRecipient = sendEmails.value ? emailAddresses.value.trim() : null
+    // 이메일 주소 준비 (쉼표로 구분된 배열 전송)
+    const emailRecipients = sendEmails.value
+      ? emailAddresses.value
+          .split(',')
+          .map((s) => s.trim())
+          .filter((s) => s.length > 0)
+      : []
+
+    if (sendEmails.value && emailRecipients.length === 0) {
+      alert('올바른 이메일 주소를 입력해주세요.')
+      return
+    }
 
     // API 호출
-    const response = await analyzeRegulations(businessInfo, emailRecipient)
-    const result = response.data
+    const response = await analyzeRegulations(
+      businessInfo,
+      emailRecipients.length > 0 ? emailRecipients : null,
+    )
+    const triggerResult = response.data
 
-    // Store 업데이트
-    analysisStore.setAnalysis(result)
-    analysisStore.stopLoading()
+    console.log('Analysis trigger response:', triggerResult)
 
-    // 분석 완료 이벤트
-    emit('analysisComplete', result)
+    // 전체 데이터 가져오기 (regulations, checklists 등 포함)
+    if (triggerResult.analysis_id) {
+      const fullDataResponse = await getAnalysis(triggerResult.analysis_id)
+      const fullResult = fullDataResponse.data
+
+      console.log('Full analysis data:', fullResult)
+
+      // 100% 완료 표시
+      analysisStore.updateProgress(100, '분석 완료!', '')
+
+      // Store 업데이트 (전체 데이터 사용)
+      analysisStore.setAnalysis(fullResult)
+
+      // 0.5초 대기 후 로딩 종료 및 결과 화면으로 이동
+      setTimeout(() => {
+        analysisStore.stopLoading()
+        emit('analysisComplete', fullResult)
+      }, 500)
+    } else {
+      throw new Error('분석 ID를 받지 못했습니다.')
+    }
   } catch (error) {
     console.error('Analysis error:', error)
     analysisStore.setError(error.message || '분석 중 오류가 발생했습니다')

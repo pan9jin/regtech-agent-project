@@ -8,7 +8,7 @@ from typing import List, Dict, Any, Iterable, Union
 from pathlib import Path
 from markdown import markdown
 from weasyprint import HTML, CSS
-from datetime import datetime
+from urllib.parse import urlparse
 
 from langchain_tavily import TavilySearch
 
@@ -335,8 +335,12 @@ def format_evidence_link(evidence: Dict[str, Any]) -> str:
     Returns:
         포맷된 마크다운 링크 문자열
     """
-    link_title = evidence.get('title') or evidence.get('url', '').split('/')[2] if evidence.get('url') else 'Unknown'
+    # hostname 추출
     url = evidence.get('url', '')
+    parsed = urlparse(url) if url else None
+    hostname = parsed.hostname if parsed else None
+    
+    link_title = evidence.get('title') or hostname or 'Unknown'
     # justification 우선 사용 (LLM 요약), 없으면 snippet 사용
     summary = evidence.get('justification') or (evidence.get('snippet') or "").replace('\n', ' ')
 

@@ -335,12 +335,30 @@ def format_evidence_link(evidence: Dict[str, Any]) -> str:
     Returns:
         포맷된 마크다운 링크 문자열
     """
-    # hostname 추출
-    url = evidence.get('url', '')
+    # hostname 추출 및 표시 이름 정리
+    url = (evidence.get('url') or '').strip()
     parsed = urlparse(url) if url else None
     hostname = parsed.hostname if parsed else None
-    
-    link_title = evidence.get('title') or hostname or 'Unknown'
+
+    raw_title = (evidence.get('title') or '').strip()
+
+    def _clean_hostname(candidate: str) -> str:
+        if candidate:
+            stripped = candidate.split('//')[-1].split('/')[0]
+            return stripped or 'Unknown'
+        if hostname:
+            return hostname
+        return 'Unknown'
+
+    link_title = raw_title or hostname or _clean_hostname(url)
+    if raw_title and url and raw_title.lower() == url.lower():
+        link_title = hostname or _clean_hostname(url)
+    if link_title.lower().startswith(('http://', 'https://')):
+        link_title = _clean_hostname(link_title)
+    if not link_title and hostname:
+        link_title = hostname
+    if not link_title:
+        link_title = 'Unknown'
     # justification 우선 사용 (LLM 요약), 없으면 snippet 사용
     summary = evidence.get('justification') or (evidence.get('snippet') or "").replace('\n', ' ')
 

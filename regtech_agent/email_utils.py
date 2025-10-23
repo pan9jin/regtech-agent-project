@@ -6,6 +6,7 @@ from __future__ import annotations
 
 import os
 import smtplib
+import ssl
 from pathlib import Path
 from typing import Dict, Any, Optional, Tuple, List
 from datetime import datetime
@@ -198,7 +199,10 @@ class EmailSender:
                     message.attach(attachment)
 
             with smtplib.SMTP(self.smtp_server, self.smtp_port, timeout=30) as server:
-                server.starttls()
+                server.ehlo()
+                context = ssl.create_default_context()
+                server.starttls(context=context)
+                server.ehlo()
                 server.login(self.sender_email, self.sender_password)
                 server.send_message(message)
 

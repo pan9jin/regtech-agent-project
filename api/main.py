@@ -138,7 +138,7 @@ async def analyze_regulations(
         final_state = await run_in_threadpool(
             run_regulation_agent,
             business_payload,
-            request.email_recipient,
+            request.email_recipients,
         )
     except Exception as exc:  # pragma: no cover - FastAPI 런타임 오류 처리
         raise HTTPException(status_code=500, detail=str(exc)) from exc

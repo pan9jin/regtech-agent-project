@@ -42,6 +42,10 @@ app.add_middleware(
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 REPORT_DIR = PROJECT_ROOT / "report"
 
+# 메모리 캐시: 분석 결과를 임시 저장 (JSON 파일 대신)
+_analysis_cache: Dict[str, AnalysisRecord] = {}
+
+
 def _create_summary(payload: Dict[str, Any]) -> AnalysisSummary:
     regulations = payload.get("regulations") or []
     checklists = payload.get("checklists") or []
@@ -94,48 +98,17 @@ def _rewrite_report_files(analysis_id: str, final_report: Dict[str, Any]) -> Opt
 
 
 def _persist_analysis(record: AnalysisRecord) -> None:
-    filename = PROJECT_ROOT / f"analysis_{record.analysis_id}.json"
-    payload = record.model_dump()
-    with filename.open("w", encoding="utf-8") as file_handle:
-        json.dump(payload, file_handle, ensure_ascii=False, indent=2)
+    """분석 결과를 메모리 캐시에 저장합니다 (JSON 파일 저장 비활성화)."""
+    _analysis_cache[record.analysis_id] = record
+    print(f"✅ 분석 결과를 메모리에 저장했습니다: {record.analysis_id}")
 
 
 def _load_analysis(analysis_id: str) -> AnalysisRecord:
-    filename = PROJECT_ROOT / f"analysis_{analysis_id}.json"
-    if not filename.exists():
+    """메모리 캐시에서 분석 결과를 로드합니다."""
+    if analysis_id not in _analysis_cache:
         raise HTTPException(status_code=404, detail="분석 결과를 찾을 수 없습니다.")
 
-    with filename.open("r", encoding="utf-8") as file_handle:
-        content = json.load(file_handle)
-
-    return AnalysisRecord.model_validate(content)
-
-
-def _format_email_message(status: Dict[str, Any]) -> Optional[str]:
-    if not status:
-        return None
-
-    attempted = status.get("attempted", False)
-    recipients = status.get("recipients") or []
-    details = status.get("details") or []
-    errors = status.get("errors") or []
-
-    if not attempted:
-        if errors:
-            return "; ".join(errors)
-        return None
-
-    if status.get("success"):
-        if recipients:
-            return f"보고서 이메일 발송 완료 ({', '.join(recipients)})"
-        return "보고서 이메일 발송 완료"
-
-    detail_errors = [item.get("error") for item in details if not item.get("success") and item.get("error")]
-    all_errors = [err for err in [*errors, *detail_errors] if err]
-    if all_errors:
-        deduped = list(dict.fromkeys(all_errors))
-        return "; ".join(deduped)
-    return "이메일 발송에 실패했습니다."
+    return _analysis_cache[analysis_id]
 
 
 @app.get("/", response_class=HTMLResponse, tags=["Root"])
@@ -165,7 +138,7 @@ async def analyze_regulations(
         final_state = await run_in_threadpool(
             run_regulation_agent,
             business_payload,
-            request.email_recipients,
+            request.email_recipient,
         )
     except Exception as exc:  # pragma: no cover - FastAPI 런타임 오류 처리
         raise HTTPException(status_code=500, detail=str(exc)) from exc
@@ -192,7 +165,9 @@ async def analyze_regulations(
     _persist_analysis(record)
 
     email_status = record.email_status or {}
-    message = _format_email_message(email_status)
+    message: Optional[str] = None
+    if email_status.get("attempted"):
+        message = "보고서 이메일 발송 완료" if email_status.get("success") else email_status.get("error")
 
     return AnalysisTriggerResponse(
         status="completed",

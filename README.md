@@ -248,6 +248,45 @@ echo "VITE_API_BASE_URL=http://localhost:8000" > .env
 
 ---
 
+## 🐳 Docker 배포
+
+프로젝트 루트에는 백엔드(`backend/Dockerfile`)와 프론트엔드(`frontend/Dockerfile`)를 위한 멀티 스테이지 Dockerfile이 포함되어 있습니다. WeasyPrint PDF 생성을 위한 Cairo/Pango/폰트 의존성을 이미지에 미리 설치했으며, 루트 `.dockerignore`와 `frontend/.dockerignore`로 빌드 컨텍스트를 최소화합니다.
+
+### 백엔드 이미지 빌드
+
+```bash
+docker build -f backend/Dockerfile -t regtech-backend .
+```
+
+실행 시 OpenAI · Tavily · SMTP 환경 변수를 `--env-file` 또는 `-e` 옵션으로 주입하세요.
+
+### 프론트엔드 이미지 빌드
+
+```bash
+docker build -f frontend/Dockerfile -t regtech-frontend .
+```
+
+`default.conf`는 `/api/` 트래픽을 `http://backend:8000`으로 프록시합니다. Docker Compose 등에서 백엔드 컨테이너 이름을 `backend`로 맞추거나, 필요에 따라 `proxy_pass` 대상을 변경하세요.
+
+### 예시 실행 (단독 컨테이너)
+
+```bash
+docker network create regtech-net
+
+docker run --rm -d --name backend --network regtech-net \
+  -p 8000:8000 \
+  --env-file .env \
+  regtech-backend
+
+docker run --rm -d --name frontend --network regtech-net \
+  -p 8080:80 \
+  regtech-frontend
+```
+
+이후 `http://localhost:8080`에서 Vue UI, `http://localhost:8000/docs`에서 Swagger UI를 확인할 수 있습니다.
+
+---
+
 ## 🌐 FastAPI 백엔드
 
 에이전트 워크플로우를 HTTP API 형태로 제공하기 위해 `api/`와 `backend/` 모듈을 추가했습니다. FastAPI는 Swagger UI를 기본 제공하므로, 브라우저에서 엔드포인트를 바로 확인하고 테스트할 수 있습니다.

@@ -250,40 +250,40 @@ echo "VITE_API_BASE_URL=http://localhost:8000" > .env
 
 ## 🐳 Docker 배포
 
-프로젝트 루트에는 백엔드(`backend/Dockerfile`)와 프론트엔드(`frontend/Dockerfile`)를 위한 멀티 스테이지 Dockerfile이 포함되어 있습니다. WeasyPrint PDF 생성을 위한 Cairo/Pango/폰트 의존성을 이미지에 미리 설치했으며, 루트 `.dockerignore`와 `frontend/.dockerignore`로 빌드 컨텍스트를 최소화합니다.
+루트에는 백엔드(`backend/Dockerfile`)와 프론트엔드(`frontend/Dockerfile`)용 멀티 스테이지 Dockerfile이 있으며, WeasyPrint 의존성( cairo/pango/폰트 등)을 포함하도록 구성되어 있습니다. 루트 `.dockerignore`와 `frontend/.dockerignore`로 빌드 컨텍스트를 최소화합니다.
 
-### 백엔드 이미지 빌드
+### docker compose로 통합 실행
+
+`docker-compose.yaml`에 두 서비스와 공용 네트워크가 정의되어 있어 한 번의 명령으로 빌드·기동할 수 있습니다.
+
+```bash
+docker compose up --build -d
+```
+
+- 프로젝트 이름은 `regtech-agent`로 설정되어 컨테이너가 `regtech-backend`, `regtech-frontend`로 생성됩니다.
+- `.env` 파일에 OpenAI, Tavily, SMTP 등 필수 환경 변수를 미리 설정해 두세요.
+- 백엔드는 `http://localhost:8000`(Swagger UI: `/docs`), 프론트엔드는 `http://localhost:8080`으로 접근합니다.
+
+종료할 때는 `docker compose down`을 사용합니다.
+
+### 수동 빌드·실행(선택)
+
+개별 이미지를 직접 빌드하고 실행하고 싶다면 다음을 참고하세요.
 
 ```bash
 docker build -f backend/Dockerfile -t regtech-backend .
-```
-
-실행 시 OpenAI · Tavily · SMTP 환경 변수를 `--env-file` 또는 `-e` 옵션으로 주입하세요.
-
-### 프론트엔드 이미지 빌드
-
-```bash
 docker build -f frontend/Dockerfile -t regtech-frontend .
-```
 
-`default.conf`는 `/api/` 트래픽을 `http://backend:8000`으로 프록시합니다. Docker Compose 등에서 백엔드 컨테이너 이름을 `backend`로 맞추거나, 필요에 따라 `proxy_pass` 대상을 변경하세요.
-
-### 예시 실행 (단독 컨테이너)
-
-```bash
 docker network create regtech-net
 
-docker run --rm -d --name backend --network regtech-net \
-  -p 8000:8000 \
-  --env-file .env \
-  regtech-backend
+docker run --rm -d --name regtech-backend --network regtech-net \
+  -p 8000:8000 --env-file .env regtech-backend
 
-docker run --rm -d --name frontend --network regtech-net \
-  -p 8080:80 \
-  regtech-frontend
+docker run --rm -d --name regtech-frontend --network regtech-net \
+  -p 8080:80 regtech-frontend
 ```
 
-이후 `http://localhost:8080`에서 Vue UI, `http://localhost:8000/docs`에서 Swagger UI를 확인할 수 있습니다.
+프론트엔드는 `default.conf`를 통해 `/api/` 호출을 자동으로 `regtech-backend:8000`에 프록시합니다.
 
 ---
 

@@ -42,7 +42,6 @@ app.add_middleware(
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 REPORT_DIR = PROJECT_ROOT / "report"
 
-
 def _create_summary(payload: Dict[str, Any]) -> AnalysisSummary:
     regulations = payload.get("regulations") or []
     checklists = payload.get("checklists") or []
@@ -109,7 +108,34 @@ def _load_analysis(analysis_id: str) -> AnalysisRecord:
     with filename.open("r", encoding="utf-8") as file_handle:
         content = json.load(file_handle)
 
-    return AnalysisRecord.parse_obj(content)
+    return AnalysisRecord.model_validate(content)
+
+
+def _format_email_message(status: Dict[str, Any]) -> Optional[str]:
+    if not status:
+        return None
+
+    attempted = status.get("attempted", False)
+    recipients = status.get("recipients") or []
+    details = status.get("details") or []
+    errors = status.get("errors") or []
+
+    if not attempted:
+        if errors:
+            return "; ".join(errors)
+        return None
+
+    if status.get("success"):
+        if recipients:
+            return f"보고서 이메일 발송 완료 ({', '.join(recipients)})"
+        return "보고서 이메일 발송 완료"
+
+    detail_errors = [item.get("error") for item in details if not item.get("success") and item.get("error")]
+    all_errors = [err for err in [*errors, *detail_errors] if err]
+    if all_errors:
+        deduped = list(dict.fromkeys(all_errors))
+        return "; ".join(deduped)
+    return "이메일 발송에 실패했습니다."
 
 
 @app.get("/", response_class=HTMLResponse, tags=["Root"])
@@ -139,7 +165,7 @@ async def analyze_regulations(
         final_state = await run_in_threadpool(
             run_regulation_agent,
             business_payload,
-            request.email_recipient,
+            request.email_recipients,
         )
     except Exception as exc:  # pragma: no cover - FastAPI 런타임 오류 처리
         raise HTTPException(status_code=500, detail=str(exc)) from exc
@@ -166,9 +192,7 @@ async def analyze_regulations(
     _persist_analysis(record)
 
     email_status = record.email_status or {}
-    message: Optional[str] = None
-    if email_status.get("attempted"):
-        message = "보고서 이메일 발송 완료" if email_status.get("success") else email_status.get("error")
+    message = _format_email_message(email_status)
 
     return AnalysisTriggerResponse(
         status="completed",
@@ -207,23 +231,28 @@ async def download_report(analysis_id: str) -> FileResponse:
 
 @app.get("/api/stats", response_model=StatsResponse, tags=["Analysis"])
 async def get_stats() -> StatsResponse:
-    """저장된 분석 파일을 기반으로 통계를 계산합니다."""
-    analysis_files = list(PROJECT_ROOT.glob("analysis_*.json"))
+    """분석 통계를 반환합니다 (메모리 캐시 기반)."""
+    total_analyses = len(_analysis_cache)
+
+    if total_analyses == 0:
+        return StatsResponse(
+            total_analyses=0,
+            total_regulations=0,
+            total_checklists=0,
+            average_regulations=0.0,
+            average_checklists=0.0,
+        )
 
     total_regulations = 0
     total_checklists = 0
 
-    for file_path in analysis_files:
+    for analysis_id, record in _analysis_cache.items():
         try:
-            with file_path.open("r", encoding="utf-8") as file_handle:
-                payload = json.load(file_handle)
+            total_regulations += len(record.regulations)
+            total_checklists += len(record.checklists)
         except Exception:
             continue
 
-        total_regulations += len(payload.get("regulations", []))
-        total_checklists += len(payload.get("checklists", []))
-
-    total_analyses = len(analysis_files)
     average_regulations = total_regulations / total_analyses if total_analyses else 0.0
     average_checklists = total_checklists / total_analyses if total_analyses else 0.0
 

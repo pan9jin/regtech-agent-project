@@ -68,11 +68,22 @@ def main():
     email_status = final_state.get("email_status", {})
     if email_status:
         status_icon = "✅" if email_status.get("success") else "⚠️"
-        recipient = email_status.get("recipient") or "미지정"
+        recipients = email_status.get("recipients") or []
+        recipient = ", ".join(recipients) if recipients else "미지정"
         print("\n📧 이메일 발송 결과:")
         print(f"   {status_icon} 수신자: {recipient}")
-        if email_status.get("error"):
-            print(f"   오류: {email_status['error']}")
+        if email_status.get("errors"):
+            for error in email_status["errors"]:
+                print(f"   오류: {error}")
+        if email_status.get("details"):
+            for detail in email_status["details"]:
+                icon = "✅" if detail.get("success") else "❌"
+                target = detail.get("recipient") or detail.get("input") or "알 수 없음"
+                message = detail.get("error")
+                if message:
+                    print(f"   {icon} {target} → {message}")
+                else:
+                    print(f"   {icon} {target} 전송 완료")
 
     print("\n" + "=" * 80)
     print("🎉 완료! 생성된 보고서를 확인하세요.")

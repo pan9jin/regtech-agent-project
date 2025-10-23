@@ -93,12 +93,13 @@ def email_notifier_node(state: AgentState) -> Dict[str, Any]:
 
     final_report: FinalReport = state.get("final_report", {})
     business_info: BusinessInfo = state.get("business_info", {})
+    recipients = state.get("email_recipients") or []
 
     result = send_final_report_email.invoke({
         "final_report": final_report,
         "business_info": business_info,
         "checklists": state.get("checklists", []),
         "execution_plans": state.get("execution_plans", []),
-        "recipient_email": state.get("email_recipient"),
+        "recipient_emails": recipients,
     })
     return {"email_status": result["email_status"]}

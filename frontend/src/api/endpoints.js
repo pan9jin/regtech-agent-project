@@ -3,13 +3,17 @@ import api from './index'
 /**
  * 규제 분석 실행
  * @param {Object} businessInfo - 사업 정보
- * @param {string|null} emailRecipient - 이메일 수신자 (쉼표로 구분된 이메일 주소)
+ * @param {string[]|null} emailRecipients - 이메일 수신자 배열
  */
-export const analyzeRegulations = (businessInfo, emailRecipient = null) => {
+export const analyzeRegulations = (businessInfo, emailRecipients = null) => {
   const payload = {
     business_info: businessInfo,
-    email_recipient: emailRecipient,
   }
+
+  if (Array.isArray(emailRecipients) && emailRecipients.length > 0) {
+    payload.email_recipients = emailRecipients
+  }
+
   return api.post('/api/analyze', payload)
 }
 

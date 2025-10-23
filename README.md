@@ -66,25 +66,20 @@ START → Analyzer → Searcher → Classifier → Prioritizer
 ## 📁 프로젝트 구조
 
 ```
-regtech_agent/
-├── agents/
-│   ├── analyzer.py
-│   ├── checklist_generator.py
-│   ├── classifier.py
-│   ├── email_notifier.py
-│   ├── planning.py
-│   ├── prioritizer.py
-│   ├── report_generator.py
-│   ├── risk_assessor.py
-│   └── searcher.py
+regtech_agent/                     # LangGraph 기반 에이전트 패키지
+├── agents/                        # LLM Tool 정의
 ├── email_utils.py
 ├── models.py
 ├── nodes.py
 ├── utils.py
 └── workflow.py
 
+api/                               # FastAPI 엔드포인트 (백엔드 API)
+backend/                           # 서버 실행 스크립트
+frontend/                          # Vue 3 웹 프론트엔드
+
 run_regtech_agent.py               # CLI 엔트리 포인트
-report/                             # 보고서 출력 디렉터리 (자동 생성)
+report/                            # 보고서 출력 디렉터리 (자동 생성)
 ```
 
 ---
@@ -144,6 +139,7 @@ report/                             # 보고서 출력 디렉터리 (자동 생�
 
 - 메일 본문은 체크리스트/실행 계획 요약, 핵심 인사이트, 다음 단계 제안을 포함한 HTML 템플릿으로 구성됩니다.
 - 첨부 파일로 PDF 보고서를 포함하며, 파일이 없을 경우 안내 메시지와 함께 본문만 전송합니다.
+- API 요청 시 `email_recipients` 필드 또는 프론트엔드의 쉼표 구분 입력을 통해 여러 수신자에게 동시에 보고서를 전송할 수 있습니다.
 - 동일 워크플로에서 중복 발송을 방지하기 위해 `email_status.attempted` 플래그로 1회만 전송합니다.
 - Gmail SMTP 정책으로 인해 TLS(587) 연결이 차단되면 `.env`에 `SMTP_USE_SSL=1`, `SMTP_PORT=465`를 추가해 SSL 모드로 전환할 수 있습니다.
 
@@ -168,8 +164,13 @@ report/                             # 보고서 출력 디렉터리 (자동 생�
     "report_pdf_path": "report/regulation_report_reason.pdf"
   },
   "email_status": {
-    "recipient": "user@example.com",
+    "attempted": true,
     "success": true,
+    "recipients": ["user@example.com", "ops@example.com"],
+    "details": [
+      {"recipient": "user@example.com", "success": true},
+      {"recipient": "ops@example.com", "success": true}
+    ],
     "attachments": ["regulation_report_reason.pdf"]
   }
 }
@@ -191,6 +192,59 @@ report/                             # 보고서 출력 디렉터리 (자동 생�
 - `.env`가 로드되지 않으면 LLM·검색·SMTP 호출이 실패하므로 실행 전 `print(os.environ.get(...))` 등으로 값을 확인하세요.
 - LangSmith를 활성화하면 각 에이전트의 프롬프트와 응답을 추적할 수 있습니다.
 - PDF 생성 시 시스템에 한글 폰트(Noto Sans CJK 등)가 설치되어 있어야 올바르게 렌더링됩니다.
+
+---
+
+## 🎨 Vue 프론트엔드
+
+`frontend/`는 Vite 기반 Vue 3 애플리케이션으로, FastAPI와 연동해 규제 분석을 시각화합니다.
+
+### 기술 스택
+
+- Vue 3 (Composition API)
+- Vite 7
+- Pinia (상태 관리)
+- Vue Router
+- Axios
+
+### 주요 경로
+
+```
+frontend/
+├── src/
+│   ├── api/               # Axios 인스턴스 및 엔드포인트 함수
+│   ├── components/        # UI 컴포넌트
+│   ├── stores/            # Pinia 스토어
+│   ├── views/             # 페이지 뷰 (Analyze/Results/Dashboard)
+│   └── main.js            # 앱 진입점
+├── public/                # 정적 리소스
+├── vite.config.js         # 개발 서버 및 빌드 설정
+└── package.json
+```
+
+### 환경 설정
+
+```bash
+cd frontend
+npm install
+echo "VITE_API_BASE_URL=http://localhost:8000" > .env
+```
+
+### 실행 및 빌드
+
+- 개발 서버: `npm run dev` (기본 포트 `http://localhost:5173`)
+- 프리뷰: `npm run preview`
+- 프로덕션 빌드: `npm run build` (출력은 `frontend/dist/`)
+
+### 주요 화면
+
+1. **규제 분석**(`/analyze`) – 사업 정보 입력, 이메일 옵션, 진행률 표시  
+2. **분석 결과**(`/results`) – 우선순위/카테고리별 규제, 체크리스트, PDF 다운로드  
+3. **대시보드**(`/dashboard`) – 최근 분석 통계, 시스템 상태 모니터링
+
+> 데모 데이터를 빠르게 확인하려면 `http://localhost:5173/?demo=1`로 접속하세요.
+
+프론트엔드가 백엔드 API를 호출할 수 있도록 `backend/run_server.py`로 FastAPI 서버를 먼저 실행한 뒤 프론트엔드를 띄우는 순서로 개발환경을 구성하면 됩니다.
 
 ---
 
@@ -229,4 +283,4 @@ python backend/run_server.py
 - `GET /api/stats` : 최근 분석 결과 기반 통계를 반환합니다.
 - `GET /health` : 서비스 상태를 확인합니다.
 
-> ⚠️ 이메일 발송을 사용하려면 `.env`에 Gmail SMTP 정보 또는 다른 SMTP 설정을 반드시 입력해야 합니다. 수신자는 API 요청의 `email_recipient` 또는 사업 정보의 `contact_email` 값을 사용합니다.
+> ⚠️ 이메일 발송을 사용하려면 `.env`에 Gmail SMTP 정보 또는 다른 SMTP 설정을 반드시 입력해야 합니다. 수신자는 API 요청의 `email_recipients`(쉼표 구분 가능) 또는 사업 정보의 `contact_email` 값을 사용합니다.

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Any, Dict, List, Optional
 
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field, validator, model_validator
 
 from regtech_agent import BusinessInfo
 
@@ -57,10 +57,40 @@ class AnalysisRequest(BaseModel):
     """규제 분석 실행 요청."""
 
     business_info: BusinessInfoPayload
-    email_recipient: Optional[str] = Field(
+    email_recipients: Optional[List[str]] = Field(
         default=None,
-        description="보고서를 수신할 이메일 주소 (지정 시 워크플로우가 이메일 발송 시도)",
+        description="보고서를 수신할 이메일 주소 목록 (쉼표 구분 허용)",
     )
+
+    @model_validator(mode="before")
+    @classmethod
+    def _merge_email_fields(cls, data: Any) -> Any:
+        """기존 필드명(email_recipient)과 호환되도록 전처리."""
+        if isinstance(data, dict) and "email_recipients" not in data:
+            legacy_value = data.get("email_recipient")
+            if legacy_value is not None:
+                data = {**data, "email_recipients": legacy_value}
+        return data
+
+    @validator("email_recipients", pre=True)
+    def _normalize_emails(cls, value: Any) -> Optional[List[str]]:
+        if value is None:
+            return None
+        candidates: List[str] = []
+        if isinstance(value, str):
+            candidates = [token.strip() for token in value.split(",") if token.strip()]
+        elif isinstance(value, list):
+            for entry in value:
+                if entry is None:
+                    continue
+                candidates.extend(
+                    [token.strip() for token in str(entry).split(",") if token and token.strip()]
+                )
+        else:
+            text = str(value).strip()
+            if text:
+                candidates.append(text)
+        return candidates or None
 
 
 class AnalysisSummary(BaseModel):

@@ -31,6 +31,41 @@
           </div>
         </div>
 
+        <!-- 이메일 발송 상태 -->
+        <div
+          v-if="emailStatusAttempted || emailErrors.length"
+          class="email-status-card"
+        >
+          <div v-if="emailStatusSuccess" class="alert alert-success">
+            <strong>✅ 이메일 발송 성공</strong>
+            <p v-if="emailRecipientsSummary">
+              {{ emailRecipientsSummary }}로 보고서가 전송되었습니다.
+            </p>
+            <p v-else>보고서가 정상적으로 발송되었습니다.</p>
+          </div>
+          <div v-else class="alert alert-error">
+            <strong>❌ 이메일 발송 결과</strong>
+            <p v-if="emailErrors.length">
+              {{ emailErrors.join(' / ') }}
+            </p>
+            <ul v-if="emailDetails.length" class="email-detail-list">
+              <li
+                v-for="detail in emailDetails"
+                :key="`${detail.recipient || detail.input}`"
+              >
+                <span v-if="detail.success">
+                  ✅ {{ detail.recipient || detail.input }} 발송 성공
+                </span>
+                <span v-else>
+                  ❌ {{ detail.recipient || detail.input }} -
+                  {{ detail.error || '발송 실패' }}
+                </span>
+              </li>
+            </ul>
+            <p class="hint">Gmail 앱 비밀번호가 설정되어 있는지 확인하세요.</p>
+          </div>
+        </div>
+
         <!-- 액션 버튼 -->
         <div class="action-buttons">
           <button class="btn btn-primary" @click="downloadPDF" :disabled="isDownloading">
@@ -145,6 +180,15 @@ const regulationCount = computed(() => analysisStore.regulationCount)
 const checklistCount = computed(() => analysisStore.checklistCount)
 const riskScore = computed(() => analysisStore.riskScore)
 const priorityDistribution = computed(() => analysisStore.priorityDistribution)
+const emailStatus = computed(() => analysisStore.emailStatus)
+const emailStatusAttempted = computed(() => emailStatus.value?.attempted || false)
+const emailStatusSuccess = computed(() => emailStatus.value?.success || false)
+const emailRecipientsSummary = computed(() => {
+  const recipients = emailStatus.value?.recipients || []
+  return recipients.filter((item) => !!item).join(', ')
+})
+const emailErrors = computed(() => emailStatus.value?.errors || [])
+const emailDetails = computed(() => emailStatus.value?.details || [])
 
 const isDownloading = ref(false)
 const showModal = ref(false)
@@ -356,8 +400,34 @@ const handleDistribute = async () => {
   border: 1px solid #c3e6cb;
 }
 
+.alert-error {
+  background: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
 .distribution-report {
   margin-top: 20px;
+}
+
+.email-status-card {
+  margin-bottom: 20px;
+}
+
+.email-status-card .hint {
+  margin-top: 8px;
+  font-size: 0.9em;
+  opacity: 0.8;
+}
+
+.email-detail-list {
+  margin: 10px 0 0;
+  padding-left: 20px;
+  color: inherit;
+}
+
+.email-detail-list li {
+  margin-bottom: 4px;
 }
 
 @keyframes fadeIn {

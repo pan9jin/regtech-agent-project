@@ -2,7 +2,7 @@
   <div class="container">
     <!-- 헤더 -->
     <header class="header">
-      <h1>🤖 규제 준수 자동화 시스템</h1>
+      <h1>🤖 RegTech Agent</h1>
       <p class="subtitle">AI 기반 규제 분석 및 워크플로우 자동화</p>
     </header>
 

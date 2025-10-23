@@ -23,13 +23,45 @@ def send_final_report_email(
     business_info: BusinessInfo,
     checklists: List[ChecklistItem],
     execution_plans: List[ExecutionPlan],
-    recipient_email: Optional[str] = None,
+    recipient_emails: Optional[List[str]] = None,
 ) -> Dict[str, Any]:
     """최종 보고서를 이메일로 전송합니다."""
     load_dotenv()
 
-    default_recipient = business_info.get("contact_email") or None
-    target_email, validation_error = prepare_email_recipient(recipient_email, default_recipient)
+    def normalize_candidates(values: Optional[List[str]]) -> List[str]:
+        normalized: List[str] = []
+        if not values:
+            return normalized
+        for entry in values:
+            if entry is None:
+                continue
+            for token in str(entry).split(","):
+                email = token.strip()
+                if email and email not in normalized:
+                    normalized.append(email)
+        return normalized
+
+    provided = recipient_emails or []
+    if not provided:
+        fallback = business_info.get("contact_email")
+        if isinstance(fallback, list):
+            provided = fallback
+        elif isinstance(fallback, str):
+            provided = [fallback]
+
+    candidate_emails = normalize_candidates(provided)
+    status_payload = {
+        "recipients": candidate_emails,
+        "details": [],
+        "errors": [],
+        "success": False,
+        "attachments": [],
+        "attempted": False,
+    }
+
+    if not candidate_emails:
+        status_payload["errors"] = ["수신자 이메일이 지정되지 않았습니다."]
+        return {"email_status": status_payload}
 
     pdf_path = Path(final_report.get("report_pdf_path", ""))
     pdf_exists = pdf_path.exists()
@@ -56,35 +88,56 @@ def send_final_report_email(
     )
 
     sender = EmailSender()
-    status_payload = {
-        "recipient": target_email,
-        "success": False,
-        "error": validation_error,
-        "attachments": [pdf_filename] if pdf_exists else [],
-        "attempted": True,
-    }
+    if pdf_exists:
+        status_payload["attachments"] = [pdf_filename]
 
-    if validation_error:
-        return {"email_status": status_payload}
+    results: List[Dict[str, Any]] = []
+    overall_success = True
 
-    if not target_email:
-        status_payload["error"] = "수신자 이메일이 지정되지 않았습니다."
-        return {"email_status": status_payload}
+    for candidate in candidate_emails:
+        normalized_email, validation_error = prepare_email_recipient(candidate)
+        detail: Dict[str, Any] = {
+            "input": candidate,
+            "recipient": normalized_email or candidate,
+            "success": False,
+        }
+
+        if validation_error:
+            detail["error"] = validation_error
+            overall_success = False
+            results.append(detail)
+            continue
+
+        results.append(detail)
 
     if not pdf_exists:
         print("⚠️  PDF 보고서를 찾을 수 없어 첨부 없이 전송합니다.")
 
     subject = f"[RegTech Assistant] {business_info.get('industry', '규제')} 분석 보고서"
 
-    success = sender.send_report(
-        recipient_email=target_email,
-        subject=subject,
-        body=body,
-        pdf_path=pdf_path if pdf_exists else None,
-    )
+    for detail in results:
+        if detail.get("error"):
+            continue
 
-    status_payload["success"] = success
-    if not success:
-        status_payload["error"] = sender.last_error or "SMTP 전송에 실패했습니다. Gmail 설정을 확인하세요."
+        success = sender.send_report(
+            recipient_email=detail["recipient"],
+            subject=subject,
+            body=body,
+            pdf_path=pdf_path if pdf_exists else None,
+        )
+        detail["success"] = success
+        if not success:
+            detail["error"] = sender.last_error or "SMTP 전송에 실패했습니다. Gmail 설정을 확인하세요."
+            overall_success = False
+
+    status_payload["details"] = results
+    status_payload["recipients"] = [
+        detail["recipient"] for detail in results if detail.get("recipient")
+    ]
+    status_payload["errors"] = [item["error"] for item in results if item.get("error")]
+    if status_payload["errors"]:
+        status_payload["errors"] = list(dict.fromkeys(status_payload["errors"]))
+    status_payload["attempted"] = bool(results)
+    status_payload["success"] = overall_success and bool(results)
 
     return {"email_status": status_payload}
